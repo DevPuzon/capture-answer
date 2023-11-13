@@ -1,0 +1,14 @@
+<!-- <app-rate-app></app-rate-app> -->
+<div class="camera-viewer--main">
+  <div class="camera-viewer--platform">
+    <div class="camera-viewer--camera--container" id="cameraContainer"></div>
+  </div>
+  <div class="camera-viewer--footer">
+    <div class="camera-viewer--tools">
+      <ion-icon class="camera-viewer--view--photo" name="image" (click)="onGallery()"></ion-icon>
+      <ion-icon class="camera-viewer--shot" name="radio-button-on" (click)="onShot()"></ion-icon>
+      <ion-icon class="camera-viewer--flash" [name]="isFlash ? 'flash' :'flash-off' " (click)="onFlash()"></ion-icon>
+    </div>
+    <app-ads-viewer></app-ads-viewer>
+  </div>
+</div>

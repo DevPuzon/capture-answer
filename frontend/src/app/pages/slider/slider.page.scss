@@ -1,0 +1,47 @@
+@import "../../../theme/custom-variable.scss";
+.slider--main{
+  height: 100vh;
+  background: #ffffff;
+}
+swiper-container{
+  // height: 100;
+}
+
+.slider--slide--item{
+  text-align: center;
+  display: grid;
+  align-content: center;
+  padding: 36px 0px 0px 0px;
+}
+
+.slider--item--text--content{
+  margin: 10px 35px;
+}
+
+.slider--description{
+  color: $text-color;
+  font-size: 17px;
+  font-weight: 14px;
+  margin: 40px 0px;
+}
+
+.slider--title{
+  color: $text-color;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.slider--image{
+  height: 280px;
+  display: grid;
+  margin: 0 auto;
+}
+
+.slider--btn--next-main{
+  display: grid;
+  .slider--btn--next{
+    // height: 50px;
+    width: 90%;
+    margin: 0 auto;
+  }
+}

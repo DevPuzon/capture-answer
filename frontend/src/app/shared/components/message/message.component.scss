@@ -1,0 +1,52 @@
+.message__group_btn{
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+}
+
+
+.message--send--btn{
+  width: 90%;
+  margin: 0 auto;
+  display: grid;
+}
+
+.message--textarea{
+  resize: none;
+  overflow-y: auto;
+  max-height: 200px;
+  height: 40px;
+  background: #ffffff;
+  border: 0;
+  width: 100%;
+  margin: 5px;
+}
+
+.message--submit--btn {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.message--suggestion--container{
+  display: flex;
+  overflow: scroll;
+  gap: 5px;
+  ion-chip{
+    flex-shrink: 0;
+  }
+}
+
+
+.message--suggestion--more{
+  margin: 0;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #1565C0;
+}
+
+.message--main{
+  background: #ffffff;
+}

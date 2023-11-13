@@ -1,0 +1,30 @@
+
+<div class="global--header">
+  <div class="global--header--content">
+    <div class="global--header--primary--btn" (click)="onBack()">
+      <ion-icon class="global--header--arrow-left" name="arrow-back"></ion-icon>
+      <!-- <span class="global--header--primary--btn--title">{{ 'BACK' | translate }}</span> -->
+    </div>
+    <h1 class="global--header--title">Capture & Answer</h1>
+    <div class="global--header--empty"></div>
+  </div>
+  <span class="global--header--bottom--border"></span>
+</div>
+<ion-content>
+  <chat-conversation [chats]="chats" (loadMore)="loadChatMore()"></chat-conversation>
+</ion-content>
+<div class="capture-chat--img--capture--accordion">
+  <ion-accordion-group class="capture-chat--ion-accordion">
+    <ion-accordion value="first" style=" border-radius: 10px; ">
+      <ion-item slot="header" class="capture-chat--ion--accordion--item">
+        <ion-label>Captured Photo</ion-label>
+      </ion-item>
+      <div class="ion-padding capture-chat--img-container" slot="content">
+        <img src="https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png" alt="">
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</div>
+<ion-footer>
+  <chat-message (onSendMessage)="onSendMessage($event)"></chat-message>
+</ion-footer>

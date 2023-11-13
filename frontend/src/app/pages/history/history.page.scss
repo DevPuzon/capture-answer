@@ -1,0 +1,35 @@
+.history--list {
+
+	.history--list--item {
+        --background: #f5f8ff;
+        margin: 10px;
+        border-radius: 5px;
+		ion-avatar {
+            height: 50px;
+            width: 50px;
+			img {
+
+			}
+		}
+
+		.history--item--content {
+            margin: 20px 0px;
+			.history--item--title {
+
+			}
+
+			.history--item--description {
+
+			}
+		}
+	}
+}
+
+.history--action--delete--btn{
+  display: grid;
+  place-content: end;
+  padding: 10px;
+  ion-button{
+    font-size: 15px;
+  }
+}

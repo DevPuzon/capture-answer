@@ -1,0 +1,8 @@
+{
+  "name": "TextFromPic [OCR]",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

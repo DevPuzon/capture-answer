@@ -1,0 +1,31 @@
+
+<ion-content>
+  <div class="slider--main"> 
+    <swiper-container >
+      <swiper-slide class="slider--slide--item">
+        <img class="slider--image" src="assets/img/scan.gif" alt="">
+        <div class="slider--item--text--content">
+          <h1 class="slider--title">{{ 'SLIDE_1_TITLE' | translate }}</h1>
+          <p class="slider--description">{{ 'SLIDE_1_DESCRIPTION' | translate }}</p>
+        </div>
+      </swiper-slide>
+      <swiper-slide class="slider--slide--item">
+        <img class="slider--image" src="assets/img/share.gif" alt=""> 
+        <div class="slider--item--text--content">
+          <h1 class="slider--title">{{ 'SLIDE_2_TITLE' | translate }}</h1>
+          <p class="slider--description">{{ 'SLIDE_2_DESCRIPTION' | translate }}</p>
+        </div>
+      </swiper-slide>
+      <swiper-slide class="slider--slide--item">
+        <img class="slider--image" src="assets/img/chat-with-ai.gif" alt=""> 
+        <div class="slider--item--text--content">
+          <h1 class="slider--title">{{ 'SLIDE_3_TITLE' | translate }}</h1>
+          <p class="slider--description">{{ 'SLIDE_3_DESCRIPTION' | translate }}</p>
+        </div>
+      </swiper-slide>
+    </swiper-container> 
+    <div class="slider--btn--next-main">  
+      <button class="slider--btn--next" mat-stroked-button color="primary" (click)="onNext()"  >{{ 'NEXT' | translate }} </button>
+    </div>
+  </div>
+</ion-content>

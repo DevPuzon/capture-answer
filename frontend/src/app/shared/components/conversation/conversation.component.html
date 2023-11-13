@@ -1,0 +1,19 @@
+<!-- <ion-content>
+</ion-content> -->
+
+
+<div class="chat-messages" #scrollContainer (scroll)="onScroll()">
+  <ng-container *ngFor="let chat of chats">
+
+    <ng-container  >
+      <div [class]="chatAiUserId != chat.user_id ? 'chat-message-right mb-4' : 'chat-message-left pb-4'">
+        <div
+        [class]="chatAiUserId != chat.user_id ? 'chat-message-iam' : 'chat-message-respondent'"
+        class="flex-shrink-1 rounded py-2 px-3 ml-3" style=" margin: 0px 10px; width: 80%; ">
+          <div [innerHTML]="chat.message"></div>
+        </div>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</div>

@@ -1,0 +1,45 @@
+@import "../../../../theme/variables.scss";
+
+.chat-messages {
+  height: 100%;
+  max-height: inherit !important;
+  overflow-y: inherit !important;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+
+// .chat-messages {
+  // height: 100%;
+  // max-height: inherit !important;
+  // overflow-y: inherit !important;
+  // overflow: auto;
+  // display: flex;
+  // flex-direction: column-reverse;
+// }
+
+.chat-message-left,
+.chat-message-right {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.chat-message-left {
+  margin-right: auto;
+}
+
+.chat-message-right {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+.chat-message-iam{
+  color: #ffffff;
+  background:$primary-color;
+  border-radius: 25px !important;
+
+}
+.chat-message-respondent{
+  background:#F8F9FA;
+  border-radius: 25px !important;
+}

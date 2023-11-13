@@ -1,0 +1,35 @@
+.profile--header--main {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 10px;
+
+	.profile--header--title {
+        color: #808080;
+        min-width: 45px;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 35px;
+        text-align: right;
+        font-size: 17px;
+	}
+
+	.profile--header--profile {
+        max-width: 44px;
+        display: block;
+	}
+}
+
+.profile--header--dias{
+  display: flex;
+  place-items: center;
+  gap: 5px;
+  .profile--header--span{
+    padding: 3px 7px;
+    font-size: 11px;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    border-radius: 25px;
+  }
+}

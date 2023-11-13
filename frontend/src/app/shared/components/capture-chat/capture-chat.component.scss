@@ -1,0 +1,17 @@
+.capture-chat--img--capture--accordion{
+  width: 95%;
+  position: absolute;
+  left: 50%;
+  top: 60px;
+  transform: translate(-50%, 0);
+}
+
+.capture-chat--ion-accordion{
+  border-radius: 10px;
+  .capture-chat--ion--accordion--item{
+    --background: #F5F8FF !important;
+  }
+  .capture-chat--img-container{
+    background: #F5F8FF;
+  }
+}

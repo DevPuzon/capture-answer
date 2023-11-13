@@ -1,0 +1,56 @@
+<div class="global--header">
+  <div class="global--header--content">
+    <div class="global--header--primary--btn" (click)="onClose()">
+      <ion-icon class="global--header--arrow-left" name="close"></ion-icon>
+      <!-- <span class="global--header--primary--btn--title">{{ 'CLOSE' | translate }}</span> -->
+    </div>
+    <h1 class="global--header--title">{{ 'GET_PREMIUM' | translate}}</h1>
+    <div class="global--header--empty"></div>
+  </div>
+  <span class="global--header--bottom--border"></span>
+</div>
+
+<ion-content>
+  <img class="unlock-f--img-payout" src="/assets/img/payout.gif" alt="">
+  <div class="unlock-f--upper--intro">
+    <div class="unlock-f--offers">
+      <span class="unlock-f--offers--item">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <p class="unlock-f--text">{{ 'AD_FREE_EXPERIENCE' | translate}}</p>
+      </span>
+      <span class="unlock-f--offers--item">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <p class="unlock-f--text">{{ 'MULTILINGUAL_SUPPORT' | translate}}</p>
+      </span>
+      <span class="unlock-f--offers--item">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <p class="unlock-f--text">{{ 'AI_POWERED_CHAT' | translate}}</p>
+      </span>
+      <span class="unlock-f--offers--item">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <p class="unlock-f--text">{{ 'COMPREHENSIVE_AI_Q&A' | translate}}</p>
+      </span>
+    </div>
+  </div>
+
+  <ion-list>
+    <ion-item lines="none" button="true"
+    *ngFor="let package of packages; index as i">
+      <div class="unlock-f--package--item " (click)="onChangePackage(i,package.textPlan)">
+        <div class="unlock-f--package--item-content"
+          [ngClass]="{ 'unlock-f--package--item--selected' : package.selected} ">
+          <span class="unlock-f--package--txt--plan-">{{ package.textPlan | translate }}</span>
+          <span class="unlock-f--package--txt--description">{{ package.price }} {{ package.description }}</span>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+  <p class="unlock-f--payment--term">{{ textPaymentTerm }}</p>
+</ion-content>
+<ion-footer>
+  <div class="unlock-f--action-btns bottom-div">
+    <button class="unlock-f--btn--subscribe" mat-flat-button color="primary"
+      (click)="onSubscribe()">{{ 'SUBSCRIBE' | translate }} </button>
+  </div>
+  <app-ads-viewer></app-ads-viewer>
+</ion-footer>

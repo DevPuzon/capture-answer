@@ -1,0 +1,6 @@
+<ion-content>
+  <chat-conversation [chats]="chats" (loadMore)="loadChatMore()"></chat-conversation>
+</ion-content>
+<ion-footer>
+  <chat-message (onSendMessage)="onSendMessage($event)"></chat-message>
+</ion-footer>

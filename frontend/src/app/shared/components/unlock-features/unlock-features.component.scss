@@ -1,0 +1,137 @@
+@import '../../../../theme/custom-variable.scss';
+
+.unlock-f--upper--intro{
+  margin: 10px 10px 30px 10px;
+  display: grid;
+  gap: 14px;
+}
+
+.unlock-f--title{
+  font-size: 28px;
+}
+
+.unlock-f--offers{
+  display: grid;
+  gap: 11px;
+  .unlock-f--offers--item{
+      display: flex;
+      place-items: center;
+      gap: 10px;
+      ion-icon{
+        color: $primary-color;
+        height: 22px;
+        width: 22px;
+      }
+      .unlock-f--img{
+
+      }
+      .unlock-f--text{
+          font-size: 17px;
+          margin: 0px;
+      }
+  }
+}
+
+.unlock-f--packages {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.unlock-f--package--item {
+  width: 100%;
+  .unlock-f--package--item--selected{
+      border: 2px solid #1565C0 !important;
+      background: #f5f8ff;
+  }
+  .unlock-f--selected-txt {
+      color: #fff;
+      background: #1565C0;
+      padding: 4px;
+      margin: 0px auto;
+      width: fit-content;
+      display: grid;
+      margin-top: 10px;
+  }
+
+  .unlock-f--package--item-content {
+      display: grid;
+      padding: 15px 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      min-width: 130px;
+
+      .unlock-f--package--txt--plan {
+          font-size: 20px;
+          font-weight: 500;
+      }
+      .unlock-f--package--txt--description {
+          font-size: 17px;
+      }
+
+
+      .unlock-f--package--usd--num--txt {
+          font-size: 60px;
+          font-weight: 700;
+
+      }
+
+      .unlock-f--package--usd--txt {
+          font-size: 17px;
+      }
+  }
+}
+mat-tab-group{
+  margin: 0px 20px;
+}
+
+.unlock-f--btn--subscribe{
+  height: 50px;
+  width: 100%;
+  border-radius: 0px;
+  span{
+      color: #fff;
+  }
+}
+.unlock-f--btn--maybe--nxt--time{
+  color: #666666;
+  height: 50px;
+  width: 100%;
+}
+
+.unlock-f--action-btns{
+  display: grid;
+}
+
+.bottom-div {
+  flex-shrink: 0; 
+  background-color: #f9f9f9;  
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+.unlock-f--img-payout{
+  height: 200px;
+  display: grid;
+  margin: 0 auto;
+}
+ion-item{
+  margin-bottom: 10px;
+}
+
+.unlock-f--payment--term{
+  margin: 20px 10px; 
+  font-size: 12px;
+  text-align: center;
+}

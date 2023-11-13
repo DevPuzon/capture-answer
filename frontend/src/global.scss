@@ -1,0 +1,201 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+@import "/src/theme/custom-variable.scss";
+@import "/src/theme/bootstarp-4.5.scss";
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+textarea {
+  color: $text-color;
+}
+
+.mdc-button {
+  span {
+    color: inherit;
+  }
+
+}
+
+ion-content {
+  --padding-top: var(--ion-safe-area-top, 10px) !important; //Solves issue with notch in unlock screen
+}
+
+// ion-icon{
+//   color: $text-color !important;
+// }
+.global--header {
+
+  background: #f5f8ff;
+  //height: 75px; it dissapear menu shadow in IOS Device
+  //line-height: 75px;
+
+  .global--header--content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 0px 10px;
+
+    ion-icon {
+      height: 25px;
+      width: 25px;
+      color: $text-color;
+    }
+
+
+    .global--header--logo--title {
+      font-size: 17px;
+      margin: 0px;
+    }
+
+    .global--header--title {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 17px;
+      margin: 0px;
+      text-align: center;
+    }
+
+    .global--header--empty {
+      width: 70px;
+    }
+
+    .global--header--profile {}
+
+    .global--header--primary--btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .global--header--arrow-left {}
+
+      .global--header--primary--btn--title {
+        color: $text-color;
+      }
+    }
+  }
+
+  .global--header--bottom--border {
+    background-color: #E0E0E0;
+    height: 1px;
+    width: 95%;
+    margin: 0 auto;
+  }
+}
+
+
+.modal--pop--up--gift {
+  .modal-wrapper {
+    height: 550px !important;
+    width: 350px !important;
+    border-radius: 10px !important;
+  }
+
+  .modal-wrapper,
+  .modal-shadow {
+    height: 550px !important;
+    width: 350px !important;
+    border-radius: 10px !important;
+  }
+}
+
+.modal--pop--up--gift .modal-wrapper {
+  height: 300px;
+  /* Set the desired height here */
+}
+
+.modal-wrapper,
+.modal-shadow {
+  height: 550px !important;
+  width: 350px !important;
+  border-radius: 10px !important;
+}
+
+.camera-viewer--camera--container--video {
+  height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+mat-tab-group .mdc-tab {
+  flex-basis: 50%;
+  max-width: 50%;
+}
+
+
+
+.global--header--home {
+  background: inherit !important;
+
+  .global--header--content {
+    ion-icon {
+      color: #ffffff;
+    }
+
+    .global--header--title, .global--header--logo--title {
+		  color: #ffffff;
+    }
+
+    .global--header--empty {
+    }
+    .global--header--profile {}
+
+    .global--header--primary--btn {
+
+      .global--header--arrow-left {
+
+	  }
+      .global--header--primary--btn--title {
+      }
+    }
+  }
+  .global--header--bottom--border {
+  }
+}
+
+.toast-c{
+  margin-top: 50px;
+}
+
+
+ion-modal#capture-chat {
+  --width: 100%;
+  --height: 100vh;
+}

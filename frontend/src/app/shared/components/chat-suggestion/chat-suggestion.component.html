@@ -1,0 +1,17 @@
+
+<div class="global--header">
+  <div class="global--header--content">
+    <div class="global--header--primary--btn" (click)="onBack()">
+      <ion-icon class="global--header--arrow-left" name="arrow-back"></ion-icon>
+    </div>
+    <h1 class="global--header--title">Question Suggestion</h1>
+    <div class="global--header--empty"></div>
+  </div>
+  <span class="global--header--bottom--border"></span>
+</div>
+
+<ion-content >
+  <ng-container *ngFor="let question of commonQuestions">
+    <ion-chip color="primary" [outline]="true" (click)="addToMessage(question)">{{question}}</ion-chip>
+  </ng-container>
+</ion-content>

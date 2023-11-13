@@ -1,0 +1,61 @@
+@import '../../../../theme/custom-variable.scss';
+
+.camera-viewer--main{
+    position: relative;
+    height: 100vh;
+}
+
+.camera-viewer--platform {
+
+	img {
+
+	}
+	.camera-viewer--zoom-actions {
+        display: grid;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%);
+        margin-right: 12px;
+        gap: 10px;
+		img {
+
+		}
+	}
+}
+
+.camera-viewer--flash.flash-enabled {
+    filter: brightness(4.5); // This will make the image brighter, you can adjust as needed
+    // Or use any other CSS property to change the appearance. For example:
+    // background-color: yellow; (if your image has transparent areas)
+  }
+.camera-viewer--footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: inherit !important;
+    margin-bottom: 50px;
+	.camera-viewer--tools {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 35px;
+        align-items: center;
+		.camera-viewer--view--photo {
+      height: 35px;
+      width: 35px;
+      color: #ffffff;
+		}
+
+		.camera-viewer--shot {
+      height: 65px;
+      width: 65px;
+      color: #ffffff;
+		}
+
+		.camera-viewer--flash {
+      height: 35px;
+      width: 35px;
+      color: #ffffff;
+		}
+	}
+}

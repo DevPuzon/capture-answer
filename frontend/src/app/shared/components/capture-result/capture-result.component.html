@@ -1,0 +1,21 @@
+
+<div class="global--header">
+  <div class="global--header--content">
+    <div class="global--header--primary--btn" (click)="onBack()">
+      <ion-icon class="global--header--arrow-left" name="arrow-back"></ion-icon>
+      <!-- <span class="global--header--primary--btn--title">{{ 'BACK' | translate }}</span> -->
+    </div>
+    <h1 class="global--header--title">{{ 'RESULT' | translate}}</h1>
+    <div class="global--header--empty"></div>
+  </div>
+  <span class="global--header--bottom--border"></span>
+</div>
+
+<ion-content >
+  <div class="capture--result--img">
+    <img [src]="capturedImage" alt="">
+  </div>
+</ion-content>
+<ion-footer>
+  <chat-message (onSendMessage)="onSendMessage"></chat-message>
+</ion-footer>
