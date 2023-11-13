@@ -15,8 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { OcrResultComponent } from '../components/ocr-result/ocr-result.component';
-
 import {MatDialog, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
 import { AppStates } from 'src/app/core/app-states';
 import { ImageCropperModule } from 'ngx-image-cropper';
@@ -39,7 +37,6 @@ const components = [
                       AdsViewerComponent,
                       MessageComponent,
                       ConversationComponent,
-                      OcrResultComponent,
                       CaptureChatComponent,
                       ChatSuggestionComponent,
                       CaptureResultComponent

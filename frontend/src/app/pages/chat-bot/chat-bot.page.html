@@ -1,6 +1,9 @@
 <ion-content>
   <chat-conversation [chats]="chats" (loadMore)="loadChatMore()"></chat-conversation>
 </ion-content>
+<div class="chat-bot--upper--message" *ngIf="!isPremium">
+  <p class="chat-bot--upper--message-p">You have {{remainingFreeAiChat}} AI free chats left. 🤖</p>
+</div>
 <ion-footer>
   <chat-message (onSendMessage)="onSendMessage($event)"></chat-message>
 </ion-footer>

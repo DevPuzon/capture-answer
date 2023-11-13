@@ -1,8 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CropImageComponent } from '../crop-image/crop-image.component';
-import { OcrResultComponent } from '../ocr-result/ocr-result.component';
-import { PopupGiftComponent } from '../popup-gift/popup-gift.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { Camera, CameraDirection, CameraResultType, CameraSource } from '@capacitor/camera';
@@ -17,6 +14,7 @@ import { AdmobUtil } from 'src/app/core/utils/admob.util';
 import { ToastService } from 'src/app/services/toast.service';
 import { error } from 'console';
 import { CaptureChatComponent } from '../capture-chat/capture-chat.component';
+import { CaptureResultComponent } from '../capture-result/capture-result.component';
 
 @Component({
   selector: 'ocr-camera-viewer',
@@ -130,9 +128,13 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
      const modal = await this.modalController.create({
       // id:"crop-modal",
       // component:CropImageComponent,
-      id:"capture-chat",
-      component:CaptureChatComponent,
-      // component:OcrResultComponent,
+
+      // id:"capture-chat",
+      // component:CaptureChatComponent,
+
+      id:"capture-result",
+      component:CaptureResultComponent,
+
       componentProps:{
         captureId:captureId,
         capturedImage:capturePreview

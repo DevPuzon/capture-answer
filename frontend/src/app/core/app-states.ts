@@ -1,143 +1,164 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { HistoryData } from "../models/history.model";
+import {
+  Injectable
+} from "@angular/core";
+import {
+  BehaviorSubject
+} from "rxjs";
+import {
+  HistoryData
+} from "../models/history.model";
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AppStates {
 
-    readonly TAG = 'AppStates';
+  readonly TAG = 'AppStates';
 
-    private showGiftPopModal = new BehaviorSubject<boolean>(false);
-    private canShowAds = new BehaviorSubject<boolean>(false);
-    private remainingScans = new BehaviorSubject<number>(0);
-    private userPremium = new BehaviorSubject<boolean>(true); //#change
-    private forceUserPremium = new BehaviorSubject<boolean>(false);
-    private freeUserChat = new BehaviorSubject<number>(0);
-    private histories = new BehaviorSubject<HistoryData[]>([]);
-    private isStartCamera = new BehaviorSubject<boolean>(false);
-    private permissionStatus = new BehaviorSubject<any>({});
-    private isShowBanner = new BehaviorSubject<boolean>(false);
-    private isAlreadyAdmobInit = new BehaviorSubject<boolean>(false);
+  private showGiftPopModal = new BehaviorSubject < boolean > (false);
+  private canShowAds = new BehaviorSubject < boolean > (false);
+  private remainingTokens = new BehaviorSubject < number > (0);
+  private loading = new BehaviorSubject < boolean > (false  );
+  private userPremium = new BehaviorSubject < boolean > (false);
+  private forceUserPremium = new BehaviorSubject < boolean > (false);
+  private freeUserChat = new BehaviorSubject < number > (0);
+  private histories = new BehaviorSubject < HistoryData[] > ([]);
+  private isStartCamera = new BehaviorSubject < boolean > (false);
+  private permissionStatus = new BehaviorSubject < any > ({});
+  private isShowBanner = new BehaviorSubject < boolean > (false);
+  private isAlreadyAdmobInit = new BehaviorSubject < boolean > (false);
 
 
-    constructor(){}
+  constructor() {}
 
-    setCanShowAds(value: boolean) {
-      this.canShowAds.next(value);
-    }
+  setCanShowAds(value: boolean) {
+    this.canShowAds.next(value);
+  }
 
-    listenCanShowAds(){
-      return this.canShowAds.asObservable();
-    }
+  listenCanShowAds() {
+    return this.canShowAds.asObservable();
+  }
 
-    showGiftPopModalListen(){
-        return this.showGiftPopModal.asObservable();
-    }
+  showGiftPopModalListen() {
+    return this.showGiftPopModal.asObservable();
+  }
 
-    setShowGiftModal(isShow:boolean){
-        this.showGiftPopModal.next(isShow);
-    }
+  setShowGiftModal(isShow: boolean) {
+    this.showGiftPopModal.next(isShow);
+  }
 
-    remainingScansListen(){
-        return this.remainingScans.asObservable();
-    }
+  listenRemainingTokens() {
+    return this.remainingTokens.asObservable();
+  }
 
-    getRemainingScans(){
-        return this.remainingScans.getValue();
-    }
+  getRemainingTokens() {
+    return this.remainingTokens.getValue();
+  }
 
-    setRemainingScans(scans:number){
-        this.remainingScans.next(scans);
-    }
+  setRemainingTokens(tokens: number) {
+    this.setUserPremium(tokens >= 1);
+    this.remainingTokens.next(tokens);
+  }
 
-    setUserPremium(isPremium:boolean){
-        // this.userPremium.next(isPremium); #change
-    }
+  private setUserPremium(isPremium: boolean) {
+    console.log("setUserPremium", isPremium);
+    this.userPremium.next(isPremium);
+  }
 
-    getIsUserPremium(){
-        return this.userPremium.getValue();
-    }
+  getIsUserPremium() {
+    return this.userPremium.getValue();
+  }
 
-    setUserForcePremium(isPremium:boolean){
-      this.forceUserPremium.next(isPremium);
-      this.setUserPremium(isPremium);
-    }
+  setUserForcePremium(isPremium: boolean) {
+    this.forceUserPremium.next(isPremium);
+    this.setUserPremium(isPremium);
+  }
 
-    getIsUserForcePremium(){
-        return this.forceUserPremium.getValue();
-    }
+  getIsUserForcePremium() {
+    return this.forceUserPremium.getValue();
+  }
 
-    listenIsUserPremium(){
-      return this.userPremium.asObservable();
-    }
+  listenIsUserPremium() {
+    return this.userPremium.asObservable();
+  }
 
-    setHistories(histories:HistoryData[]){
-        this.histories.next(histories);
-    }
+  setHistories(histories: HistoryData[]) {
+    this.histories.next(histories);
+  }
 
-    historiesListen(){
-        return this.histories.asObservable();
-    }
+  historiesListen() {
+    return this.histories.asObservable();
+  }
 
-    listenIsStartCamera(){
-      return this.isStartCamera.asObservable();
-    }
+  listenIsStartCamera() {
+    return this.isStartCamera.asObservable();
+  }
 
-    setIsStartCamera(isStart:boolean){
-      console.log("setIsStartCamera",isStart);
-      this.isStartCamera.next(isStart);
-    }
+  setIsStartCamera(isStart: boolean) {
+    console.log("setIsStartCamera", isStart);
+    this.isStartCamera.next(isStart);
+  }
 
-    listenPermissionStatus(){
-      return this.permissionStatus.asObservable();
-    }
+  listenPermissionStatus() {
+    return this.permissionStatus.asObservable();
+  }
 
-    getPermissionStatus(){
-      return this.permissionStatus.getValue();
-    }
+  getPermissionStatus() {
+    return this.permissionStatus.getValue();
+  }
 
-    setPermissionStatus(permissionName :string){
-      const permissionStatus = this.permissionStatus.getValue();
-      permissionStatus[permissionName] = true;
-      this.permissionStatus.next(permissionStatus);
-    }
+  setPermissionStatus(permissionName: string) {
+    const permissionStatus = this.permissionStatus.getValue();
+    permissionStatus[permissionName] = true;
+    this.permissionStatus.next(permissionStatus);
+  }
 
-    getIsShowBanner(){
-      console.log('getIsShownBanner');
-      return this.isShowBanner.getValue();
-    }
+  getIsShowBanner() {
+    console.log('getIsShownBanner');
+    return this.isShowBanner.getValue();
+  }
 
-    setIsShowBanner(isShownBanner:boolean){
-      console.log('setIsShownBanner',isShownBanner);
-      return this.isShowBanner.next(isShownBanner);
-    }
+  setIsShowBanner(isShownBanner: boolean) {
+    console.log('setIsShownBanner', isShownBanner);
+    return this.isShowBanner.next(isShownBanner);
+  }
 
-    listenIsShownBanner(){
-      return this.isShowBanner.asObservable();
-    }
+  listenIsShownBanner() {
+    return this.isShowBanner.asObservable();
+  }
 
-    getIsAlreadyAdmobInit(){
-      console.log('getIsAlreadyAdmobInit');
-      return this.isAlreadyAdmobInit.getValue();
-    }
+  getIsAlreadyAdmobInit() {
+    console.log('getIsAlreadyAdmobInit');
+    return this.isAlreadyAdmobInit.getValue();
+  }
 
-    setIsAlreadyAdmobInit(isAlreadyAdmobInit:boolean){
-      console.log('setIsAlreadyAdmobInit',isAlreadyAdmobInit);
-      return this.isAlreadyAdmobInit.next(isAlreadyAdmobInit);
-    }
+  setIsAlreadyAdmobInit(isAlreadyAdmobInit: boolean) {
+    console.log('setIsAlreadyAdmobInit', isAlreadyAdmobInit);
+    return this.isAlreadyAdmobInit.next(isAlreadyAdmobInit);
+  }
 
-    setFreeUserChat(value:number){
-      this.freeUserChat.next(value);
-    }
+  setFreeUserChat(value: number) {
+    this.freeUserChat.next(value);
+  }
 
-    getFreeUserChat(){
-      return this.freeUserChat.getValue();
-    }
+  getFreeUserChat() {
+    return this.freeUserChat.getValue();
+  }
 
-    listenFreeUserChat(){
-      return this.freeUserChat.asObservable();
-    }
+  listenFreeUserChat() {
+    return this.freeUserChat.asObservable();
+  }
+
+  setLoading(loading:boolean){
+    this.loading.next(loading);
+  }
+
+  getLoading(){
+    return this.loading.getValue();
+  }
+
+  listenLoading(){
+    return this.loading.asObservable();
+  }
 }

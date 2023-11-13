@@ -47,16 +47,6 @@ export class MessageComponent  implements OnInit {
     }
   }
 
-  async onSendHi(){
-      const load = this.loading.create({ message : "Please wait ..."});
-      (await load).present();
-
-      this.messageForm.reset();
-      await this.chatService.sendMessage('Hi! 👋',this.user.id);
-
-      (await load).dismiss();
-  }
-
   onTranscripListener(transcript : string){
     console.log("onTranscripListener",transcript);
     this.messageForm.patchValue({message : transcript});
@@ -79,7 +69,9 @@ export class MessageComponent  implements OnInit {
     await modal.present();
     modal.onDidDismiss().then((el)=>{
       console.log("onSuggestionMore dismiss",el,el.data);
-      this.addToMessage(el.data);
+      if(el.data){
+        this.addToMessage(el.data);
+      }
     })
   }
 }

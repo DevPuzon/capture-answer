@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { APP_NAME, HISTORY_LOCAL, REMAINING_SCANS } from '../core/global-variable';
+import { ALREADY_CLAIMED_GIFT, APP_NAME, HISTORY_LOCAL } from '../core/global-variable';
 import { AppStates } from '../core/app-states';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -23,19 +23,37 @@ export class CommonUseService   {
   claimFreePremium(){
     return new Promise(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.post(environment.baseURL+'/common-use/free-premium/'+deviceUID,{
-        deviceUID:deviceUID
+      const req = this.httpClient.post(environment.baseURL+'/common-use/claim-free-premium/'+deviceUID,
+      {
       }).subscribe(
         (res:any) => {
           req.unsubscribe();
           if(res.success){
             const data = res.data;
-            if(!this.appStates.getIsUserForcePremium()){
-              this.appStates.setUserPremium(data.premiumCount > 0);
-            }
-            this.appStates.setFreeUserChat(data.premiumCount);
+
+            this.appStates.setRemainingTokens(data.premiumCount);
+            this.appStates.setFreeUserChat(data.freeChatCount);
+            localStorage.setItem(ALREADY_CLAIMED_GIFT,"1");
           }
           resolve({});
+        }
+      );
+    })
+  }
+
+  checkFreePremium(){
+    return new Promise<boolean>(async (resolve,reject)=>{
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+      const req = this.httpClient.get(environment.baseURL+'/common-use/check-free-premium/'+deviceUID).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            const data = res.data;
+
+            this.appStates.setRemainingTokens(data.premiumCount);
+            this.appStates.setFreeUserChat(data.freeChatCount);
+            resolve(data.isCanClaimGift);
+          }
         }
       );
     })
@@ -44,21 +62,14 @@ export class CommonUseService   {
   isCanGetGift(){
     return new Promise<boolean>(async (resolve,reject)=>{
 
-      let giftAlreadyClaimed = localStorage.getItem('giftAlreadyClaimed');
-      if(giftAlreadyClaimed && giftAlreadyClaimed=='1') return resolve(false);  //To avoid multiple api calls
+      let giftAlreadyClaimed = localStorage.getItem(ALREADY_CLAIMED_GIFT);
+      console.log("isCanGetGift",giftAlreadyClaimed,giftAlreadyClaimed && giftAlreadyClaimed == '1');
+      if(giftAlreadyClaimed && giftAlreadyClaimed == '1') {
+        return resolve(false);
+      }
 
-      const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.post(environment.baseURL+'/ocr/gift/status',{
-        deviceUID:deviceUID
-      }).subscribe(
-        (res:any) => {
-          req.unsubscribe();
-          resolve(res.data.canRequestOcrGift);
-        },
-        (error:HttpErrorResponse) => {
-          req.unsubscribe();
-        }
-      );
+      const isCanClaimGift = await this.checkFreePremium();
+      resolve(isCanClaimGift);
     })
   }
 
@@ -151,32 +162,32 @@ export class CommonUseService   {
   }
 
 
-  onSubscription(isStart:boolean,subscriptionId:string){
-    return new Promise<any>(async (resolve,reject)=>{
-      const deviceUID = await CommonUseUtil.getDeviceUID();
-      let body = {};
-      const localLanguage = await this.commonUseUtil.getLocalLanguage();
-      if(isStart){
-        body = {
-          deviceUID: deviceUID,
-          cultureIso2: localLanguage,
-          subscriptionId: subscriptionId
-        }
-      }else{
-        body = {
-          deviceUID: deviceUID,
-          cultureIso2: localLanguage
-        }
-      }
-      const req = this.httpClient.post(environment.baseURL+'/user/subscription/'+(isStart ? 'start':'end'),
-        body
-      ).subscribe((res:any)=>{
-        const data :SubscriptionResponse = res;
-        req.unsubscribe();
-        console.log('onSubscription response',data,isStart,subscriptionId);
-        this.commonUseUtil.addRemainingScans(data.data.ocrPremiumCycleCallsLeft);
-        resolve({});
-      })
-    })
-  }
+  // onSubscription(isStart:boolean,subscriptionId:string){
+  //   return new Promise<any>(async (resolve,reject)=>{
+  //     const deviceUID = await CommonUseUtil.getDeviceUID();
+  //     let body = {};
+  //     const localLanguage = await this.commonUseUtil.getLocalLanguage();
+  //     if(isStart){
+  //       body = {
+  //         deviceUID: deviceUID,
+  //         cultureIso2: localLanguage,
+  //         subscriptionId: subscriptionId
+  //       }
+  //     }else{
+  //       body = {
+  //         deviceUID: deviceUID,
+  //         cultureIso2: localLanguage
+  //       }
+  //     }
+  //     const req = this.httpClient.post(environment.baseURL+'/user/subscription/'+(isStart ? 'start':'end'),
+  //       body
+  //     ).subscribe((res:any)=>{
+  //       const data :SubscriptionResponse = res;
+  //       req.unsubscribe();
+  //       console.log('onSubscription response',data,isStart,subscriptionId);
+  //       this.commonUseUtil.addRemainingScans(data.data.ocrPremiumCycleCallsLeft);
+  //       resolve({});
+  //     })
+  //   })
+  // }
 }

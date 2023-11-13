@@ -3,7 +3,6 @@ import { environment } from "src/environments/environment";
 
 export const NOT_NEW_USER = "NOT_NEW_USER";
 export const COUNT_SHOW_OFFER = "COUNT_SHOW_OFFER";
-export const REMAINING_SCANS = "REMAINING_SCANS";
 export const FREE_SCANS = 5;
 export const PLATINUM_SCANS = 1500;
 export const GOLD_SCANS = 500;
@@ -14,7 +13,7 @@ export const LAST_PURCHASED_PRODUCT_ID = 'LAST_PURCHASED_PRODUCT_ID';
 export const APP_NAME = config.appName;
 export const TABLE_CHAT_AI = 'ocr-chat-ai-'+environment.environment;
 export const OCR_CHAT_AI_USER_ID = 'OCR_CHAT_AI_USER_ID';
-
+export const ALREADY_CLAIMED_GIFT = "ALREADY_CLAIMED_GIFT";
 export const SUBSCRIPTION_IDS = {
   androidSubscriptionIds: {
     monthly: 'ocr_gold_android_monthly_subs',

@@ -59,11 +59,13 @@ export class AppComponent implements OnInit {
     if(!isNewUser){
       const load = await this.loadingController.create({message: 'Please wait...' })
       await load.present();
-      const scans = this.commonUseUtil.getRemainingScans();
-      this.appStates.setRemainingScans(scans);
+      // const scans = this.commonUseUtil.getRemainingScans();
+      // this.appStates.setRemainingTokens(scans);
+      this.appStates.setLoading(true);
       this.appStates.setHistories(await this.commonUseService.getHistoryList());
-      // await this.commonUseService.claimFreePremium();
+      await this.commonUseService.checkFreePremium();
       await load.dismiss();
+      this.appStates.setLoading(false);
     }
   }
 }

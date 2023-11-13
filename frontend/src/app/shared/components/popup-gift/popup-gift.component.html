@@ -1,9 +1,8 @@
 <div class="popup-gift--main">
-  <div class="popup-gift--close" (click)="onClose()">
-    <ion-icon name="close"></ion-icon>
-  </div>
-  <h1 class="popup-gift--title">{{ 'CONGRATS_GIFT' | translate}}</h1>
-  <img class="popup-gift--img" src="/assets/img/gift.png" alt="">
-  <span class="popup-gift--ocr--premium--txt" [innerHTML]="('OCR_PREMIUM' | translate: { freeScans: freeScans })"></span>
-  <button class="popup-gift--claim button-elevated" mat-flat-button color="primary" (click)="onClaim()"  >{{ 'CLAIM_IT_NOW' | translate }} </button>
+  <img class="popup-gift--img" src="/assets/img/payout.gif" alt="">
+  <h1 class="popup-gift--title">Claim your gift now!</h1>
+  <span class="popup-gift--ocr--premium--txt">2 complimentary tokens</span>
+  <span class="popup-gift--ocr--premium--txt">10 free AI conversations</span>
+  <button class="popup-gift--claim button-elevated" mat-flat-button color="primary"
+  (click)="onClaim()"  >Claim </button>
 </div>

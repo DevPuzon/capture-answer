@@ -1,0 +1,13 @@
+.chat-bot--upper--message{
+  width: 95%;
+  position: absolute;
+  left: 50%;
+  background: #F5F8FF;
+  top: 10px;
+  transform: translate(-50%, 0);
+  border-radius: 10px;
+  padding: 10px;
+  .chat-bot--upper--message-p{
+    margin: 0px;
+  }
+}

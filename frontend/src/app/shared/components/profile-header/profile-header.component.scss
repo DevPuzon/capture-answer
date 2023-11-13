@@ -1,5 +1,4 @@
 .profile--header--main {
-
     display: flex;
     align-items: center;
     gap: 10px;
@@ -28,8 +27,8 @@
   .profile--header--span{
     padding: 3px 7px;
     font-size: 11px;
-    color: #fff;
-    background: rgba(255,255,255,0.1);
+    color: #000;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 25px;
   }
 }

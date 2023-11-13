@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { Browser } from '@capacitor/browser';
 import { AlertController, LoadingController, MenuController, ModalController, Platform } from '@ionic/angular';
@@ -27,6 +28,9 @@ export class DashboardPage implements OnInit,OnDestroy {
   headerTitle = 'capture & answer';
   showFiller = false;
   isPremium: boolean = false;
+  remainingFreeAiChat:number =0;
+  isLoading:boolean = false;
+
   constructor(private commonUseUtil : CommonUseUtil,
               private router : Router,
               private modalController:ModalController,
@@ -34,6 +38,7 @@ export class DashboardPage implements OnInit,OnDestroy {
               private admobUtil:AdmobUtil,
               private platform: Platform,
               private rateAppService:RateAppService,
+              private dialog: MatDialog,
               private loadingController : LoadingController,
               private toastService : ToastService,
               private commonUseService:CommonUseService,
@@ -57,9 +62,23 @@ export class DashboardPage implements OnInit,OnDestroy {
         }
       }
     });
-    this.isPremium = this.appStates.getIsUserPremium();
-    this.appStates.listenIsUserPremium().subscribe((value)=>{
+
+    this.appStates.listenIsUserPremium()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((value)=>{
       this.isPremium = this.appStates.getIsUserPremium();
+    });
+
+    this.appStates.listenFreeUserChat()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((remainingFreeAiChat)=>{
+      this.remainingFreeAiChat = remainingFreeAiChat;
+    });
+
+    this.appStates.listenLoading()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((isLoading)=>{
+      this.isLoading = isLoading;
     });
   }
 
@@ -69,8 +88,26 @@ export class DashboardPage implements OnInit,OnDestroy {
     // this.checkShowGiftModal();  //TO MOVE
     this.appStates.setIsShowBanner(true);
     // this.admobUtil.initialAdmob();
+
+    this.checkShowGiftModal();
   }
 
+  async checkShowGiftModal() {
+    //const isNewUser = this.commonUseUtil.isNewUser();
+
+    this.appStates.setLoading(true);
+    const isCanGetGift = await this.commonUseService.isCanGetGift();
+    this.appStates.setLoading(false);
+
+    console.log("checkShowGiftModal",isCanGetGift);
+    if(isCanGetGift){
+      this.dialog.open(PopupGiftComponent, {
+        width: '360px',
+        height:'480px',
+        disableClose:true
+      });
+    }
+  }
   onCloseMenu(){
     console.log('onCloseMenu');
     // this.menuController.close('dashboardMenu');

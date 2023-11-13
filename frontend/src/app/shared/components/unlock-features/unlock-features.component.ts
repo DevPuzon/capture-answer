@@ -18,7 +18,7 @@ import { AdmobUtil } from 'src/app/core/utils/admob.util';
   templateUrl: './unlock-features.component.html',
   styleUrls: ['./unlock-features.component.scss'],
 })
-export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy { 
+export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedPlan = 'monthly';
   textPaymentTerm = '';
   packages = [
@@ -93,14 +93,14 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   onChangePackage(selectedPlanIndex:number,selectedPlan:string){
-    for(let [i,val] of this.packages.entries()){val.selected=false;} 
+    for(let [i,val] of this.packages.entries()){val.selected=false;}
     this.selectedPlan = selectedPlan == "MONTHLY_PLAN" ? "monthly":"yearly";
-    
+
     for(let [i,val] of this.packages.entries()){
       if(i == selectedPlanIndex){
         val.selected = true;
       }
-    } 
+    }
   }
 
   async onSubscribe(){
@@ -131,14 +131,13 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   async checkShowGiftModal() {
     //const isNewUser = this.commonUseUtil.isNewUser();
     const isCanGetGift = await this.commonUseService.isCanGetGift();
+    console.log("checkShowGiftModal",isCanGetGift);
     if(isCanGetGift){
-      setTimeout(() => {
-        this.dialog.open(PopupGiftComponent, {
-          width: '360px',
-          height:'480px',
-          disableClose:true
-        });
-      }, 2000);
+      this.dialog.open(PopupGiftComponent, {
+        width: '360px',
+        height:'480px',
+        disableClose:true
+      });
     }
   }
 

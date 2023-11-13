@@ -1,54 +1,25 @@
-.popup-gift--main { 
-    display: grid;
-    justify-items: center;
-    height: 100%;
-    gap: 30px;
-    place-content: center;
-	.popup-gift--title {  
-        font-size: 34px;
-        font-weight: 700;
-        text-align: center;
-        margin: 0px;
-        width: 300px;
+.popup-gift--main {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  margin: 0 auto;
+	.popup-gift--title {
+    font-size: 22px;
+    margin-bottom: 8px;
 	}
 
-	.popup-gift--img { 
+	.popup-gift--img {
+    width: 190px;
+    margin-bottom: 30px;
+	}
+
+	.popup-gift--ocr--premium--txt {
 
 	}
 
-	.popup-gift--ocr--premium--txt { 
-                font-size: 17px;
-                font-weight: bold;
+	.popup-gift--claim {
+    width: 100%;
+    margin-top: 30px;
 	}
-
-        .button-elevated {
-                display: inline-block;
-                padding: 10px 20px;
-                //background-color: #3498db; /* Change to your desired color */
-                color: #ffffff; /* Button text color */
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                
-                /* Shadow for elevation effect */
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 
-                            0px 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-	.popup-gift--claim { 
-                height: 50px;
-                width: 90%;
-                font-weight: bold;
-                border-radius: 25px;
-                font-size: 17px;
-	}
-        .popup-gift--close {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                font-size: 24px;
-                cursor: pointer;
-              }
-              
 }

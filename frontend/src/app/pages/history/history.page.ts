@@ -4,8 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
 import { HistoryData } from 'src/app/models/history.model';
 import { CommonUseService } from 'src/app/services/common-use.service';
-import { OcrResultComponent } from 'src/app/shared/components/ocr-result/ocr-result.component';
-
+import { CaptureResultComponent } from 'src/app/shared/components/capture-result/capture-result.component';
 @Component({
   selector: 'app-history',
   templateUrl: './history.page.html',
@@ -86,7 +85,7 @@ export class HistoryPage implements OnInit,OnDestroy {
 
   async onClickItem(history:HistoryData){
     const modal = await this.modalController.create({
-      component:OcrResultComponent,
+      component:CaptureResultComponent,
       componentProps:{
         isViewAsHistory:true,
         captureId:history.captureId,

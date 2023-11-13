@@ -25,18 +25,22 @@ export class PopupGiftComponent  implements OnInit {
   ngOnInit() {}
 
   async onClaim(){
-    // const load = await this.loadingController.create({message: 'Please wait...' });
-    // this.dialogRef.close();
-    // await load.present();
-    // try{
-    //   await this.commonUseService.claimGift();
-    //   load.dismiss();
-    //   localStorage.setItem('giftAlreadyClaimed', '1');
-    //   (await this.toastService.presentToast(this.translateService.instant("CLAIMED_OK"),3000));
-    // }catch(ex:any){
-    //   load.dismiss();
-    //   (await this.toastService.presentToast(ex,3000));
-    // }
+    const load = await this.loadingController.create({message: 'Please wait...' });
+    await load.present();
+    await new Promise(async (resolve)=>{
+
+      try{
+        await this.commonUseService.claimFreePremium();
+        (await this.toastService.presentToast("Claimed successfully!",3000));
+        resolve({});
+      }catch(ex:any){
+        (await this.toastService.presentToast(ex,3000));
+        resolve({});
+      }
+    })
+
+    await load.dismiss();
+    this.dialogRef.close();
   }
 
   onClose() {

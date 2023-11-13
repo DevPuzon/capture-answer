@@ -32,6 +32,7 @@ async function bootstrap() {
   admin.initializeApp({
     credential: admin.credential.cert(adminConfig),
     databaseURL: "https://ocr-chat-ai.firebaseio.com",
+    storageBucket: "ocr-chat-ai.appspot.com"
   });
 
   app.useGlobalPipes(new ValidationPipe());

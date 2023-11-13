@@ -6,6 +6,7 @@ import { OCR_CHAT_AI_USER_ID, TABLE_CHAT_AI } from 'src/app/core/global-variable
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { AppStates } from 'src/app/core/app-states';
 import { LoadingController } from '@ionic/angular';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-chat-bot',
   templateUrl: './chat-bot.page.html',
@@ -14,12 +15,27 @@ import { LoadingController } from '@ionic/angular';
 export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
 
   private user : UserAccount = {} as UserAccount;
+  private destroy$: Subject<void> = new Subject<void>();
+  remainingFreeAiChat:number = 0;
+  isPremium:boolean = false;
 
   constructor(chatService : ChatService,
               private loading : LoadingController,
               private appStates:AppStates){
     super(chatService);
     this.tableName = TABLE_CHAT_AI;
+
+    this.appStates.listenIsUserPremium()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((value)=>{
+      this.isPremium = this.appStates.getIsUserPremium();
+    });
+
+    this.appStates.listenFreeUserChat()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((remainingFreeAiChat)=>{
+      this.remainingFreeAiChat = remainingFreeAiChat;
+    });
   }
 
   async ngOnInit() {
@@ -60,6 +76,8 @@ export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
@@ -68,7 +86,11 @@ export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
     const load = this.loading.create({ message : "Please wait ..."});
     (await load).present();
 
-    await this.chatService.sendMessage(event.message,event.userId);
+    try{
+      await this.chatService.sendMessage(event.message,event.userId);
+    }catch(ex){
+      console.log("onSendMessage er",ex);
+    }
 
     (await load).dismiss();
   }

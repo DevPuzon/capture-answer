@@ -2,7 +2,7 @@
 <div class="global--header" [ngClass]="{'global--header--home': headerTitle == 'capture & answer'}">
   <div class="global--header--content">
     <ocr-profile-header></ocr-profile-header>
-    <h1 class="global--header--title">{{ headerTitle }}</h1>
+    <h1 class="global--header--title" >{{ headerTitle }}</h1>
     <ion-buttons id="open-modal" expand="block">
       <ion-icon name="menu"></ion-icon>
     </ion-buttons>
@@ -54,14 +54,14 @@
   </ion-modal>
 </ion-content>
 
-<div class="camera-viewer--no-capture" *ngIf="headerTitle == 'capture & answer' && !isPremium ">
+<div class="camera-viewer--no-capture" *ngIf="headerTitle == 'capture & answer' && !isPremium && !isLoading ">
   <div class="camera-viewer--no-capture-container">
     <div class="camera-viewer--no-capture--center">
       <h1 class="camera-viewer--no-capture--center-h1">Unlock Image Capture!</h1>
       <p class="camera-viewer--no-capture--center-p">Get tokens to enable this feature. </p>
     </div>
     <div class="camera-viewer--no-capture--footer">
-      <p class="camera-viewer--no-capture--chat-ai-message">You have 5 AI chats left. 🤖 Chat away!</p>
+      <p class="camera-viewer--no-capture--chat-ai-message">You have {{remainingFreeAiChat}} AI free chats left. 🤖</p>
       <button class="camera-viewer--on--chat--with--ai" mat-flat-button color="primary" (click)="onChatWithAi()"  >Chat With AI</button>
     </div>
   </div>

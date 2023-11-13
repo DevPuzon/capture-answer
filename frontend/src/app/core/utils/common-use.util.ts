@@ -3,7 +3,7 @@ import {
 } from "@angular/core";
 import { Filesystem } from "@capacitor/filesystem";
 import { Platform } from "@ionic/angular";
-import { COUNT_SHOW_OFFER, NOT_NEW_USER, REMAINING_SCANS, SUBSCRIPTION_IDS } from "../global-variable";
+import { COUNT_SHOW_OFFER, NOT_NEW_USER, SUBSCRIPTION_IDS } from "../global-variable";
 import { PopupGiftComponent } from "src/app/shared/components/popup-gift/popup-gift.component";
 import { MatDialog } from "@angular/material/dialog";
 import { CommonUseService } from "src/app/services/common-use.service";
@@ -86,30 +86,30 @@ export class CommonUseUtil {
   //   });
   // }
 
-  deducScans(many = 1){
-    let remainingScans = this.appStates.getRemainingScans();
-    if(remainingScans > 0){
-      remainingScans = remainingScans - many;
-      this.setRemainingScans(remainingScans);
-    }
-  }
+  // deducScans(many = 1){
+  //   let remainingScans = this.appStates.getRemainingTokens();
+  //   if(remainingScans > 0){
+  //     remainingScans = remainingScans - many;
+  //     this.setRemainingScans(remainingScans);
+  //   }
+  // }
 
-  setRemainingScans(countScans:number){
-    localStorage.setItem(REMAINING_SCANS,countScans.toString());
-    this.appStates.setRemainingScans(countScans);
-  }
+  // setRemainingScans(countScans:number){
+  //   this.appStates.setRemainingTokens(countScans);
+  //   this.appStates.setUserPremium(countScans >= 1);
+  // }
 
-  addRemainingScans(add:number){
-    console.log("addRemainingScans",add);
-    const remaining = this.getRemainingScans() + add;
-    this.setRemainingScans(remaining);
-  }
+  // addRemainingScans(add:number){
+  //   console.log("addRemainingScans",add);
+  //   const remaining = this.getRemainingScans() + add;
+  //   this.setRemainingScans(remaining);
+  // }
 
-  getRemainingScans(){
-    const countStr = localStorage.getItem(REMAINING_SCANS) as string;
-    let count = parseInt(countStr ? countStr : "0");
-    return count;
-  }
+  // getRemainingScans(){
+  //   const countStr = localStorage.getItem(REMAINING_SCANS) as string;
+  //   let count = parseInt(countStr ? countStr : "0");
+  //   return count;
+  // }
 
   static getDeviceUID(){
     return new Promise<string>(async (resolve)=>{
@@ -203,4 +203,7 @@ export class CommonUseUtil {
       this.appStates.setIsStartCamera(isStart);
     }
   }
+
+
+
 }

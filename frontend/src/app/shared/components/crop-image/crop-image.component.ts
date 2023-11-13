@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { OcrResultComponent } from '../ocr-result/ocr-result.component';
 import { AppStates } from 'src/app/core/app-states';
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { CaptureResultComponent } from '../capture-result/capture-result.component';

@@ -43,7 +43,8 @@ export class ChatService {
       .subscribe((res: any) => {
         if(res.success){
           const data = res.data;
-          this.appStates.setFreeUserChat(data.freePremiumDevice.premiumCount);
+          this.appStates.setRemainingTokens(data.accountSubscribeDevice.premiumCount);
+          this.appStates.setFreeUserChat(data.accountSubscribeDevice.freeChatCount);
         }
         resolve({});
       },

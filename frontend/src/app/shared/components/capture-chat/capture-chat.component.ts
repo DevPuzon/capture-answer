@@ -71,8 +71,11 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
   async onSendMessage(event:any){
     const load = this.loading.create({ message : "Please wait ..."});
     (await load).present();
-
-    await this.chatService.sendMessage(event.message,event.userId);
+    try{
+      await this.chatService.sendMessage(event.message,event.userId);
+    }catch(ex){
+      console.log("onSendMessage er",ex);
+    }
 
     (await load).dismiss();
   }

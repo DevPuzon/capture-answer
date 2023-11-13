@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./profile-header.component.scss'],
 })
 export class ProfileHeaderComponent  implements OnInit,OnDestroy {
-  remainingScans : number = 0;
+  remainingTokens : number = 0;
   private destroy$:Subject<void> = new Subject<void>();
 
   constructor(
@@ -22,10 +22,10 @@ export class ProfileHeaderComponent  implements OnInit,OnDestroy {
     private toastService:ToastService) { }
 
   ngOnInit() {
-    this.appStates.remainingScansListen()
-    .pipe(takeUntil(this.destroy$)).subscribe((scans)=>{
-      console.log('ProfileHeaderComponent',scans);
-      this.remainingScans = scans;
+    this.appStates.listenRemainingTokens()
+    .pipe(takeUntil(this.destroy$)).subscribe((tokens)=>{
+      console.log('ProfileHeaderComponent',tokens);
+      this.remainingTokens = tokens;
     })
   }
 
