@@ -38,12 +38,31 @@ export class AdminController {
 
     
     @Post('update-subscriber')
-    async updateSubscribers(@Headers('authorization') authorization: string,@Body() data:any) {
+    async updateSubscriber(@Headers('authorization') authorization: string,@Body() data:any) {
         try {
             this.checkToken(authorization);
             
             const { deviceId,freeChatCount,premiumCount } = data;
-            const response = await this.adminService.updateSubscribers(deviceId,freeChatCount,premiumCount);
+            const response = await this.adminService.updateSubscriber(deviceId,freeChatCount,premiumCount);
+            return {
+                ...{
+                    success: true,
+                    data: response
+                },
+                statusCode: 200
+            };
+        } catch (ex) {
+            throw new HttpException(ex, HttpStatus.FORBIDDEN);
+        }
+    }
+    
+    @Post('add-subscriber')
+    async addSubscriber(@Headers('authorization') authorization: string,@Body() data:any) {
+        try {
+            this.checkToken(authorization);
+            
+            const { deviceId,freeChatCount,premiumCount } = data;
+            const response = await this.adminService.addSubscriber(deviceId,freeChatCount,premiumCount);
             return {
                 ...{
                     success: true,
@@ -56,14 +75,15 @@ export class AdminController {
         }
     }
 
+
     @Post('delete-subscriber')
-    async deleteSubscribers(@Headers('authorization') authorization: string,@Body() data:any) {
+    async deleteSubscriber(@Headers('authorization') authorization: string,@Body() data:any) {
         try {
             this.checkToken(authorization);
 
             const { deviceId } = data;
 
-            const response = await this.adminService.deleteSubscribers(deviceId);
+            const response = await this.adminService.deleteSubscriber(deviceId);
             return {
                 ...{
                     success: true,

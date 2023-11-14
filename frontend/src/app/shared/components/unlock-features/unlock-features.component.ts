@@ -141,20 +141,20 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   async onClose(){
     // this.appStates.setIsShowBanner(true);
     await this.modaController.dismiss();
-    this.checkShowGiftModal();
+    // this.checkShowGiftModal();
   }
 
-  async checkShowGiftModal() {
-    //const isNewUser = this.commonUseUtil.isNewUser();
-    const isCanGetGift = await this.commonUseService.isCanGetGift();
-    console.log("checkShowGiftModal",isCanGetGift);
-    if(isCanGetGift){
-      this.dialog.open(PopupGiftComponent, {
-        width: '360px',
-        height:'480px',
-        disableClose:true
-      });
-    }
-  }
+  // async checkShowGiftModal() {
+  //   //const isNewUser = this.commonUseUtil.isNewUser();
+  //   const isCanGetGift = await this.commonUseService.isCanGetGift();
+  //   console.log("checkShowGiftModal",isCanGetGift);
+  //   if(isCanGetGift){
+  //     this.dialog.open(PopupGiftComponent, {
+  //       width: '360px',
+  //       height:'480px',
+  //       disableClose:true
+  //     });
+  //   }
+  // }
 
 }

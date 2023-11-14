@@ -7,10 +7,11 @@ dotenv.config();
 // export const TABLE_CHAT_AI = 'ocr-chat-ai-'+process.env.ENVIRONMENT;
 // export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+process.env.ENVIRONMENT;
 export const TABLE_CHAT_AI = 'ocr-chat-ai-'+ENVIRONMENT;
+export const TABLE_SUBSCRIBERS = 'subscribers-'+ENVIRONMENT;
 export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+ENVIRONMENT;
 
 
-export const LOCAL_SUBSCRIBE = 'LOCAL_SUBSCRIBE.json';
+// export const LOCAL_SUBSCRIBE = 'LOCAL_SUBSCRIBE.json';
 export const FREE_CHAT_COUNT = 10;
 export const PREMIUM_COUNT = 2;
 export const READ_HISTORY_COUNT = 2; 

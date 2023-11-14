@@ -8,6 +8,8 @@ import { AppPurchaseUtil } from './core/utils/app-purchase.utils';
 import { AdmobUtil } from './core/utils/admob.util';
 import { TranslateService } from '@ngx-translate/core';
 import { RateAppService } from './services/rate-app.service';
+import { CryptUtil } from './core/utils/crypt.util';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +41,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.initApp();
+    var a = CryptUtil.encryptData(environment.firebaseConfig);
+    var b = CryptUtil.decryptData(a);
+    console.log("a",a);
+    console.log("b",b);
     // this.initPrepareAdmob();
   }
 
@@ -59,8 +65,6 @@ export class AppComponent implements OnInit {
     if(!isNewUser){
       const load = await this.loadingController.create({message: 'Please wait...' })
       await load.present();
-      // const scans = this.commonUseUtil.getRemainingScans();
-      // this.appStates.setRemainingTokens(scans);
       this.appStates.setLoading(true);
       this.appStates.setHistories(await this.commonUseService.getHistoryList());
       await this.commonUseService.checkFreePremium();

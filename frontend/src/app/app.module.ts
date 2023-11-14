@@ -22,6 +22,7 @@ import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { provideStorage,getStorage } from '@angular/fire/storage';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { CryptUtil } from './core/utils/crypt.util';
 register();
 @NgModule({
   declarations: [AppComponent],
@@ -32,7 +33,7 @@ register();
     MatTabsModule,
     HttpClientModule,
     SharedComponentsModule.forRoot(),
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirebaseApp(() => initializeApp(CryptUtil.decryptData(environment.firebaseConfig))),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),

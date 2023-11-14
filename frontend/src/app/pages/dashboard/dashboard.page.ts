@@ -89,7 +89,9 @@ export class DashboardPage implements OnInit,OnDestroy {
     this.appStates.setIsShowBanner(true);
     // this.admobUtil.initialAdmob();
 
-    this.checkShowGiftModal();
+    setTimeout(() => {
+      this.checkShowGiftModal();
+    }, 2500);
   }
 
   async checkShowGiftModal() {
