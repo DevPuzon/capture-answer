@@ -11,7 +11,10 @@ export const APPLICATION_ID = config.appId;
 export const APPLICATION_IOS_ID = '0000000';
 export const LAST_PURCHASED_PRODUCT_ID = 'LAST_PURCHASED_PRODUCT_ID';
 export const APP_NAME = config.appName;
+
 export const TABLE_CHAT_AI = 'ocr-chat-ai-'+environment.environment;
+export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+environment.environment;
+
 export const OCR_CHAT_AI_USER_ID = 'OCR_CHAT_AI_USER_ID';
 export const ALREADY_CLAIMED_GIFT = "ALREADY_CLAIMED_GIFT";
 export const SUBSCRIPTION_IDS = {

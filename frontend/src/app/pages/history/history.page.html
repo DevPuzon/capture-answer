@@ -16,21 +16,19 @@
          -->
 
 
-    <ion-item button
-    *ngFor="let history of histories">
+    <ion-item button *ngFor="let history of histories">
 
-      <ion-card mode="ios" >
-        <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png"
-        (click)="onClickItem(history)"/>
-        <ion-card-header
-        (click)="onClickItem(history)">
-          <ion-card-title>Card Title</ion-card-title>
-          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-        </ion-card-header>
+      <ion-card mode="ios" class="history--card">
+        <!-- <img [src]="history.image"
+          (click)="onClickItem(history)" /> -->
 
-        <ion-card-content
-        (click)="onClickItem(history)">
-          Here's a small text description for the card content. Nothing more, nothing less.
+          <image-viewer
+          (click)="onClickItem(history)"
+          [imageUrl]="history.image"
+          [isViewImage]="true"></image-viewer>
+
+        <ion-card-content class="history--card-content" (click)="onClickItem(history)">
+          <span  class="history--card-span">{{ history.text }}</span>
         </ion-card-content>
         <div class="history--action--delete--btn">
           <ion-button fill="clear" color="danger" (click)="onDelete(history.captureId)">Delete</ion-button>

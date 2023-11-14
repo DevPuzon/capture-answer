@@ -33,3 +33,29 @@
     font-size: 15px;
   }
 }
+
+
+.history--card {
+  width: 100%;
+	img {
+
+	}
+
+	.history--card-content {
+
+		.history--card-span {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+		}
+	}
+
+	.history--action--delete--btn {
+
+		ion-button {
+
+		}
+	}
+}

@@ -1,0 +1,28 @@
+.image--container__main{
+    position: relative;
+    // margin: 5px;
+    // border-radius: 8px;
+    // overflow: hidden;
+    min-height: 200px;
+    .image--container__img{
+        border-radius: 8px;
+        width: 100%;
+        object-fit: cover;
+    }
+    .image--container__view__img{
+        border-radius: 8px;
+        max-height: 78vh;
+        width: 100%;
+        object-fit: cover;
+    }
+    .image--container__skeleton{
+        position: absolute;
+        top: 0;
+        height: 95%;
+        width: 100%;
+        margin: 0px;
+        z-index: -1;
+        border-radius: 8px;
+    }
+}
+

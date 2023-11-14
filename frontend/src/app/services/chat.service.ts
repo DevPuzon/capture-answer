@@ -54,6 +54,33 @@ export class ChatService {
     })
   }
 
+  public sendMessageVision(roomId : string, message : string, imageUrl:string): Promise < any > {
+    return new Promise < any > (async (resolve, reject) => {
+      const deviceId = await CommonUseUtil.getDeviceUID();
+
+      const body = {
+        message:message,
+        imageUrl:imageUrl,
+        deviceId:deviceId,
+        roomId:roomId
+      }
+      console.log("sendMessageVision body",body,roomId,message,imageUrl);
+      this.http.post(`${environment.apiBaseURL}chat-ai/convo-vision`, body, {
+      })
+      .subscribe((res: any) => {
+        if(res.success){
+          const data = res.data;
+          this.appStates.setRemainingTokens(data.accountSubscribeDevice.premiumCount);
+          this.appStates.setFreeUserChat(data.accountSubscribeDevice.freeChatCount);
+        }
+        resolve({});
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      })
+    })
+  }
+
   public convoObservable(tableName : string, roomId : string) {
     return new Promise < any > (async (resolve) => {
       const convoRef = collection(doc(collection(this.firestore, tableName), roomId), tableName);

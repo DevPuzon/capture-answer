@@ -28,12 +28,14 @@ import { ConversationComponent } from '../components/conversation/conversation.c
 import { CaptureResultComponent } from '../components/capture-result/capture-result.component';
 import { CaptureChatComponent } from '../components/capture-chat/capture-chat.component';
 import { ChatSuggestionComponent } from '../components/chat-suggestion/chat-suggestion.component';
+import { ImageContainerComponent } from '../components/image-container/image-container.component';
 const components = [
                       PopupGiftComponent,
                       CameraViewerComponent,
                       CropImageComponent,
                       ProfileHeaderComponent,
                       UnlockFeaturesComponent,
+                      ImageContainerComponent,
                       AdsViewerComponent,
                       MessageComponent,
                       ConversationComponent,

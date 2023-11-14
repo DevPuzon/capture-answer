@@ -20,7 +20,9 @@
         <ion-label>Captured Photo</ion-label>
       </ion-item>
       <div class="ion-padding capture-chat--img-container" slot="content">
-        <img src="https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png" alt="">
+        <image-viewer
+        [imageUrl]="capturedImage"
+        [isViewImage]="true"></image-viewer>
       </div>
     </ion-accordion>
   </ion-accordion-group>

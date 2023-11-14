@@ -29,7 +29,7 @@ export class ChatAiService {
         return new Promise(async (resolve, reject) => {
             let accountSubscribeDevice;
             try {
-                accountSubscribeDevice = await this.chatValidation(deviceId);
+                accountSubscribeDevice = await this.chatValidation(deviceId,false);
             } catch (ex) {
                 return resolve(ex);
             }
@@ -52,23 +52,28 @@ export class ChatAiService {
         })
     }
 
-    public chatVisionAi(deviceId: string, roomId: string, message: string) {
+    public chatVisionAi(deviceId: string, roomId: string, message: string,imageUrl:string) {
         return new Promise(async (resolve, reject) => {
+            console.log('chatVisionAi',deviceId,roomId,message,imageUrl);
             let accountSubscribeDevice;
             try {
-                accountSubscribeDevice = await this.chatValidation(deviceId);
+                accountSubscribeDevice = await this.chatValidation(deviceId,true);
             } catch (ex) {
                 return resolve(ex);
             }
+            console.log('chatVisionAi accountSubscribeDevice',accountSubscribeDevice);
 
-            await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, roomId, message);
+            await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, deviceId, message);
             // const convoData = await this.getConvoHistory(roomId);
-            const botResponse = await this.requestChatVisionGPT(message);
+            const botResponse = await this.requestChatVisionGPT(message,imageUrl);
             const botMessage = botResponse;
+            console.log('chatVisionAi botMessage',botMessage);
             await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
 
 
             accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
+            
+            console.log('chatVisionAi accountSubscribeDevice',accountSubscribeDevice);
             resolve({
                 message: botMessage,
                 accountSubscribeDevice: accountSubscribeDevice
@@ -120,30 +125,30 @@ export class ChatAiService {
         })
     }
 
-    private requestChatVisionGPT(message: string): Promise < string > {
+    private requestChatVisionGPT(message: string,imageUrl : string): Promise < string > {
         return new Promise < string > (async (resolve) => {
-            const openai = new OpenAI({
-                apiKey: process.env.OPENAI_API_KEY,
-            });
-            const response = await openai.chat.completions.create({
-                model: "gpt-4-vision-preview",
-                messages: [{
-                    role: "user",
-                    content: [{
-                            type: "text",
-                            text: message
-                        },
-                        {
-                            type: "image_url",
-                            image_url: {
-                                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
-                            },
-                        },
-                    ],
-                }, ],
-            });
-            console.log(response.choices);
-            console.log(response.choices[0].message.content);
+            // const openai = new OpenAI({
+            //     apiKey: process.env.OPENAI_API_KEY,
+            // });
+            // const response = await openai.chat.completions.create({
+            //     model: "gpt-4-vision-preview",
+            //     messages: [{
+            //         role: "user",
+            //         content: [{
+            //                 type: "text",
+            //                 text: message
+            //             },
+            //             {
+            //                 type: "image_url",
+            //                 image_url: {
+            //                     "url": imageUrl
+            //                 },
+            //             },
+            //         ],
+            //     }, ],
+            // });
+            // console.log(response.choices);
+            // console.log(response.choices[0].message.content);
             resolve("test from- ai requestChatVisionGPT");
         })
     }
@@ -172,6 +177,7 @@ export class ChatAiService {
 
     private saveMessage(tableName: string, roomId: string, user_id: string, message: string, metadata ? : any) {
         return new Promise(async (resolve) => {
+            console.log('saveMessage',tableName,roomId,user_id,message,metadata);
             const chat_id = uuidv4();
             const chat: Chat = {
                 id: chat_id,
@@ -192,12 +198,19 @@ export class ChatAiService {
         })
     }
 
-    private chatValidation(deviceId: string) {
+    private chatValidation(deviceId: string,isUseChatVision:boolean) {
         return new Promise(async (resolve, reject) => {
+            console.log("chatValidation",deviceId);
             const isPremiumUser = await this.commonUseUtil.isPremiumUser(deviceId);
             let accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
+            
+            console.log("chatValidation accountSubscribeDevice",accountSubscribeDevice);
             if (isPremiumUser) {
-                this.commonUseUtil.minusChatAccountSubscribe(deviceId);
+                if(isUseChatVision){
+                    this.commonUseUtil.minusChatWithVisonAccountSubscribe(deviceId);
+                }else{ 
+                    this.commonUseUtil.minusChatAccountSubscribe(deviceId);
+                }
             } else {
                 console.log("accountSubscribeDevice", accountSubscribeDevice);
                 if (!accountSubscribeDevice || accountSubscribeDevice.freeChatCount <= 0) {
@@ -208,6 +221,8 @@ export class ChatAiService {
                     this.commonUseUtil.minusFreeChatAccountSubscribe(deviceId);
                 }
             }
+
+            resolve(accountSubscribeDevice);
         })
     }
 }

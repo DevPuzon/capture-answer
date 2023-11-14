@@ -5,6 +5,7 @@ import { AppStates } from 'src/app/core/app-states';
 import { UnlockFeaturesComponent } from '../unlock-features/unlock-features.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'src/app/services/toast.service';
+import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 
 @Component({
   selector: 'ocr-profile-header',
@@ -12,11 +13,12 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrls: ['./profile-header.component.scss'],
 })
 export class ProfileHeaderComponent  implements OnInit,OnDestroy {
-  remainingTokens : number = 0;
+  remainingTokens : string = '0';
   private destroy$:Subject<void> = new Subject<void>();
 
   constructor(
     private appStates:AppStates,
+    private commonUseUtil:CommonUseUtil,
     private modalController:ModalController,
     private translateService: TranslateService,
     private toastService:ToastService) { }
@@ -25,7 +27,7 @@ export class ProfileHeaderComponent  implements OnInit,OnDestroy {
     this.appStates.listenRemainingTokens()
     .pipe(takeUntil(this.destroy$)).subscribe((tokens)=>{
       console.log('ProfileHeaderComponent',tokens);
-      this.remainingTokens = tokens;
+      this.remainingTokens = this.commonUseUtil.formatNumber(tokens);
     })
   }
 

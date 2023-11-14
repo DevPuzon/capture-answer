@@ -7,7 +7,7 @@ export interface HistoryData{
     // translatedHistory:TranslatedHistory
 }
 
-export interface TranslatedHistory{
-    iso2:string,
-    text:string
-}
+// export interface TranslatedHistory{
+//     iso2:string,
+//     text:string
+// }

@@ -84,14 +84,10 @@ export class CommonUseService {
                 },
             });
 
-            stream.on('error', (error) => {
-                console.error("uploadImage", error);
-            });
-
-            stream.on('finish', () => {
-                console.log(`Image uploaded to Firebase Storage: ${fileName}`);
-            });
-
+            stream.on('error', (error) => { 
+            }); 
+            stream.on('finish', () => { 
+            }); 
             stream.end(file.buffer);
  
             const imageUrl = `https://firebasestorage.googleapis.com/v0/b/ocr-chat-ai.appspot.com/o/${fileName}?alt=media`;

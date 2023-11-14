@@ -205,5 +205,42 @@ export class CommonUseUtil {
   }
 
 
+  base64toFile(base64String : string, filename : string) {
+    const mimeType = "image/png";
+    const base64Data = base64String.split(',')[1];
+    const binaryData = atob(base64Data);
+    const arrayBuffer = new ArrayBuffer(binaryData.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binaryData.length; i++) {
+      uint8Array[i] = binaryData.charCodeAt(i);
+    }
 
+    const blob = new Blob([uint8Array], { type: mimeType });
+
+    const file = new File([blob], filename, { type: mimeType });
+
+    return file;
+  }
+
+  formatNumber(num:number) {
+    const absNum = Math.abs(num);
+
+    if (absNum >= 1e6) {
+      return (num / 1e6).toFixed(1) + 'M';
+    } else if (absNum >= 1e3) {
+      return (num / 1e3).toFixed(1) + 'k';
+    }
+
+    return num.toFixed(1).toString();
+  }
+
+  convertBlobToBase64(blob: Blob) {
+    return new Promise<string>((resolve)=>{
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        return resolve(reader.result as string);
+      };
+      reader.readAsDataURL(blob);
+    })
+  }
 }

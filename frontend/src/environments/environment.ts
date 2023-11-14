@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   environment:'local',
   deviceUID:'deviceIDExample02',
-  baseURL:"http://localhost:3000",
+  apiBaseURL:"http://localhost:3000/",
   admobTest:true,
   admobBannerId:'ca-app-pub-2424323323577681/4618343494', // change this
   firebaseConfig: {
@@ -16,8 +16,7 @@ export const environment = {
     messagingSenderId: "385358948807",
     appId: "1:385358948807:web:622f81b3b48c6fe99ad1e2",
     measurementId: "G-QQDQRN7QNP"
-  },
-  apiBaseURL:"http://localhost:3000/"
+  }
 };
 
 /*

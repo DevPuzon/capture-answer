@@ -1,0 +1,6 @@
+<div class="image--container__main">
+  <img
+    [classList]="isViewImage ? 'image--container__view__img' : 'image--container__img'"
+    [src]="imageUrl" loading="lazy">
+  <ion-skeleton-text class="image--container__skeleton" [animated]="true" *ngIf="isSkeletonShow" ></ion-skeleton-text>
+</div>

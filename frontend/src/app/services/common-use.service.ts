@@ -23,7 +23,7 @@ export class CommonUseService   {
   claimFreePremium(){
     return new Promise(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.post(environment.baseURL+'/common-use/claim-free-premium/'+deviceUID,
+      const req = this.httpClient.post(environment.apiBaseURL+'common-use/claim-free-premium/'+deviceUID,
       {
       }).subscribe(
         (res:any) => {
@@ -44,7 +44,7 @@ export class CommonUseService   {
   checkFreePremium(){
     return new Promise<boolean>(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.get(environment.baseURL+'/common-use/check-free-premium/'+deviceUID).subscribe(
+      const req = this.httpClient.get(environment.apiBaseURL+'common-use/check-free-premium/'+deviceUID).subscribe(
         (res:any) => {
           req.unsubscribe();
           if(res.success){
@@ -73,55 +73,57 @@ export class CommonUseService   {
     })
   }
 
-  saveHistory(item:HistoryData,saveImageString:string){
+  saveHistory(item:HistoryData,file?:File){
     return new Promise<HistoryData[]>(async (resolve,reject)=>{
       const histories = await this.getHistoryList();
-      const histroyFindIndex = this.histroyFindIndex(item.captureId,histories);
-      if(histroyFindIndex != -1){
-        histories[histroyFindIndex] = item;
+      const historyFindIndex = this.historyFindIndex(item.captureId,histories);
+
+      if(historyFindIndex != -1){
+        // new item
+        histories[historyFindIndex] = item;
       }else{
+        // already exist item
+        if(file){
+          item.image = await this.onUploadImage(file);
+        }else{
+          throw new Error("Requred file");
+        }
+
         histories.push(item);
       }
-      if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
-        const docPath = `${APP_NAME}/${new Date().getTime()}.msp`;
-        await Filesystem.writeFile({
-          path: docPath,
-          data: saveImageString,
-          directory: Directory.Documents,
-          encoding: Encoding.UTF8,
-        });
-        localStorage.setItem(HISTORY_LOCAL+item.captureId,docPath);
-      }else{
-        saveImageString = await this.commonUseUtil.resizeBase64Image(saveImageString,50,50)
-        localStorage.setItem(HISTORY_LOCAL+item.captureId,saveImageString);
-      }
+
       localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
       await this.getHistoryList();
       resolve(histories);
     })
   }
 
-  private histroyFindIndex(captureId:string, histories:HistoryData[]){
+  deleteHistoryItem(captureId:string){
+    return new Promise(async(resolve)=>{
+      const histories = await this.getHistoryList();
+      const historyFindIndex = this.historyFindIndex(captureId,histories);
+      histories.splice(historyFindIndex,1);
+      localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+      await this.getHistoryList();
+      resolve(histories);
+    })
+  }
+
+  private historyFindIndex(captureId:string, histories:HistoryData[]){
     return histories.findIndex((el)=>{return el.captureId == captureId});
+  }
+
+  getHistoryItem(captureId:string){
+    return new Promise<HistoryData>(async (resolve)=>{
+      const histories = await this.getHistoryList();
+      const item:any = histories.find((el)=>{return captureId == el.captureId; });
+      return resolve(item);
+    })
   }
 
   getHistoryList(){
     return new Promise<HistoryData[]>(async (resolve,reject)=>{
       let histories:any[]|HistoryData[] = JSON.parse(localStorage.getItem(HISTORY_LOCAL) || '[]');
-      for(let [i,val] of histories.entries()){
-        console.log(HISTORY_LOCAL+val.captureId);
-        if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
-          const docPath = localStorage.getItem(HISTORY_LOCAL+val.captureId) as string;
-          const contents = await Filesystem.readFile({
-            path: docPath,
-            directory: Directory.Documents,
-            encoding: Encoding.UTF8,
-          });
-          histories[i].image = contents.data;
-        }else{
-          histories[i].image = localStorage.getItem(HISTORY_LOCAL+val.captureId);
-        }
-      }
       console.log(histories);
       this.appStates.setHistories(histories);
       resolve(histories);
@@ -132,7 +134,7 @@ export class CommonUseService   {
     return new Promise<any>(async (resolve)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
       const localLanguage = await this.commonUseUtil.getLocalLanguage();
-      const req = this.httpClient.post(environment.baseURL+"/feedback",
+      const req = this.httpClient.post(environment.apiBaseURL+"feedback",
         {
           deviceUID: deviceUID,
           cultureIso2: localLanguage,
@@ -148,7 +150,7 @@ export class CommonUseService   {
   translateLanguage(text:string,iso2:string){
     return new Promise<string>(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.post(environment.baseURL+"/translate",
+      const req = this.httpClient.post(environment.apiBaseURL+"translate",
         {
           deviceUID: deviceUID,
           text: text,
@@ -179,7 +181,7 @@ export class CommonUseService   {
   //         cultureIso2: localLanguage
   //       }
   //     }
-  //     const req = this.httpClient.post(environment.baseURL+'/user/subscription/'+(isStart ? 'start':'end'),
+  //     const req = this.httpClient.post(environment.apiBaseURL+'/user/subscription/'+(isStart ? 'start':'end'),
   //       body
   //     ).subscribe((res:any)=>{
   //       const data :SubscriptionResponse = res;
@@ -190,4 +192,31 @@ export class CommonUseService   {
   //     })
   //   })
   // }
+
+  onUploadImage(file:File){
+    return new Promise<string>((resolve)=>{
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const req = this.httpClient.post(environment.apiBaseURL+"common-use/upload",
+        formData
+      ).subscribe((data:any) => {
+        req.unsubscribe();
+        return resolve(data.data.imageUrl);
+      })
+
+    })
+  }
+
+  getImage(url:string){
+    return new Promise<string>((resolve)=>{
+      const req = this.httpClient.get(url, { responseType: 'blob' })
+      .subscribe((data:any) => {
+        req.unsubscribe();
+        return resolve(this.commonUseUtil.convertBlobToBase64(data));
+      })
+
+    })
+  }
 }

@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
 import { HistoryData } from 'src/app/models/history.model';
 import { CommonUseService } from 'src/app/services/common-use.service';
+import { CaptureChatComponent } from 'src/app/shared/components/capture-chat/capture-chat.component';
 import { CaptureResultComponent } from 'src/app/shared/components/capture-result/capture-result.component';
 @Component({
   selector: 'app-history',
@@ -11,64 +12,11 @@ import { CaptureResultComponent } from 'src/app/shared/components/capture-result
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit,OnDestroy {
-  histories : HistoryData[] = [
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-    {
-      "captureId":"232",
-      "text":"lorem",
-      "image":"https://images.saymedia-content.com/.image/t_share/MTc4MjUyODg2Mjk4ODYzMjEz/free-fun-100-question-quiz-3.png",
-      "date":1699867355754
-    },
-  ];
+  histories : HistoryData[] = [];
   destroy$ = new Subject<void>();
+
   constructor(private commonUseService: CommonUseService,
+              private alertController:AlertController,
               private appStates : AppStates,
               private modalController : ModalController) { }
 
@@ -77,24 +25,19 @@ export class HistoryPage implements OnInit,OnDestroy {
   }
 
   async init() {
-    // this.appStates.historiesListen().pipe(takeUntil(this.destroy$))
-    // .subscribe((histories:HistoryData[])=>{
-    //   this.histories = histories.sort((a, b) => b.date - a.date);
-    // })
+    this.appStates.historiesListen().pipe(takeUntil(this.destroy$))
+    .subscribe((histories:HistoryData[])=>{
+      this.histories = histories.sort((a, b) => b.date - a.date);
+    })
   }
 
   async onClickItem(history:HistoryData){
     const modal = await this.modalController.create({
-      component:CaptureResultComponent,
+      id:"capture-chat",
+      component:CaptureChatComponent,
       componentProps:{
-        isViewAsHistory:true,
         captureId:history.captureId,
-        capturedImage:null,
-        historyTextValue:history.text,
-        saveImageString:history.image,
-        // isoTranslateLanguage:history.translatedHistory.iso2,
-        // translated:history.translatedHistory.text,
-        // languageDetected:history.languageDetected
+        capturedImage:history.image
       }
     })
     await modal.present();
@@ -105,7 +48,25 @@ export class HistoryPage implements OnInit,OnDestroy {
     this.destroy$.complete();
   }
 
-  onDelete(captureId:string){
-
+  async onDelete(captureId:string){
+    const alert = await this.alertController.create(
+      {
+        header:"Delete Confirmation",
+        message:"Are you sure you want to delete this item?",
+        buttons:[
+          {
+            text:"Cancel"
+          },
+          {
+            text:"Delete",
+            role:"destructive",
+            handler:async ()=>{
+              await this.commonUseService.deleteHistoryItem(captureId);
+            }
+          }
+        ]
+      }
+    )
+    await alert.present();
   }
 }

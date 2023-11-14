@@ -17,4 +17,17 @@ export class ChatAiController {
             throw new HttpException({success:false,...ex}, HttpStatus.FORBIDDEN);
         }
     }
+
+    
+    @Post('convo-vision') 
+    async convoVision(@Body() data : any) {   
+        try{
+            console.log('convoVision',data);
+            const { message,imageUrl,deviceId,roomId } = data; 
+            const response = await this.chatAiService.chatVisionAi(deviceId,roomId,message,imageUrl)
+            return { ...{ success:true, data:response}, statusCode: 200 };
+        }catch(ex){  
+            throw new HttpException({success:false,...ex}, HttpStatus.FORBIDDEN);
+        }
+    }
 }
