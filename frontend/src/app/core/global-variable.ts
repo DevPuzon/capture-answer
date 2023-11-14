@@ -19,8 +19,10 @@ export const OCR_CHAT_AI_USER_ID = 'OCR_CHAT_AI_USER_ID';
 export const ALREADY_CLAIMED_GIFT = "ALREADY_CLAIMED_GIFT";
 export const SUBSCRIPTION_IDS = {
   androidSubscriptionIds: {
-    monthly: 'ocr_gold_android_monthly_subs',
-    yearly: 'ocr_gold_android_yearly_subs'
+    one: 'android_one',
+    five: 'android_five',
+    ten: 'android_ten',
+    fifteen: 'android_fifteen'
   },
   iosSubscriptionIds: {
     monthly: 'ocr_gold_ios_monthly_subs',

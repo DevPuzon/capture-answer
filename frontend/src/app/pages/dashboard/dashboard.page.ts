@@ -54,7 +54,7 @@ export class DashboardPage implements OnInit,OnDestroy {
         if(event.url.includes('history')){
           this.headerTitle = 'history';
         }else if(event.url.includes('chat-with-ai')){
-          this.headerTitle = 'chat with ai';
+          this.headerTitle = 'ai chat lounge';
         }else if(event.url.includes('open-source-libraries')){
           this.headerTitle = "open source libraries";
         }else{

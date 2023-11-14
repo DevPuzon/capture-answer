@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
@@ -13,6 +13,7 @@ import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
   styleUrls: ['./profile-header.component.scss'],
 })
 export class ProfileHeaderComponent  implements OnInit,OnDestroy {
+  @Input('isShowRight') isShowRight = false;
   remainingTokens : string = '0';
   private destroy$:Subject<void> = new Subject<void>();
 

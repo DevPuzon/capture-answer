@@ -1,4 +1,4 @@
-package com.ocr.chat.ai;
+package com.capture.answer.ai;
 
 import com.getcapacitor.BridgeActivity;
 

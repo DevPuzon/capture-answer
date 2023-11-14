@@ -1,8 +1,9 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommonUseService } from './common-use.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ENVIRONMENT } from 'src/environments/environment';
 
-@Controller('common-use')
+@Controller(ENVIRONMENT+'/common-use')
 export class CommonUseController {
     
     constructor(private commonUseService:CommonUseService){}
@@ -20,6 +21,7 @@ export class CommonUseController {
     @Get('check-free-premium/:deviceId') 
     async checkAccountSubscribe(@Param('deviceId') deviceId : string) {  
         try{  
+            console.log("checkAccountSubscribe");
             const response = await this.commonUseService.checkAccountSubscribe(deviceId)
             return { ...{ success:true, data:response}, statusCode: 200 };
         }catch(ex){  

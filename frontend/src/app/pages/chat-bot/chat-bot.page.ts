@@ -7,6 +7,7 @@ import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { AppStates } from 'src/app/core/app-states';
 import { LoadingController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
+import { ToastService } from 'src/app/services/toast.service';
 @Component({
   selector: 'app-chat-bot',
   templateUrl: './chat-bot.page.html',
@@ -21,6 +22,7 @@ export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
 
   constructor(chatService : ChatService,
               private loading : LoadingController,
+              private toastService:ToastService,
               private appStates:AppStates){
     super(chatService);
     this.tableName = TABLE_CHAT_AI;
@@ -47,6 +49,7 @@ export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
       console.log('ChatBotPage listenFreeUserChat',el);
     })
   }
+
 
   checkChat() {
     console.log("check chats",this.chats,this.chats.length);
@@ -88,8 +91,8 @@ export class ChatBotPage extends ChatAbstract implements OnInit, OnDestroy{
 
     try{
       await this.chatService.sendMessage(event.message,event.userId);
-    }catch(ex){
-      console.log("onSendMessage er",ex);
+    }catch(ex:any){
+      console.error("onSendMessage er",ex);
     }
 
     (await load).dismiss();

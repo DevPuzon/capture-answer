@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-  environment:'prod',
+  environment:'local',
   deviceUID:'',
   admobTest:false,
-  apiBaseURL:"https://web-voice-aidep.devpuzon.repl.co/prod/",
+  apiBaseURL:"https://web-voice-aidep.devpuzon.repl.co/local/",
   admobBannerId:'ca-app-pub-2424323323577681/4618343494', // change this
   firebaseConfig: {
     apiKey: "AIzaSyBRS90bS-9u5IHjUw-jk5naV7k0MiJJyBY",

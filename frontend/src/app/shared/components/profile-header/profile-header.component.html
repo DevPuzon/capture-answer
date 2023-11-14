@@ -1,7 +1,10 @@
 <div class="profile--header--main">
   <a class="profile--header--dias" (click)="onUnlockFeatures()">
-    <ion-icon name="diamond"></ion-icon>
-    <span class="profile--header--span"  >
+    <span class="profile--header--span" *ngIf="isShowRight"  >
+      {{remainingTokens}}
+    </span>
+    <ion-icon name="diamond-outline"></ion-icon>
+    <span class="profile--header--span" *ngIf="!isShowRight" >
       {{remainingTokens}}
     </span>
   </a>

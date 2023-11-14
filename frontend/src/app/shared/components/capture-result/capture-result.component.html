@@ -2,10 +2,10 @@
 <div class="global--header">
   <div class="global--header--content">
     <div class="global--header--primary--btn" (click)="onBack()">
-      <ion-icon class="global--header--arrow-left" name="arrow-back"></ion-icon>
+      <ion-icon class="global--header--arrow-left" name="arrow-back-outline"></ion-icon>
     </div>
     <h1 class="global--header--title">{{ 'RESULT' | translate}}</h1>
-    <div class="global--header--empty"></div>
+    <ocr-profile-header [isShowRight]="true"></ocr-profile-header>
   </div>
   <span class="global--header--bottom--border"></span>
 </div>
@@ -16,5 +16,5 @@
   </div>
 </ion-content>
 <ion-footer>
-  <chat-message (onSendMessage)="onSendMessage($event)"></chat-message>
+  <chat-message (onSendMessage)="onSendMessage($event)" [isShowSuggestion]="true"></chat-message>
 </ion-footer>

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Image To Text with Chat AI (OCR)</string>
     <string name="title_activity_main">Image To Text with Chat AI (OCR)</string>
-    <string name="package_name">com.ocr.chat.ai</string>
-    <string name="custom_url_scheme">com.ocr.chat.ai</string>
+    <string name="package_name">com.capture.answer.ai</string>
+    <string name="custom_url_scheme">com.capture.answer.ai</string>
   <string name="admob_app_id">ca-app-pub-2424323323577681~9714440270</string>
 </resources>

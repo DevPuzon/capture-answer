@@ -23,17 +23,33 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   textPaymentTerm = '';
   packages = [
     {
-      textPlan:"MONTHLY_PLAN",
-      description:"Lorem",
-      price:5,
+      id:"one",
+      title:"Discounted",
+      description:"20 tokens",
+      price:1,
       selected:true
     },
     {
-      textPlan:"ANNUAL_PLAN",
-      description:"Lorem",
-      price:15,
+      id:"five",
+      title:"Silver",
+      description:"200 tokens",
+      price:5,
       selected:false
     },
+    {
+      id:"ten",
+      title:"Gold",
+      description:"450 tokens",
+      price:10,
+      selected:false
+    },
+    {
+      id:"fifteen",
+      title:"Diamond",
+      description:"750 tokens",
+      price:15,
+      selected:false
+    }
   ];
 
   // platinumPackages = [

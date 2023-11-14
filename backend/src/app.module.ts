@@ -6,10 +6,14 @@ import { ChatAiModule } from './chat-ai/chat-ai.module';
 import { CommonUseModule } from './common-use/common-use.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SharedProvider } from './shared/shared.modules';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [ 
-    ChatAiModule, CommonUseModule],
+    ChatAiModule, 
+    CommonUseModule, 
+    AdminModule
+  ],
   controllers: [AppController],
   providers: [AppService,...SharedProvider ], 
 })

@@ -41,6 +41,12 @@
   </ion-list>
 
 </ion-content>
+
+<div class="global--no-data-center" *ngIf="isShowNoData && histories.length <= 0">
+  <h1 class="global--no-data-center-h1">Data Not Found</h1>
+  <p class="global--no-data-center-p">Oops! It looks like there's no data available at the moment. </p>
+</div>
+
 <ion-footer>
   <app-ads-viewer></app-ads-viewer>
 </ion-footer>

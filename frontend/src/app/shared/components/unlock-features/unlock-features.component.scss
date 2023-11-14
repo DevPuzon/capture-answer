@@ -64,13 +64,16 @@
       min-width: 130px;
 
       .unlock-f--package--txt--plan {
-          font-size: 20px;
-          font-weight: 500;
+        font-size: 15px;
+        font-weight: 500;
       }
       .unlock-f--package--txt--description {
-          font-size: 17px;
+        font-size: 15px;
       }
-
+      .unlock-f--package--txt--price{
+        font-size: 32px;
+        font-weight: bold;
+      }
 
       .unlock-f--package--usd--num--txt {
           font-size: 60px;
@@ -106,8 +109,8 @@ mat-tab-group{
 }
 
 .bottom-div {
-  flex-shrink: 0; 
-  background-color: #f9f9f9;  
+  flex-shrink: 0;
+  background-color: #f9f9f9;
 }
 
 .content {
@@ -131,7 +134,7 @@ ion-item{
 }
 
 .unlock-f--payment--term{
-  margin: 20px 10px; 
+  margin: 20px 10px;
   font-size: 12px;
   text-align: center;
 }

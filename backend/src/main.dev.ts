@@ -1,15 +1,30 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as admin from 'firebase-admin'; 
-import { ServiceAccount } from "firebase-admin";
-import { ValidationPipe } from '@nestjs/common';
+import {
+  NestFactory
+} from '@nestjs/core';
+import {
+  AppModule
+} from './app.module';
+import * as admin from 'firebase-admin';
+import {
+  ServiceAccount
+} from "firebase-admin";
 import * as dotenv from 'dotenv';
-import {  PORT } from 'src/environments/environment';
 
+import {
+  ExpressAdapter,
+  NestExpressApplication
+} from '@nestjs/platform-express';
+import * as express from 'express';
+import * as functions from 'firebase-functions';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true }); 
-  
+const server: express.Express = express();
+
+export const createNestServer = async (expressInstance: express.Express) => {
+  const adapter = new ExpressAdapter(expressInstance);
+  const app = await NestFactory.create < NestExpressApplication > (
+    AppModule, adapter, {},
+  );
+
   dotenv.config();
   const firebase = {
     "type": "service_account",
@@ -23,8 +38,8 @@ async function bootstrap() {
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-avn2g%40ocr-chat-ai.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
-}
-  
+  }
+
   const adminConfig: ServiceAccount = {
     "projectId": firebase.project_id,
     "privateKey": firebase.private_key,
@@ -37,11 +52,13 @@ async function bootstrap() {
     storageBucket: "ocr-chat-ai.appspot.com"
   });
 
-  app.useGlobalPipes(new ValidationPipe());
+
   app.enableCors();
-  await app.listen(PORT);
-}
-bootstrap();
+  return app.init();
+};
 
+createNestServer(server)
+  .then(v => console.log('Nest Ready'))
+  .catch(err => console.error('Nest broken', err));
 
-
+export const api: functions.HttpsFunction = functions.https.onRequest(server);

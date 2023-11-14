@@ -32,19 +32,23 @@ export class CaptureResultComponent  implements OnInit {
     const { message } = event;
     const load  = await this.loadingController.create({message:"Please wait..."});
     await load.present();
-    console.log("onSendMessage",event,message);
-    const file = this.commoUseUtl.base64toFile(this.capturedImage,this.captureId.toString());
-    const item:HistoryData = {
-      captureId: this.captureId,
-      text:message,
-      image:'',
-      date:new Date().getTime()
+    try{
+      console.log("onSendMessage",event,message);
+      const file = this.commoUseUtl.base64toFile(this.capturedImage,this.captureId.toString());
+      const item:HistoryData = {
+        captureId: this.captureId,
+        text:message,
+        image:'',
+        date:new Date().getTime()
+      }
+      await this.commonUseService.saveHistory(item,file);
+      const { image } = await this.commonUseService.getHistoryItem(this.captureId);
+      await this.chatService.sendMessageVision(this.captureId,message,image);
+      await this.onBack();
+      await this.onOpenCaptureChat();
+    }catch(ex){
+      console.error(ex);
     }
-    await this.commonUseService.saveHistory(item,file);
-    const { image } = await this.commonUseService.getHistoryItem(this.captureId);
-    await this.chatService.sendMessageVision(this.captureId,message,image);
-    await this.onBack();
-    await this.onOpenCaptureChat();
     await load.dismiss();
   }
 
@@ -53,6 +57,7 @@ export class CaptureResultComponent  implements OnInit {
       id:"capture-chat",
       component:CaptureChatComponent,
       componentProps:{
+        capturedImage:this.capturedImage,
         captureId:this.captureId
       }
     })

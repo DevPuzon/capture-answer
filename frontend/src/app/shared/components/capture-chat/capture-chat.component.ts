@@ -6,6 +6,7 @@ import { TABLE_CHAT_VISON_AI } from 'src/app/core/global-variable';
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { ChatService } from 'src/app/services/chat.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-capture-chat',
@@ -19,6 +20,7 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
   private user : UserAccount = {} as UserAccount;
 
   constructor(chatService : ChatService,
+              private toastService:ToastService,
               private modalController:ModalController,
               private loading : LoadingController,
               private appStates:AppStates){
@@ -78,7 +80,8 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
     try{
       const { message } = event;
       await this.chatService.sendMessageVision(this.captureId,message,this.capturedImage);
-    }catch(ex){
+    }catch(ex:any){
+      this.toastService.presentToast(ex.error.message);
       console.log("onSendMessage er",ex);
     }
 

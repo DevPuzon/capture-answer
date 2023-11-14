@@ -17,36 +17,35 @@
     <ng-template>
       <ion-list class="dashboard--list-item" mode="md">
         <ion-item button (click)="onClickItemMenu('MAIN')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="home" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="home-outline" slot="start"></ion-icon>
           <ion-label>{{ 'HOME' | translate }}</ion-label>
         </ion-item>
-        <ion-item *ngIf="!isPremium" button (click)="onClickItemMenu('UNLOCK_FEATURES')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="diamond" slot="start"></ion-icon>
+        <ion-item button (click)="onClickItemMenu('UNLOCK_FEATURES')" lines="none" detail="false" [class.selected]="false">
+          <ion-icon aria-hidden="true" name="diamond-outline" slot="start"></ion-icon>
           <ion-label>{{ 'GET_PREMIUM' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('CHAT_WITH_AI')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="chatbubbles" slot="start"></ion-icon>
-          <ion-icon *ngIf="!isPremium" aria-hidden="true" name="lock-closed" slot="end"></ion-icon>
+          <ion-icon aria-hidden="true" name="chatbubbles-outline" slot="start"></ion-icon>
           <ion-label>{{ 'CHAT_WITH_AI' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('HISTORY')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="book" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="book-outline" slot="start"></ion-icon>
           <ion-label>{{ 'HISTORY' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('SETTINGS')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="settings" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="settings-outline" slot="start"></ion-icon>
           <ion-label>{{ 'SETTINGS' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('OUR_OTHER_APPS')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="apps" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="apps-outline" slot="start"></ion-icon>
           <ion-label>{{ 'OUR_OTHER_APPS' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('SEND_US_A_FEEDBACK')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="mail" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="mail-outline" slot="start"></ion-icon>
           <ion-label>{{ 'SEND_US_A_FEEDBACK' | translate }}</ion-label>
         </ion-item>
         <ion-item button (click)="onClickItemMenu('RATE_APP_ON_GOOGLE_PLAY')" lines="none" detail="false" [class.selected]="false">
-          <ion-icon aria-hidden="true" name="bag" slot="start"></ion-icon>
+          <ion-icon aria-hidden="true" name="bag-outline" slot="start"></ion-icon>
           <ion-label>{{ 'RATE_APP_ON_GOOGLE_PLAY' | translate }}</ion-label>
         </ion-item>
       </ion-list>
@@ -62,7 +61,7 @@
     </div>
     <div class="camera-viewer--no-capture--footer">
       <p class="camera-viewer--no-capture--chat-ai-message">You have {{remainingFreeAiChat}} AI free chats left. 🤖</p>
-      <button class="camera-viewer--on--chat--with--ai" mat-flat-button color="primary" (click)="onChatWithAi()"  >Chat With AI</button>
+      <button class="camera-viewer--on--chat--with--ai" mat-flat-button color="primary" (click)="onChatWithAi()"  >AI Chat Lounge</button>
     </div>
   </div>
 </div>

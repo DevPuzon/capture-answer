@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   environment:'local',
   deviceUID:'deviceIDExample02',
-  apiBaseURL:"http://localhost:3000/",
+  apiBaseURL:"https://us-central1-ocr-chat-ai.cloudfunctions.net/api/local/",
+  // apiBaseURL:"http://localhost:5000/ocr-chat-ai/us-central1/api/",
   admobTest:true,
   admobBannerId:'ca-app-pub-2424323323577681/4618343494', // change this
   firebaseConfig: {

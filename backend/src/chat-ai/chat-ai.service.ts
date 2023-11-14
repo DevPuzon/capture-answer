@@ -31,7 +31,7 @@ export class ChatAiService {
             try {
                 accountSubscribeDevice = await this.chatValidation(deviceId,false);
             } catch (ex) {
-                return resolve(ex);
+                return reject(ex);
             }
 
             const roomId = deviceId;

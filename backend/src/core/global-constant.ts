@@ -1,10 +1,13 @@
 
 
 import * as dotenv from 'dotenv';
+import { ENVIRONMENT } from 'src/environments/environment';
 
 dotenv.config();
-export const TABLE_CHAT_AI = 'ocr-chat-ai-'+process.env.ENVIRONMENT;
-export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+process.env.ENVIRONMENT;
+// export const TABLE_CHAT_AI = 'ocr-chat-ai-'+process.env.ENVIRONMENT;
+// export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+process.env.ENVIRONMENT;
+export const TABLE_CHAT_AI = 'ocr-chat-ai-'+ENVIRONMENT;
+export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+ENVIRONMENT;
 
 
 export const LOCAL_SUBSCRIBE = 'LOCAL_SUBSCRIBE.json';

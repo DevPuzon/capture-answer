@@ -1,7 +1,8 @@
 import { Body, Controller, HttpException, HttpStatus, Param, Post, Req } from '@nestjs/common'; 
 import { ChatAiService } from './chat-ai.service';
+import { ENVIRONMENT } from 'src/environments/environment';
 
-@Controller('chat-ai')
+@Controller(ENVIRONMENT+'/chat-ai')
 export class ChatAiController {
 
     constructor(private chatAiService:ChatAiService){}
@@ -16,9 +17,8 @@ export class ChatAiController {
         }catch(ex){  
             throw new HttpException({success:false,...ex}, HttpStatus.FORBIDDEN);
         }
-    }
+    } 
 
-    
     @Post('convo-vision') 
     async convoVision(@Body() data : any) {   
         try{

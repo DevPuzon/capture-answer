@@ -14,6 +14,7 @@ import { ChatSuggestionComponent } from '../chat-suggestion/chat-suggestion.comp
 })
 export class MessageComponent  implements OnInit {
   @Output() onSendMessage: EventEmitter<any> = new EventEmitter<any>();
+  @Input('isShowSuggestion') isShowSuggestion = false;
 
   messageForm: FormGroup;
   user: UserAccount = {} as UserAccount;

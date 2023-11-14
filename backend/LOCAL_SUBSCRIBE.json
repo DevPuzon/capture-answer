@@ -1,7 +1,17 @@
 {
+  "2": {
+    "deviceId": "2",
+    "freeChatCount": 0,
+    "premiumCount": 7.9
+  },
+  "3": {
+    "deviceId": "3",
+    "freeChatCount": 0,
+    "premiumCount": 7.9
+  },
   "c65ad02a-d429-4654-befd-ef0107c79c25": {
     "deviceId": "c65ad02a-d429-4654-befd-ef0107c79c25",
-    "freeChatCount": 10,
-    "premiumCount": 106.2
+    "freeChatCount": 0,
+    "premiumCount": 7.9
   }
 }

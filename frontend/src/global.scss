@@ -199,3 +199,23 @@ ion-modal#capture-chat {
   --width: 100%;
   --height: 100vh;
 }
+
+
+.global--no-data-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%;
+	.global--no-data-center-h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    text-align: center;
+
+	}
+
+	.global--no-data-center-p {
+    font-size: 14px;
+    text-align: center;
+	}
+}

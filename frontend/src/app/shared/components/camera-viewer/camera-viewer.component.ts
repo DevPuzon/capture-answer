@@ -109,8 +109,6 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
     const options : CameraPreviewPictureOptions = {
       quality:100
     }
-
-    // #change
     try {
       let baseSixtyFourImage = (await CameraPreview.capture(options)).value;
       const capturePreview = `data:image/jpeg;base64,${baseSixtyFourImage}`;
@@ -118,7 +116,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
     } catch (error: any) {
       let msg = JSON.stringify(error);
       if(error && error.errorMessage) msg = error.errorMessage;
-      this.toastService.presentToast("Error: "+msg);
+      this.toastService.presentToast("Camera not found: "+msg);
     }
   }
 

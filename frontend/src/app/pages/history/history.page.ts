@@ -14,6 +14,7 @@ import { CaptureResultComponent } from 'src/app/shared/components/capture-result
 export class HistoryPage implements OnInit,OnDestroy {
   histories : HistoryData[] = [];
   destroy$ = new Subject<void>();
+  isShowNoData = false;
 
   constructor(private commonUseService: CommonUseService,
               private alertController:AlertController,
@@ -22,15 +23,22 @@ export class HistoryPage implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.init();
+    this.checkData();
   }
 
   async init() {
     this.appStates.historiesListen().pipe(takeUntil(this.destroy$))
     .subscribe((histories:HistoryData[])=>{
       this.histories = histories.sort((a, b) => b.date - a.date);
+      this.checkData();
     })
   }
 
+  checkData(){
+    setTimeout(()=>{
+      this.isShowNoData = this.histories.length <= 0 ;
+    },2000);
+  }
   async onClickItem(history:HistoryData){
     const modal = await this.modalController.create({
       id:"capture-chat",

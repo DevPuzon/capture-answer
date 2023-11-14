@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ocr.chat.ai',
-  appName: 'capture & answer - OCR Chat AI',
+  appId: 'com.capture.answer.ai',
+  appName: 'capture & answer - AI',
   bundledWebRuntime: false,
   webDir: 'www',
   server: {

@@ -20,6 +20,7 @@ import { UserAccount } from '../models/user-account.model';
 import { CommonUseUtil } from '../core/utils/common-use.util';
 import { Observable } from 'rxjs';
 import { AppStates } from '../core/app-states';
+import { ToastService } from './toast.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +29,7 @@ export class ChatService {
   private countPerPage = 10;
 
   constructor(
+    private toastService:ToastService,
     private appStates : AppStates,
     private http: HttpClient ) {}
 
@@ -49,6 +51,7 @@ export class ChatService {
         resolve({});
       },
       (error: HttpErrorResponse) => {
+        this.toastService.presentToast(error.error.message);
         reject(error);
       })
     })
@@ -76,6 +79,7 @@ export class ChatService {
         resolve({});
       },
       (error: HttpErrorResponse) => {
+        this.toastService.presentToast(error.error.message);
         reject(error);
       })
     })

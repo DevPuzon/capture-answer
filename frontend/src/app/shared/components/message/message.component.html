@@ -1,5 +1,5 @@
 <div class="message--main">
-  <ion-row>
+  <ion-row *ngIf="isShowSuggestion">
     <ion-col size="10">
       <div class="message--suggestion--container">
         <ng-container *ngFor="let question of commonQuestions">
@@ -16,7 +16,7 @@
         <textarea formControlName="message" class="message--textarea" placeholder="Type your message"></textarea>
       </ion-col>
       <ion-col size="1.5" style="display: grid; place-content: center;">
-        <a class="message--submit--btn " (click)="onSubmit()"><ion-icon name="send" color="primary"></ion-icon></a>
+        <a class="message--submit--btn " (click)="onSubmit()"><ion-icon name="send-outline" color="primary"></ion-icon></a>
       </ion-col>
     </ion-row>
   </form>
