@@ -28,8 +28,6 @@ export class AppComponent implements OnInit {
               private nativePermissionUtil:NativePermissionsUtil,
               private translateService: TranslateService) {
     this.initPlatformDependents();
-
-    this.nativePermissionUtil.cameraAndroidPermission();
   }
 
   private initPlatformDependents(){
@@ -39,6 +37,7 @@ export class AppComponent implements OnInit {
       console.log('platform.ready');
       this.translateService.setDefaultLang('en');
       this.appPurchaseUtil.initializeV1();
+      // this.nativePermissionUtil.cameraAndroidPermission();
       // this.rateAppService.init();
     });
 

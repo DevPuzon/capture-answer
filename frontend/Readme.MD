@@ -1,6 +1,7 @@
 D:\Github\personal-project\ocr-chat-gpt\android-keystore.jks
 keystore pass = com.capture.answer.ai.msp
 
+https://api.exchangerate-api.com/v4/latest/USD
 
 Snap and Retrieve Answers
 
@@ -11,7 +12,7 @@ Homework Helper
 Paper Assistance
 Ask Anything
 History Companion
- 
+
 
 Title: Snap & Solve
 Description: Easily tackle problems with a snap!

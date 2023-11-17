@@ -19,7 +19,7 @@ import { AdmobUtil } from 'src/app/core/utils/admob.util';
   styleUrls: ['./unlock-features.component.scss'],
 })
 export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy {
-  selectedPlan = 'monthly';
+
   textPaymentTerm = '';
   packages = [
     {
@@ -51,6 +51,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       selected:false
     }
   ];
+  selectedPackage = this.packages[0];
 
   // platinumPackages = [
   //   {
@@ -92,11 +93,13 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     setTimeout(() => {
       this.admobUtils.hideBanner(); //HACk
     }, 100);
+    const language = this.commonUseUtil.getLocalLanguage();
+    console.log('langauge',language);
 
     if(this.commonUseUtil.isNativeIos()){
-      this.textPaymentTerm = 'The yearly subscription costs 50 USD and automatically renews annually, while the monthly subscription is priced at 5 USD and automatically renews every month. You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Apple Store.';
+      this.textPaymentTerm = 'You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Apple Store.';
     }else{
-      this.textPaymentTerm = 'The yearly subscription costs 50 USD and automatically renews annually, while the monthly subscription is priced at 5 USD and automatically renews every month. You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Google Play Store.';
+      this.textPaymentTerm = 'You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Google Play Store.';
     }
   }
 
@@ -110,17 +113,16 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
 
   onChangePackage(selectedPlanIndex:number,selectedPlan:string){
     for(let [i,val] of this.packages.entries()){val.selected=false;}
-    this.selectedPlan = selectedPlan == "MONTHLY_PLAN" ? "monthly":"yearly";
-
     for(let [i,val] of this.packages.entries()){
       if(i == selectedPlanIndex){
         val.selected = true;
+        this.selectedPackage = val;
       }
     }
   }
 
   async onSubscribe(){
-    const subscriptionId = this.commonUseUtil.getSubscriptionId(this.selectedPlan);
+    const subscriptionId = this.commonUseUtil.getSubscriptionId(this.selectedPackage.id);
     console.log("onSubscribe",subscriptionId);
     const load = await this.loadingController.create({message: 'Please wait...' });
     await load.present();

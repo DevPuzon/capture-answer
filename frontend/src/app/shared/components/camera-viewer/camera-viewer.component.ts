@@ -58,7 +58,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
   initialCalls(){
     // #change
     this.nativePermissionUtil.cameraAndroidPermission();
-    // this.commonUseUtil.setIsStartCamera(true);
+    this.commonUseUtil.setIsStartCamera(true);
     this.init();
   }
 
@@ -157,18 +157,21 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
   }
 
   async startCamera() {
-    console.log('startCamera');
-    this.isCameraStop = false;
-    const cameraPreviewOptions: CameraPreviewOptions = {
-      parent:'cameraContainer',
-      className:'camera-viewer--camera--container--video',
-      position: 'rear',
-      enableZoom:true,
-      toBack:true,
-      disableAudio: true
-    };
+    console.log('on startCamera');
+    // this.isCameraStop = false;
+    // const cameraPreviewOptions: CameraPreviewOptions = {
+    //   parent:'cameraContainer',
+    //   className:'camera-viewer--camera--container--video',
+    //   position: 'rear',
+    //   enableZoom:true,
+    //   toBack:true,
+    //   disableAudio: true
+    // };
 
-    CameraPreview.start(cameraPreviewOptions);
+    // CameraPreview.start(cameraPreviewOptions);
+
+
+
 
     // if(!this.isPremium){
     //   this.admobUtil.initialAdmob();
@@ -212,7 +215,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
   }
 
   onCameraStop(){
-    console.log('onCameraStop');
+    console.log('on CameraStop');
     if(this.isCameraStop){return;}
     this.isCameraStop = true;
     CameraPreview.stop();

@@ -107,4 +107,15 @@ export class CommonUseService {
             resolve(account);
         })
     }
+
+    public claimedRewards(deviceId:string){
+        return new Promise(async (resolve,reject)=>{ 
+            try{ 
+                const currentClaimedRewards = await this.commonUseUtil.claimedRewards(deviceId);
+                resolve(currentClaimedRewards);
+            }catch(ex){
+                reject(ex);
+            }
+        })
+    }
 }

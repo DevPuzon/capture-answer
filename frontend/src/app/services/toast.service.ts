@@ -22,4 +22,18 @@ export class ToastService {
     });
     toast.present();
   }
+
+  async rewardToast(message: string, duration: number = 2000) {
+    const toast = await this.toastController.create({
+      message: message,
+      color:"success",
+      position:"top",
+      cssClass:"toast-c",
+      icon:"star",
+      keyboardClose:true,
+      duration: duration,
+      // any other default properties you want
+    });
+    toast.present();
+  }
 }

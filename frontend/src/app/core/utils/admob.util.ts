@@ -13,9 +13,7 @@ import { CommonUseService } from 'src/app/services/common-use.service';
 })
 export class AdmobUtil {
   private readonly TAG = "[AdmobUtil]";
-  constructor(private appStates:AppStates,
-    private commonUseService:CommonUseService,
-    private loadingController:LoadingController,
+  constructor(
     private commonUseUtil:CommonUseUtil ) {
   }
 
@@ -81,7 +79,7 @@ export class AdmobUtil {
 
   hideBanner(){
     console.log(this.TAG,'hideBanner');
-    AdMob.hideBanner();
+    // AdMob.hideBanner();
   }
 
 
@@ -164,40 +162,41 @@ export class AdmobUtil {
     await AdMob.showInterstitial();
   }
 
-  async showRewardVideo() {
-    console.log(this.TAG,"showRewardVideo");
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      // Subscribe prepared rewardVideo
-      console.log(this.TAG,'RewardAdPluginEvents.Loaded',info);
-    });
+  showRewardVideo() {
+    return new Promise(async (resolve)=>{
+      console.log(this.TAG,"showRewardVideo");
+        AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+          // Subscribe prepared rewardVideo
+          console.log(this.TAG,'RewardAdPluginEvents.Loaded',info);
+        });
 
-    AdMob.addListener(RewardAdPluginEvents.Rewarded, (rewardItem: AdMobRewardItem) => {
-      // Subscribe user rewarded
-      console.log(this.TAG,'RewardAdPluginEvents.Rewarded',rewardItem);
-    });
+        AdMob.addListener(RewardAdPluginEvents.Rewarded, (rewardItem: AdMobRewardItem) => {
+          // Subscribe user rewarded
+          console.log(this.TAG,'RewardAdPluginEvents.Rewarded',rewardItem);
+        });
 
-    let adId = '';
-    if(this.commonUseUtil.isNativeAndroid()){
-      adId = 'ca-app-pub-2424323323577681/6679243395';
-    }
-    if(this.commonUseUtil.isNativeIos()){
-      adId = '';
-    }
-    const options: RewardAdOptions = {
-      adId: adId,
-      isTesting: environment.admobTest
-      // npa: true
-      // ssv: {
-      //   userId: "A user ID to send to your SSV"
-      //   customData: JSON.stringify({ ...MyCustomData })
-      // }
-    };
-    const load = await this.loadingController.create({message:"Please wait..."});
-    await load.present();
-    await AdMob.prepareRewardVideoAd(options);
-    const rewardItem = await AdMob.showRewardVideoAd();
-    console.log(this.TAG,"rewardItem",rewardItem);
-    await this.commonUseService.claimFreeAiChat();
-    await load.dismiss();
+        let adId = '';
+        if(this.commonUseUtil.isNativeAndroid()){
+          adId = 'ca-app-pub-2424323323577681/6679243395';
+        }
+        if(this.commonUseUtil.isNativeIos()){
+          adId = '';
+        }
+        const options: RewardAdOptions = {
+          adId: adId,
+          isTesting: environment.admobTest
+          // npa: true
+          // ssv: {
+          //   userId: "A user ID to send to your SSV"
+          //   customData: JSON.stringify({ ...MyCustomData })
+          // }
+        };
+        await AdMob.prepareRewardVideoAd(options);
+        const rewardItem = await AdMob.showRewardVideoAd();
+        console.log(this.TAG,"rewardItem",rewardItem);
+
+        resolve({});
+    })
+
   }
 }

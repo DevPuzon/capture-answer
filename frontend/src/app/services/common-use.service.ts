@@ -79,6 +79,24 @@ export class CommonUseService   {
     })
   }
 
+  isCanClaimRewards(){
+    return new Promise<boolean>(async (resolve,reject)=>{
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+      const req = this.httpClient.get(environment.apiBaseURL+'common-use/claim-free-ai-chat/'+deviceUID).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            const data = res.data;
+            resolve(data.isCanClaim);
+          }
+        },
+        ()=>{
+          resolve(false)
+        }
+      );
+    })
+  }
+
   isCanGetGift(){
     return new Promise<boolean>(async (resolve,reject)=>{
 

@@ -40,7 +40,7 @@
         <div class="unlock-f--package--item-content"
           [ngClass]="{ 'unlock-f--package--item--selected' : package.selected} ">
           <span class="unlock-f--package--txt--plan-">{{ package.title | translate }}</span>
-          <span class="unlock-f--package--txt--price">{{ package.price }}</span>
+          <span class="unlock-f--package--txt--price">$ {{ package.price }}</span>
           <span class="unlock-f--package--txt--description"> {{ package.description }}</span>
         </div>
       </div>
@@ -51,7 +51,7 @@
 <ion-footer>
   <div class="unlock-f--action-btns bottom-div">
     <button class="unlock-f--btn--subscribe" mat-flat-button color="primary"
-      (click)="onSubscribe()">{{ 'SUBSCRIBE' | translate }} </button>
+      (click)="onSubscribe()">Buy now </button>
   </div>
   <app-ads-viewer></app-ads-viewer>
 </ion-footer>

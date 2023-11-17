@@ -30,6 +30,7 @@ export class AppStates {
   private permissionStatus = new BehaviorSubject < any > ({});
   private isShowBanner = new BehaviorSubject < boolean > (false);
   private isAlreadyAdmobInit = new BehaviorSubject < boolean > (false);
+  private availableRewardsCount = new BehaviorSubject < number > (0);
 
 
   constructor() {}
@@ -175,4 +176,6 @@ export class AppStates {
   listenSettings(){
     return this.settings.asObservable();
   }
+
+
 }

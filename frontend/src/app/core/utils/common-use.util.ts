@@ -3,7 +3,7 @@ import {
 } from "@angular/core";
 import { Filesystem } from "@capacitor/filesystem";
 import { Platform } from "@ionic/angular";
-import { COUNT_SHOW_OFFER, NOT_NEW_USER, SETTINGS, SUBSCRIPTION_IDS } from "../global-variable";
+import { COUNT_SHOW_OFFER , NOT_NEW_USER, SETTINGS, SUBSCRIPTION_IDS } from "../global-variable";
 import { MatDialog } from "@angular/material/dialog";
 import { AppStates } from "../app-states";
 import { Device } from "@capacitor/device";
@@ -274,4 +274,5 @@ export class CommonUseUtil {
     LStorage.set('isShowInterstitial',countShowInter.toString());
     return ret;
   }
+
 }

@@ -1,8 +1,9 @@
-import {  Injectable } from "@nestjs/common";
+import {  HttpException, HttpStatus, Injectable } from "@nestjs/common";
 // import * as fs from 'fs-extra';
-import { CHAT_PREMIUM_COST, CHAT_VISION_PREMIUM_COST, TABLE_CHAT_AI, TABLE_SUBSCRIBERS } from 'src/core/global-constant';
+import { CHAT_PREMIUM_COST, CHAT_VISION_PREMIUM_COST, TABLE_CHAT_AI, TABLE_CLAIM_REWARDS, TABLE_SUBSCRIBERS } from 'src/core/global-constant';
 import { AccountSubscribe } from "src/intefaces/account-subscribe";
 import * as admin from 'firebase-admin';
+import { ClaimRewards } from "src/intefaces/claim-rewards";
 
 @Injectable()
 export class CommonUseUtil{
@@ -108,6 +109,47 @@ export class CommonUseUtil{
             accountSubscribeDevice.premiumCount = accountSubscribeDevice.premiumCount - CHAT_VISION_PREMIUM_COST;
             await this.addAccountSubscribeDeviceId(accountSubscribeDevice);
             resolve({});
+        })
+    }
+
+    currentClaimedRewards(deviceId:string){
+        return new Promise<ClaimRewards|null>(async (resolve,reject)=>{ 
+            const db = admin.firestore();
+            const querySnapshot = await db.collection(TABLE_CLAIM_REWARDS).doc(deviceId).get(); 
+            const data = querySnapshot.data() as ClaimRewards || null; 
+            return resolve(data);
+        })
+    }
+
+    claimedRewards(deviceId:string){
+        return new Promise(async (resolve,reject)=>{ 
+            const db = admin.firestore();
+            let currentClaimedRewards = await this.currentClaimedRewards(deviceId);
+            if(currentClaimedRewards){
+                const lastDate = new Date(currentClaimedRewards.lastClaim).getDate();
+                const currentDate = new Date().getDate();
+                if(currentDate != lastDate){
+                    currentClaimedRewards.claimRewardsCount = 0;
+                }
+            }
+
+            if(!currentClaimedRewards){
+                currentClaimedRewards = {
+                    deviceId:deviceId,
+                    claimRewardsCount:0,
+                    lastClaim: new Date().getTime()
+                }
+            }else{
+                if(currentClaimedRewards.claimRewardsCount >= 3){
+                    return reject({success:false,message:"Exceed the claim rewards per day"});
+                }
+            }
+            currentClaimedRewards.lastClaim = new Date().getTime();
+            currentClaimedRewards.claimRewardsCount+=1;
+
+            await db.collection(TABLE_CLAIM_REWARDS).doc(deviceId).set(currentClaimedRewards);
+
+            return resolve({...currentClaimedRewards,isCanClaim:true});
         })
     }
 }
