@@ -7,6 +7,7 @@ import {
 import {
   HistoryData
 } from "../models/history.model";
+import { SettingsModel } from "../models/settings.model";
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class AppStates {
   readonly TAG = 'AppStates';
 
   private showGiftPopModal = new BehaviorSubject < boolean > (false);
+  private settings = new BehaviorSubject < SettingsModel > ({isCrop:true});
   private canShowAds = new BehaviorSubject < boolean > (false);
   private remainingTokens = new BehaviorSubject < number > (0);
   private loading = new BehaviorSubject < boolean > (false  );
@@ -160,5 +162,17 @@ export class AppStates {
 
   listenLoading(){
     return this.loading.asObservable();
+  }
+
+  setSettings(settings:SettingsModel){
+    this.settings.next(settings);
+  }
+
+  getSettings(){
+    return this.settings.getValue();
+  }
+
+  listenSettings(){
+    return this.settings.asObservable();
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FREE_SCANS } from 'src/app/core/global-variable';
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
@@ -16,11 +16,9 @@ export class PopupGiftComponent  implements OnInit {
   freeScans = FREE_SCANS;
 
   constructor(private commonUseService:CommonUseService,
-              private commonUseUtil:CommonUseUtil,
+              private modalController:ModalController,
               private loadingController:LoadingController,
-              private toastService:ToastService,
-              private translateService: TranslateService,
-              public dialogRef: MatDialogRef<PopupGiftComponent> ) { }
+              private toastService:ToastService, ) { }
 
   ngOnInit() {}
 
@@ -40,11 +38,11 @@ export class PopupGiftComponent  implements OnInit {
     })
 
     await load.dismiss();
-    this.dialogRef.close();
+    this.modalController.dismiss();
   }
 
   onClose() {
-    this.dialogRef.close();
+    this.modalController.dismiss();
   }
 
 }

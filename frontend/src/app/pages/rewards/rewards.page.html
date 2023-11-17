@@ -1,0 +1,13 @@
+
+<ion-content>
+  <div class="rewards--main">
+    <img class="rewards--img" src="/assets/img/rewards.gif" alt="">
+    <h1 class="rewards--title">Claim your daily rewards!</h1>
+  </div>
+  <ion-item [button]="true" [detail]="false" [lines]="'none'">
+    <div class="rewards--item" (click)="onGetReward()">
+      <span class="rewards--item--title">Get Free 1 AI Chat</span>
+      <div class="rewards--item--counter">(0/3)</div>
+    </div>
+  </ion-item>
+</ion-content>

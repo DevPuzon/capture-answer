@@ -200,6 +200,12 @@ ion-modal#capture-chat {
   --height: 100vh;
 }
 
+ion-modal#popup-gift-modal {
+  --width: 320px;
+  --height: 480px;
+  --border-radius: 8px;
+}
+
 
 .global--no-data-center {
   position: absolute;

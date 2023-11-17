@@ -97,4 +97,14 @@ export class CommonUseService {
             });
         });
     }
+
+    public claimFreeAiChat(deviceId:string){
+        return new Promise(async (resolve)=>{
+            const freeAiChat = 1;
+            const account = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
+            account.freeChatCount+= freeAiChat;
+            await this.commonUseUtil.updateAccountSubscriber(deviceId,account.freeChatCount,account.premiumCount);
+            resolve(account);
+        })
+    }
 }

@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.capture.answer.ai',
-  appName: 'capture & answer - AI',
+  appName: 'capture & answer - AI Buddy',
   bundledWebRuntime: false,
   webDir: 'www',
   server: {

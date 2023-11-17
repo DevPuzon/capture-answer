@@ -15,8 +15,24 @@ export const APP_NAME = config.appName;
 export const TABLE_CHAT_AI = 'ocr-chat-ai-'+environment.environment;
 export const TABLE_CHAT_VISON_AI = 'ocr-chat-vision-ai-'+environment.environment;
 
+export const SETTINGS = 'SETTINGS';
 export const OCR_CHAT_AI_USER_ID = 'OCR_CHAT_AI_USER_ID';
 export const ALREADY_CLAIMED_GIFT = "ALREADY_CLAIMED_GIFT";
+export const SHARE_APP_MESSAGE = `
+📸✨ Introducing the Ultimate "Capture and Answer" App! 🤖🔍
+
+Ready for an adventure in curiosity and creativity? Join forces with your friends and dive into the magic of our app! 🌟
+
+📲 Download NOW:
+👉 Google Play: https://play.google.com/store/apps/details?id=${config.appId}
+👉 Apple Store: https://apps.apple.com/ph/app/apple-store/
+
+Snap a photo, ask any question, and let our AI unravel the answers! 🚀 Unleash the power of your imagination with the "Capture and Answer" app – where every click sparks a world of knowledge! 🌐🔮 #CaptureAndAnswer #AIAdventure`;
+
+export const STORAGE_APP_URL_IOS = '';
+// export const STORAGE_APP_URL_ANDROID = 'market://details?id='+config.appId;
+export const STORAGE_APP_URL_ANDROID = 'market://details?id='+'com.mobirix.mbbi'; // #change
+
 export const SUBSCRIPTION_IDS = {
   androidSubscriptionIds: {
     one: 'android_one',

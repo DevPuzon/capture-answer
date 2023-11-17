@@ -4,13 +4,19 @@ import {
 import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, BannerAdPluginEvents, AdMobBannerSize, InterstitialAdPluginEvents, AdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem, RewardAdOptions } from '@capacitor-community/admob';
 import { environment } from 'src/environments/environment';
 import { AppStates } from '../app-states';
+import { CommonUseUtil } from './common-use.util';
+import { LoadingController } from '@ionic/angular';
+import { CommonUseService } from 'src/app/services/common-use.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdmobUtil {
   private readonly TAG = "[AdmobUtil]";
-  constructor(private appStates:AppStates ) {
+  constructor(private appStates:AppStates,
+    private commonUseService:CommonUseService,
+    private loadingController:LoadingController,
+    private commonUseUtil:CommonUseUtil ) {
   }
 
   // initialAdmob(){
@@ -114,14 +120,84 @@ export class AdmobUtil {
       console.log(this.TAG,'BannerAdPluginEvents.SizeChanged',size);
     });
 
+
+    let adId = '';
+    if(this.commonUseUtil.isNativeAndroid()){
+      adId = 'ca-app-pub-2424323323577681/8312174678';
+    }
+    if(this.commonUseUtil.isNativeIos()){
+      adId = '';
+    }
     const options: BannerAdOptions = {
-      adId: 'ca-app-pub-2424323323577681/4618343494',
+      adId: adId,
       adSize: BannerAdSize.BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin: 0,
-      isTesting: true
+      isTesting: environment.admobTest
       // npa: true
     };
     AdMob.showBanner(options);
+  }
+
+  async showInterstitial() {
+    if(!this.commonUseUtil.isShowInterstitial()){return;}
+
+    console.log(this.TAG,"showInterstitial");
+    AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+      // Subscribe prepared interstitial
+      console.log(this.TAG,'InterstitialAdPluginEvents.Loaded',info);
+    });
+
+    let adId = '';
+    if(this.commonUseUtil.isNativeAndroid()){
+      adId = 'ca-app-pub-2424323323577681/1746766324';
+    }
+    if(this.commonUseUtil.isNativeIos()){
+      adId = '';
+    }
+    const options: AdOptions = {
+      adId: adId,
+      isTesting: environment.admobTest
+      // npa: true
+    };
+    await AdMob.prepareInterstitial(options);
+    await AdMob.showInterstitial();
+  }
+
+  async showRewardVideo() {
+    console.log(this.TAG,"showRewardVideo");
+    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+      // Subscribe prepared rewardVideo
+      console.log(this.TAG,'RewardAdPluginEvents.Loaded',info);
+    });
+
+    AdMob.addListener(RewardAdPluginEvents.Rewarded, (rewardItem: AdMobRewardItem) => {
+      // Subscribe user rewarded
+      console.log(this.TAG,'RewardAdPluginEvents.Rewarded',rewardItem);
+    });
+
+    let adId = '';
+    if(this.commonUseUtil.isNativeAndroid()){
+      adId = 'ca-app-pub-2424323323577681/6679243395';
+    }
+    if(this.commonUseUtil.isNativeIos()){
+      adId = '';
+    }
+    const options: RewardAdOptions = {
+      adId: adId,
+      isTesting: environment.admobTest
+      // npa: true
+      // ssv: {
+      //   userId: "A user ID to send to your SSV"
+      //   customData: JSON.stringify({ ...MyCustomData })
+      // }
+    };
+    const load = await this.loadingController.create({message:"Please wait..."});
+    await load.present();
+    await AdMob.prepareRewardVideoAd(options);
+    const rewardItem = await AdMob.showRewardVideoAd();
+    console.log(this.TAG,"rewardItem",rewardItem);
+    await this.commonUseService.claimFreeAiChat();
+    await load.dismiss();
   }
 }

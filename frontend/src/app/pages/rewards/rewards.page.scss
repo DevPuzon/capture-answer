@@ -1,0 +1,30 @@
+
+.rewards--main {
+    display: grid;
+    place-items: center;
+    margin: 18px 0px;
+	.rewards--title {
+    font-size: 22px;
+	}
+
+	.rewards--img {
+    width: 190px;
+	}
+}
+
+.rewards--item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 8px;
+  background: #f5f8ff;
+  padding: 18px 14px;
+  margin: 10px 0px;
+	.rewards--item--title {
+
+	}
+
+	.rewards--item--counter {
+
+	}
+}

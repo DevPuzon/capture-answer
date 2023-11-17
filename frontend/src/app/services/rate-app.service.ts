@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { AppRate, AppRateReviewTypeAndroid, AppRateReviewTypeIos } from '@awesome-cordova-plugins/app-rate/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { APPLICATION_ID, APPLICATION_IOS_ID } from '../core/global-variable';
+import { Storage } from '@ionic/storage-angular';
+import { STORAGE_APP_URL_ANDROID, STORAGE_APP_URL_IOS } from '../core/global-variable';
+// import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +12,13 @@ import { APPLICATION_ID, APPLICATION_IOS_ID } from '../core/global-variable';
 export class RateAppService {
 
   private readonly STORAGE_KEY = 'appUsageCount';
-  private readonly THRESHOLD = 6;
+  private readonly THRESHOLD = 5;
 
   constructor(
     private appRate: AppRate,
+    // private storage: Storage,
     private platform : Platform,
+    // private analyticsService: AnalyticsService,
     private translateService: TranslateService
   ) { }
 
@@ -26,31 +30,29 @@ export class RateAppService {
   //   if (await this.shouldPromptForRating()) {
   //     // Display the rate prompt here using your plugin or custom UI
   //     // After displaying, reset the counter:
-  //     this.checkPrompRating();
+  //     await this.checkPrompRating();
   //     await this.resetAppUsageCounter();
   //   }
   // }
 
   // private async incrementAppUsage(): Promise<void> {
-  //   let count = +(await localStorage.getItem(this.STORAGE_KEY) || 0);
-  //   console.log('RateAppService.count:'+count)
-
+  //   let count = +(await this.storage.get(this.STORAGE_KEY) || 0);
   //   count++;
-  //   await localStorage.setItem(this.STORAGE_KEY, count+'');
+  //   await this.storage.set(this.STORAGE_KEY, count+'');
   // }
 
   // private async shouldPromptForRating(): Promise<boolean> {
-  //   const count = +(await localStorage.getItem(this.STORAGE_KEY) || 0);
+  //   const count = +(await this.storage.get(this.STORAGE_KEY) || 0);
   //   return count >= this.THRESHOLD;
   // }
 
   // private async resetAppUsageCounter(): Promise<void> {
-  //   await localStorage.setItem(this.STORAGE_KEY, '0');
+  //   await this.storage.set(this.STORAGE_KEY, '0');
   // }
 
-  // private checkPrompRating(){
-  //   console.log('checkPrompRating');
-  //   let dontShow = localStorage.getItem('APP_RATE_NEGATIVE');
+  // private async checkPrompRating(){
+
+  //   let dontShow = await this.storage.get('APP_RATE_NEGATIVE');
   //   if(dontShow) return;
 
   //   setTimeout(() => {
@@ -60,18 +62,17 @@ export class RateAppService {
   // }
 
   promptForRating() {
-    console.log('promptForRating');
+    // this.analyticsService.setScreenName('Popup Rate', 'rate-app.service')
     this.appRate.setPreferences({
-      usesUntilPrompt: 2, //Do not work
       promptAgainForEachNewVersion: false,
       simpleMode: true,
       storeAppURL: {
-        ios: APPLICATION_IOS_ID,
-        android: 'market://details?id'+APPLICATION_ID,
+        ios: STORAGE_APP_URL_IOS,
+        android: STORAGE_APP_URL_ANDROID
       },
       reviewType: {
-        ios: AppRateReviewTypeIos.InAppBrowser,
-        android: AppRateReviewTypeAndroid.InAppBrowser
+        ios: AppRateReviewTypeIos.InAppReview,
+        android: AppRateReviewTypeAndroid.InAppReview
       },
       customLocale: {
         title:  this.translateService.instant('APP_RATE_TITLE'),
@@ -81,11 +82,19 @@ export class RateAppService {
         rateButtonLabel: this.translateService.instant('APP_RATE_NOW')
       },
       callbacks: {
-        onButtonClicked: (buttonIndex)=> {
+        onButtonClicked: async (buttonIndex)=> {
+          /*
+            1=NEGATIVE  | 2=LATER | 3=RATENOW
+          **/
+          let label = "negative";
+          if(buttonIndex == 2) label = 'later';
+          else if(buttonIndex == 3) label = 'now';
+
+          // this.analyticsService.logEvent('click_rate_answer-'+label, {})
           //buttonIndex 1 is not show again
-          if(buttonIndex == 1){
-            localStorage.setItem('APP_RATE_NEGATIVE', '1');
-          }
+          // if(buttonIndex == 1){
+          //   await this.storage.set('APP_RATE_NEGATIVE', '1');
+          // }
         }
       }
     });

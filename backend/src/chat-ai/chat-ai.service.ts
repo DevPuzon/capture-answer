@@ -207,18 +207,24 @@ export class ChatAiService {
             console.log("chatValidation accountSubscribeDevice",accountSubscribeDevice);
             if (isPremiumUser) {
                 if(isUseChatVision){
-                    this.commonUseUtil.minusChatWithVisonAccountSubscribe(deviceId);
+                    await this.commonUseUtil.minusChatWithVisonAccountSubscribe(deviceId);
                 }else{ 
-                    this.commonUseUtil.minusChatAccountSubscribe(deviceId);
+                    await this.commonUseUtil.minusChatAccountSubscribe(deviceId);
                 }
             } else {
+                if(isUseChatVision){
+                    return reject({
+                        message: "No more token"
+                    });
+                }
+                
                 console.log("accountSubscribeDevice", accountSubscribeDevice);
                 if (!accountSubscribeDevice || accountSubscribeDevice.freeChatCount <= 0) {
                     return reject({
                         message: "No more token"
                     });
                 } else {
-                    this.commonUseUtil.minusFreeChatAccountSubscribe(deviceId);
+                    await this.commonUseUtil.minusFreeChatAccountSubscribe(deviceId);
                 }
             }
 

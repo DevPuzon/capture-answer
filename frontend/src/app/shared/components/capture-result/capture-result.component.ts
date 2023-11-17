@@ -43,6 +43,7 @@ export class CaptureResultComponent  implements OnInit {
       }
       await this.commonUseService.saveHistory(item,file);
       const { image } = await this.commonUseService.getHistoryItem(this.captureId);
+      this.capturedImage = image;
       await this.chatService.sendMessageVision(this.captureId,message,image);
       await this.onBack();
       await this.onOpenCaptureChat();

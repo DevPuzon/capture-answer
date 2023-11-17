@@ -34,6 +34,8 @@ export class CropImageComponent  implements OnInit {
         capturedImage:this.croppedImage
       }
     })
+
+    this.modalController.dismiss();
     await modal.present();
   }
 

@@ -3,15 +3,14 @@ import {
 } from "@angular/core";
 import { Filesystem } from "@capacitor/filesystem";
 import { Platform } from "@ionic/angular";
-import { COUNT_SHOW_OFFER, NOT_NEW_USER, SUBSCRIPTION_IDS } from "../global-variable";
-import { PopupGiftComponent } from "src/app/shared/components/popup-gift/popup-gift.component";
+import { COUNT_SHOW_OFFER, NOT_NEW_USER, SETTINGS, SUBSCRIPTION_IDS } from "../global-variable";
 import { MatDialog } from "@angular/material/dialog";
-import { CommonUseService } from "src/app/services/common-use.service";
 import { AppStates } from "../app-states";
-import { environment } from "src/environments/environment";
 import { Device } from "@capacitor/device";
 import { TranslateService } from "@ngx-translate/core";
 import { UserAccount } from "src/app/models/user-account.model";
+import { SettingsModel } from "src/app/models/settings.model";
+import { LStorage } from "./lstorage.util";
 
 declare var navigator:any;
 @Injectable({
@@ -47,26 +46,30 @@ export class CommonUseUtil {
   }
 
   setNotNewUser():void{
-    localStorage.setItem(NOT_NEW_USER,"1");
+    // localStorage.setItem(NOT_NEW_USER,"1");
+    LStorage.set(NOT_NEW_USER,"1");
   }
 
   isNewUser(): boolean{
-    //return true; //HACK TODO
-    return !localStorage.getItem(NOT_NEW_USER);
+    // return !localStorage.getItem(NOT_NEW_USER);
+    return !LStorage.get(NOT_NEW_USER);
   }
 
   setCountShowOffer(isReset = false){
-    const countStr = localStorage.getItem(COUNT_SHOW_OFFER) as string;
+    // const countStr = localStorage.getItem(COUNT_SHOW_OFFER) as string;
+    const countStr = LStorage.get(COUNT_SHOW_OFFER) as string;
     let count = parseInt(countStr ? countStr : "0");
     count++;
     if(isReset){
       count = 0;
     }
-    localStorage.setItem(COUNT_SHOW_OFFER,count.toString());
+    // localStorage.setItem(COUNT_SHOW_OFFER,count.toString());
+    LStorage.set(COUNT_SHOW_OFFER,count.toString());
   }
 
   isShowOfferPlan():boolean{
-    const countStr = localStorage.getItem(COUNT_SHOW_OFFER) as string;
+    // const countStr = localStorage.getItem(COUNT_SHOW_OFFER) as string;
+    const countStr = LStorage.get(COUNT_SHOW_OFFER) as string;
     if(!countStr){
       return true;
     }
@@ -242,5 +245,33 @@ export class CommonUseUtil {
       };
       reader.readAsDataURL(blob);
     })
+  }
+
+  saveSettings(settings:SettingsModel){
+    // localStorage.setItem(SETTINGS,JSON.stringify(settings));
+    LStorage.set(SETTINGS,JSON.stringify(settings));
+    this.appStates.setSettings(settings);
+  }
+
+  checkSettings(){
+    // const settings = localStorage.getItem(SETTINGS);
+    const settings = LStorage.get(SETTINGS);
+    if(settings){
+      this.appStates.setSettings(JSON.parse(settings));
+    }
+  }
+
+  public isShowInterstitial():boolean{
+    let ret = false;
+    // let countShowInter = parseInt(localStorage.getItem("isShowInterstitial") || '0');
+    let countShowInter = parseInt(LStorage.get("isShowInterstitial") || '0');
+    if(countShowInter >= 3){
+      ret = true;
+      countShowInter = 0;
+    }
+    countShowInter++;
+    // localStorage.setItem('isShowInterstitial',countShowInter.toString());
+    LStorage.set('isShowInterstitial',countShowInter.toString());
+    return ret;
   }
 }

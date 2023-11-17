@@ -3,7 +3,7 @@
     // margin: 5px;
     // border-radius: 8px;
     // overflow: hidden;
-    min-height: 200px;
+    height: 200px;
     .image--container__img{
         border-radius: 8px;
         width: 100%;
@@ -14,6 +14,7 @@
         max-height: 78vh;
         width: 100%;
         object-fit: cover;
+        height: 100%;
     }
     .image--container__skeleton{
         position: absolute;

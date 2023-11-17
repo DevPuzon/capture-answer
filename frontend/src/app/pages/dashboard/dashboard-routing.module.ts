@@ -31,6 +31,14 @@ const routes: Routes = [
       {
         path: 'open-source-libraries',
         loadChildren: () => import('../open-source-libraries/open-source-libraries.module').then( m => m.OpenSourceLibrariesPageModule)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('../settings/settings.module').then( m => m.SettingsPageModule)
+      },
+      {
+        path: 'rewards',
+        loadChildren: () => import('../rewards/rewards.module').then( m => m.RewardsPageModule)
       }
     ]
   }

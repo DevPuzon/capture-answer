@@ -25,18 +25,34 @@ export class AppComponent implements OnInit {
               private appStates : AppStates,
               private appPurchaseUtil:AppPurchaseUtil,
               private rateAppService: RateAppService,
+              private nativePermissionUtil:NativePermissionsUtil,
               private translateService: TranslateService) {
-    platform.ready().then(async () => {
-      console.log('RateAppService.ready');
+    this.initPlatformDependents();
+
+    this.nativePermissionUtil.cameraAndroidPermission();
+  }
+
+  private initPlatformDependents(){
+
+    //On Ready
+    this.platform.ready().then(async () => {
+      console.log('platform.ready');
       this.translateService.setDefaultLang('en');
       this.appPurchaseUtil.initializeV1();
       // this.rateAppService.init();
     });
-    //Become Active
+
+    //Become Active - AKA Restart
     this.platform.resume.subscribe((res) => {
-      console.log('RateAppService.resumed');
+      console.log('platform.resumed');
       // this.rateAppService.init();
     });
+
+    //Pause
+    this.platform.pause.subscribe((res) => {
+      console.log('platform.paused');
+    });
+
   }
 
   ngOnInit(): void {
@@ -67,6 +83,7 @@ export class AppComponent implements OnInit {
       await load.present();
       this.appStates.setLoading(true);
       this.appStates.setHistories(await this.commonUseService.getHistoryList());
+      this.commonUseUtil.checkSettings();
       await this.commonUseService.checkFreePremium();
       await load.dismiss();
       this.appStates.setLoading(false);

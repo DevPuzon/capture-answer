@@ -12,11 +12,11 @@ export class ToastService {
   async presentToast(message: string, duration: number = 2000) {
     const toast = await this.toastController.create({
       message: message,
-      "color":"light",
-      "position":"top",
-      "cssClass":"toast-c",
-      "icon":"notifications",
-      "keyboardClose":true,
+      color:"light",
+      position:"top",
+      cssClass:"toast-c",
+      icon:"notifications",
+      keyboardClose:true,
       duration: duration,
       // any other default properties you want
     });

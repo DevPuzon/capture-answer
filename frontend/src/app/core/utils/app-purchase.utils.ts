@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AppStates } from '../app-states';
 import { ToastService } from 'src/app/services/toast.service';
+import { LStorage } from './lstorage.util';
 @Injectable({
   providedIn: 'root'
 })
@@ -219,7 +220,8 @@ export class AppPurchaseUtil {
       this.buying = false;
       // await this.commonUseService.onSubscription(true,productId);
       this.appStates.setUserForcePremium(true);
-      localStorage.setItem(LAST_PURCHASED_PRODUCT_ID,productId);
+      // localStorage.setItem(LAST_PURCHASED_PRODUCT_ID,productId);
+      LStorage.set(LAST_PURCHASED_PRODUCT_ID,productId);
       this.listenBuyProduct.next(true);
       resolve({});
     })

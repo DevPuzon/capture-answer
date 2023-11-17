@@ -1,27 +1,10 @@
 <ion-content>
-  <ion-list class="history--list" lines="none">
-
-    <!-- <ion-item button detail="true" class="history--list--item"
-    *ngFor="let history of histories"
-    (click)="onClickItem(history)">
-      <ion-avatar aria-hidden="true" slot="start">
-        <img alt="" [src]="history.image" />
-      </ion-avatar>
-      <ion-label class="history--item--content">
-        <h2 class="history--item--title">{{ history.text }}
-        </h2>
-        <p class="history--item--description">{{ history.date | date:'MMM dd, y' }}</p>
-      </ion-label>
-    </ion-item>
-         -->
+  <ion-list class="history--list" >
 
 
-    <ion-item button *ngFor="let history of histories">
+    <ion-item button lines="none" [detail]="false" *ngFor="let history of histories">
 
       <ion-card mode="ios" class="history--card">
-        <!-- <img [src]="history.image"
-          (click)="onClickItem(history)" /> -->
-
           <image-viewer
           (click)="onClickItem(history)"
           [imageUrl]="history.image"

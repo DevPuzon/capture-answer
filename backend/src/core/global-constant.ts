@@ -18,4 +18,4 @@ export const READ_HISTORY_COUNT = 2;
 export const OCR_CHAT_PROMPT = "";
 export const OCR_CHAT_AI_USER_ID = 'OCR_CHAT_AI_USER_ID';
 export const CHAT_PREMIUM_COST = 0.1;
-export const CHAT_VISION_PREMIUM_COST = 1;
+export const CHAT_VISION_PREMIUM_COST = 1; 

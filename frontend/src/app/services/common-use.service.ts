@@ -10,6 +10,7 @@ import { HistoryData } from '../models/history.model';
 import { TranslateData } from '../models/translate.model';
 import { SubscriptionResponse } from '../models/subscription.model';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { LStorage } from '../core/utils/lstorage.util';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +34,8 @@ export class CommonUseService   {
 
             this.appStates.setRemainingTokens(data.premiumCount);
             this.appStates.setFreeUserChat(data.freeChatCount);
-            localStorage.setItem(ALREADY_CLAIMED_GIFT,"1");
+            // localStorage.setItem(ALREADY_CLAIMED_GIFT,"1");
+            LStorage.set(ALREADY_CLAIMED_GIFT,"1");
           }
           resolve({});
         }
@@ -59,10 +61,29 @@ export class CommonUseService   {
     })
   }
 
+  claimFreeAiChat(){
+    return new Promise<boolean>(async (resolve,reject)=>{
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+      const req = this.httpClient.get(environment.apiBaseURL+'common-use/claim-free-ai-chat/'+deviceUID).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            const data = res.data;
+
+            this.appStates.setRemainingTokens(data.premiumCount);
+            this.appStates.setFreeUserChat(data.freeChatCount);
+            resolve(data.isCanClaimGift);
+          }
+        }
+      );
+    })
+  }
+
   isCanGetGift(){
     return new Promise<boolean>(async (resolve,reject)=>{
 
-      let giftAlreadyClaimed = localStorage.getItem(ALREADY_CLAIMED_GIFT);
+      // let giftAlreadyClaimed = localStorage.getItem(ALREADY_CLAIMED_GIFT);
+      let giftAlreadyClaimed = LStorage.get(ALREADY_CLAIMED_GIFT);
       console.log("isCanGetGift",giftAlreadyClaimed,giftAlreadyClaimed && giftAlreadyClaimed == '1');
       if(giftAlreadyClaimed && giftAlreadyClaimed == '1') {
         return resolve(false);
@@ -92,7 +113,8 @@ export class CommonUseService   {
         histories.push(item);
       }
 
-      localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+      // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+      LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
       await this.getHistoryList();
       resolve(histories);
     })
@@ -103,7 +125,8 @@ export class CommonUseService   {
       const histories = await this.getHistoryList();
       const historyFindIndex = this.historyFindIndex(captureId,histories);
       histories.splice(historyFindIndex,1);
-      localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+      // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+      LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
       await this.getHistoryList();
       resolve(histories);
     })
@@ -123,7 +146,8 @@ export class CommonUseService   {
 
   getHistoryList(){
     return new Promise<HistoryData[]>(async (resolve,reject)=>{
-      let histories:any[]|HistoryData[] = JSON.parse(localStorage.getItem(HISTORY_LOCAL) || '[]');
+      // let histories:any[]|HistoryData[] = JSON.parse(localStorage.getItem(HISTORY_LOCAL) || '[]');
+      let histories:any[]|HistoryData[] = JSON.parse(LStorage.get(HISTORY_LOCAL) || '[]');
       console.log(histories);
       this.appStates.setHistories(histories);
       resolve(histories);

@@ -15,6 +15,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { error } from 'console';
 import { CaptureChatComponent } from '../capture-chat/capture-chat.component';
 import { CaptureResultComponent } from '../capture-result/capture-result.component';
+import { CropImageComponent } from '../crop-image/crop-image.component';
 
 @Component({
   selector: 'ocr-camera-viewer',
@@ -57,7 +58,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
   initialCalls(){
     // #change
     this.nativePermissionUtil.cameraAndroidPermission();
-    this.commonUseUtil.setIsStartCamera(true);
+    // this.commonUseUtil.setIsStartCamera(true);
     this.init();
   }
 
@@ -112,7 +113,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
     try {
       let baseSixtyFourImage = (await CameraPreview.capture(options)).value;
       const capturePreview = `data:image/jpeg;base64,${baseSixtyFourImage}`;
-      this.onShowCrop(capturePreview);
+      this.onNextComponent(capturePreview);
     } catch (error: any) {
       let msg = JSON.stringify(error);
       if(error && error.errorMessage) msg = error.errorMessage;
@@ -120,18 +121,30 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
     }
   }
 
-  async onShowCrop(capturePreview: string) {
+  async onNextComponent(capturePreview: string) {
     const captureId = this.commonUseUtil.getUID();
-     // const capturePreview = TEST_IMAGE;
-     const modal = await this.modalController.create({
+    const isCrop = this.appStates.getSettings().isCrop;
+    let component:any = {};
+
+    if(isCrop){
+      component = {
+        id:"crop-modal",
+        component:CropImageComponent,
+      }
+    }else{
+      component = {
+        id:"capture-result",
+        component:CaptureResultComponent,
+      }
+    }
+    const modal = await this.modalController.create({
       // id:"crop-modal",
       // component:CropImageComponent,
 
       // id:"capture-chat",
       // component:CaptureChatComponent,
 
-      id:"capture-result",
-      component:CaptureResultComponent,
+      ...component,
 
       componentProps:{
         captureId:captureId,
@@ -157,9 +170,9 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
 
     CameraPreview.start(cameraPreviewOptions);
 
-    if(!this.isPremium){
-      this.admobUtil.initialAdmob();
-    }
+    // if(!this.isPremium){
+    //   this.admobUtil.initialAdmob();
+    // }
   }
 
   isFlash = false;
@@ -190,7 +203,7 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
         resultType: CameraResultType.Uri
       });
       var imageUrl = await this.commonUseUtil.readFileAsBase64(image.path!) as string;
-      this.onShowCrop(imageUrl);
+      this.onNextComponent(imageUrl);
     } catch (error: any) {
       let msg = JSON.stringify(error);
       if(error && error.errorMessage) msg = error.errorMessage;

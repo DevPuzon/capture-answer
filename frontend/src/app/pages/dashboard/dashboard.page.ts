@@ -7,7 +7,7 @@ import { IonModal } from '@ionic/angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
-import { APPLICATION_ID, APP_NAME, } from 'src/app/core/global-variable';
+import { APPLICATION_ID, APP_NAME, SHARE_APP_MESSAGE, } from 'src/app/core/global-variable';
 import { AdmobUtil } from 'src/app/core/utils/admob.util';
 import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
 import { CommonUseService } from 'src/app/services/common-use.service';
@@ -15,7 +15,7 @@ import { RateAppService } from 'src/app/services/rate-app.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { PopupGiftComponent } from 'src/app/shared/components/popup-gift/popup-gift.component';
 import { UnlockFeaturesComponent } from 'src/app/shared/components/unlock-features/unlock-features.component';
-
+import { Share } from '@capacitor/share';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -35,14 +35,10 @@ export class DashboardPage implements OnInit,OnDestroy {
               private router : Router,
               private modalController:ModalController,
               private appStates:AppStates,
-              private admobUtil:AdmobUtil,
               private platform: Platform,
               private rateAppService:RateAppService,
-              private dialog: MatDialog,
-              private loadingController : LoadingController,
               private toastService : ToastService,
               private commonUseService:CommonUseService,
-              private alertController : AlertController,
               private translateService: TranslateService,
               // private menuController : MenuController
               ) {
@@ -55,8 +51,12 @@ export class DashboardPage implements OnInit,OnDestroy {
           this.headerTitle = 'history';
         }else if(event.url.includes('chat-with-ai')){
           this.headerTitle = 'ai chat lounge';
+        }else if(event.url.includes('settings')){
+          this.headerTitle = 'settings';
         }else if(event.url.includes('open-source-libraries')){
           this.headerTitle = "open source libraries";
+        }else if(event.url.includes('rewards')){
+          this.headerTitle = "rewards";
         }else{
           this.headerTitle = 'capture & answer';
         }
@@ -103,11 +103,12 @@ export class DashboardPage implements OnInit,OnDestroy {
 
     console.log("checkShowGiftModal",isCanGetGift);
     if(isCanGetGift){
-      this.dialog.open(PopupGiftComponent, {
-        width: '360px',
-        height:'480px',
-        disableClose:true
-      });
+      const modal = await this.modalController.create({
+        backdropDismiss:false,
+        component:PopupGiftComponent,
+        id:"popup-gift-modal"
+      })
+      await modal.present();
     }
   }
   onCloseMenu(){
@@ -140,14 +141,36 @@ export class DashboardPage implements OnInit,OnDestroy {
       case'CHAT_WITH_AI':
         this.onChatWithAi();
       break;
+      case'SETTINGS':
+        this.onSettings();
+      break;
+      case'SHARE_APP':
+        this.onShareApp();
+      break;
       case 'RATE_APP_ON_GOOGLE_PLAY':
         this.onAppRate();
       break;
-
+      case 'REWARDS':
+        this.onRewards();
+      break;
       default:
         console.error("item doesn't match")
       break;
     }
+  }
+
+  onRewards() {
+    this.router.navigate(['dashboard','rewards']);
+  }
+
+  async onShareApp() {
+    await Share.share({
+      text: SHARE_APP_MESSAGE
+    });
+  }
+
+  onSettings() {
+    this.router.navigate(['dashboard','settings']);
   }
 
   onChatWithAi() {

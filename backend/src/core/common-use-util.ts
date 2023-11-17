@@ -44,8 +44,10 @@ export class CommonUseUtil{
     updateAccountSubscriber(deviceId:string,freeChatCount:number,premiumCount:number){
         return new Promise<any>(async (resolve)=>{
             const account = await this.findAccountSubscribeDevice(deviceId);
+            
             account.freeChatCount = freeChatCount;
             account.premiumCount = premiumCount;
+            
             const premiumList = await this.subscriberList();
             premiumList[deviceId] = account;
 

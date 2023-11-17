@@ -39,5 +39,16 @@ export class CommonUseController {
             throw new HttpException(ex, HttpStatus.FORBIDDEN);
         }
     }
+
+    
+    @Post('claim-free-ai-chat/:deviceId')  
+    async claimFreeAiChat(@Param('deviceId') deviceId : string) {  
+        try{  
+            const response = await this.commonUseService.claimFreeAiChat(deviceId)
+            return { ...{ success:true, data:response}, statusCode: 200 };
+        }catch(ex){  
+            throw new HttpException(ex, HttpStatus.FORBIDDEN);
+        }
+    }
 }
  
