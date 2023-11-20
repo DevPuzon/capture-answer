@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ChatAiService } from './chat-ai.service';
-import { ChatAiController } from './chat-ai.controller';
-import { CommonUseModule } from 'src/common-use/common-use.module';
+import { ChatAiController } from './chat-ai.controller'; 
 import { SharedProvider } from 'src/shared/shared.modules';
 
 @Module({

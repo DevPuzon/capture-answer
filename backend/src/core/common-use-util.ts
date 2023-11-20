@@ -136,9 +136,26 @@ export class CommonUseUtil{
         })
     }
 
-    claimedRewards(deviceId:string){
+    claimRewards(deviceId:string){
         return new Promise(async (resolve,reject)=>{ 
             const db = admin.firestore();
+            let currentClaimedRewards = null;
+            try{
+                currentClaimedRewards = await this.checkRewards(deviceId);
+            }catch(ex){
+                return reject(ex);
+            } 
+            currentClaimedRewards.claimRewardsCount+=1;
+
+            console.log("claimRewards currentClaimedRewards",deviceId,currentClaimedRewards);
+            await db.collection(TABLE_CLAIM_REWARDS).doc(deviceId).set(currentClaimedRewards);
+
+            return resolve({...currentClaimedRewards,isCanClaim:true});
+        })
+    }
+    
+    checkRewards(deviceId:string) {
+        return new Promise(async (resolve,reject)=>{ 
             let currentClaimedRewards = await this.currentClaimedRewards(deviceId);
             if(currentClaimedRewards){
                 const lastDate = new Date(currentClaimedRewards.lastClaim).getDate();
@@ -156,15 +173,12 @@ export class CommonUseUtil{
                 }
             }else{
                 if(currentClaimedRewards.claimRewardsCount >= 3){
-                    return reject({success:false,message:"Exceed the claim rewards per day"});
+                    return reject({...currentClaimedRewards,success:false,message:"Exceed the claim rewards per day"});
                 }
             }
             currentClaimedRewards.lastClaim = new Date().getTime();
-            currentClaimedRewards.claimRewardsCount+=1;
 
-            await db.collection(TABLE_CLAIM_REWARDS).doc(deviceId).set(currentClaimedRewards);
-
-            return resolve({...currentClaimedRewards,isCanClaim:true});
+            resolve(currentClaimedRewards);
         })
     }
 

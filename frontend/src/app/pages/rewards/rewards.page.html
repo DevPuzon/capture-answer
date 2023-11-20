@@ -7,7 +7,7 @@
   <ion-item [button]="true" [detail]="false" [lines]="'none'">
     <div class="rewards--item" (click)="onGetReward()">
       <span class="rewards--item--title">Get Free 1 AI Chat</span>
-      <div class="rewards--item--counter">(0/3)</div>
+      <div class="rewards--item--counter">({{availableRewardsCount}}/3)</div>
     </div>
   </ion-item>
 </ion-content>

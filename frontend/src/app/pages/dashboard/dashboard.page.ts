@@ -153,10 +153,19 @@ export class DashboardPage implements OnInit,OnDestroy {
       case 'REWARDS':
         this.onRewards();
       break;
+      case'PRIVACY_POLICY':
+        this.onOpenPrivacyPolicy();
+      break;
       default:
         console.error("item doesn't match")
       break;
     }
+  }
+
+  onOpenPrivacyPolicy() {
+    Browser.open({
+      url:'https://medium.com/@wondertechphclub/privacy-policy-cf05313237ec'
+    })
   }
 
   onRewards() {

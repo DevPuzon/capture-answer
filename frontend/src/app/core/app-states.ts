@@ -177,5 +177,18 @@ export class AppStates {
     return this.settings.asObservable();
   }
 
+  setAvailableRewardsCount(count:number){
+    this.availableRewardsCount.next(count);
+  }
+
+  getAvailableRewardsCount(){
+    return this.availableRewardsCount.getValue();
+  }
+
+  listenAvailableRewardsCount(){
+    return this.availableRewardsCount.asObservable();
+  }
+
+
 
 }

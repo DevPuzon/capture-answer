@@ -132,7 +132,7 @@ export class AppPurchaseUtil {
         if (this.commonUseUtil.isNativeAndroid() && productId.includes('android')) {
           product = {
             id: productId,
-            type: CdvPurchase.ProductType.NON_CONSUMABLE,
+            type: CdvPurchase.ProductType.CONSUMABLE,
             platform: CdvPurchase.Platform.GOOGLE_PLAY
           }
         }
@@ -140,7 +140,7 @@ export class AppPurchaseUtil {
         if (this.commonUseUtil.isNativeIos() && productId.includes('ios')) {
           product = {
             id: productId,
-            type: CdvPurchase.ProductType.NON_CONSUMABLE,
+            type: CdvPurchase.ProductType.CONSUMABLE,
             platform: CdvPurchase.Platform.APPLE_APPSTORE
           }
         }

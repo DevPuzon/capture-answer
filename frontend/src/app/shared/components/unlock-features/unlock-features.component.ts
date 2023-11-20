@@ -26,7 +26,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   textPaymentTerm = '';
   packages = [
     {
-      id:"one",
+      id:"one_consumable",
       title:"Discounted",
       description:"20 tokens",
       tokens:20,
@@ -34,21 +34,21 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       selected:true
     },
     {
-      id:"five",
+      id:"five_consumable",
       title:"Silver",
       tokens:200,
       price:5,
       selected:false
     },
     {
-      id:"ten",
+      id:"ten_consumable",
       title:"Gold",
       tokens:450,
       price:10,
       selected:false
     },
     {
-      id:"fifteen",
+      id:"fifteen_consumable",
       title:"Diamond",
       tokens:750,
       price:15,

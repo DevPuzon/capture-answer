@@ -104,18 +104,48 @@ export class CommonUseService {
             const account = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
             account.freeChatCount+= freeAiChat;
             await this.commonUseUtil.updateAccountSubscriber(deviceId,account.freeChatCount,account.premiumCount);
-            resolve(account);
+            const currentClaimedRewards = await this.claimRewards(deviceId);
+ 
+            resolve(currentClaimedRewards);
         })
     }
 
-    public claimedRewards(deviceId:string){
+    public checkRewards(deviceId:string){
         return new Promise(async (resolve,reject)=>{ 
             try{ 
-                const currentClaimedRewards = await this.commonUseUtil.claimedRewards(deviceId);
+                const currentClaimedRewards = await this.commonUseUtil.checkRewards(deviceId);
                 resolve(currentClaimedRewards);
             }catch(ex){
                 reject(ex);
             }
         })
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    private claimRewards(deviceId:string){
+        return new Promise(async (resolve,reject)=>{ 
+            try{ 
+                const currentClaimedRewards = await this.commonUseUtil.claimRewards(deviceId);
+                resolve(currentClaimedRewards);
+            }catch(ex){
+                reject(ex);
+            }
+        })
+    }
+    
 }

@@ -38,8 +38,7 @@ export class CommonUseController {
         }catch(ex){  
             throw new HttpException(ex, HttpStatus.FORBIDDEN);
         }
-    }
-
+    } 
     
     @Post('claim-free-ai-chat/:deviceId')  
     async claimFreeAiChat(@Param('deviceId') deviceId : string) {  
@@ -49,17 +48,18 @@ export class CommonUseController {
         }catch(ex){  
             throw new HttpException(ex, HttpStatus.FORBIDDEN);
         }
-    }
+    } 
 
-    
-    @Post('claim-rewards/:deviceId')  
-    async claimedRewards(@Param('deviceId') deviceId : string) {  
+    @Post('check-rewards/:deviceId')  
+    async checkRewards(@Param('deviceId') deviceId : string) {  
         try{  
-            const response = await this.commonUseService.claimedRewards(deviceId)
+            const response = await this.commonUseService.checkRewards(deviceId)
             return { ...{ success:true, data:response}, statusCode: 200 };
         }catch(ex){  
             throw new HttpException(ex, HttpStatus.FORBIDDEN);
         }
     }
+
+    
 }
  

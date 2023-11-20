@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RateAppService } from './services/rate-app.service';
 import { CryptUtil } from './core/utils/crypt.util';
 import { environment } from 'src/environments/environment';
+import { PushNotificationUtil } from './core/utils/push-notification.util';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
               private appStates : AppStates,
               private appPurchaseUtil:AppPurchaseUtil,
               private rateAppService: RateAppService,
+              private pushNotificationUtil:PushNotificationUtil,
               private nativePermissionUtil:NativePermissionsUtil,
               private translateService: TranslateService) {
     this.initPlatformDependents();
@@ -37,6 +39,8 @@ export class AppComponent implements OnInit {
       console.log('platform.ready');
       this.translateService.setDefaultLang('en');
       this.appPurchaseUtil.initialize();
+
+      this.pushNotificationUtil.registerNotifications();
       // this.nativePermissionUtil.cameraAndroidPermission();
       // this.rateAppService.init();
     });
@@ -52,10 +56,10 @@ export class AppComponent implements OnInit {
       console.log('platform.paused');
     });
 
+    this.initApp();
   }
 
   ngOnInit(): void {
-    this.initApp();
     var a = CryptUtil.encryptData(environment.firebaseConfig);
     var b = CryptUtil.decryptData(a);
     console.log("a",a);

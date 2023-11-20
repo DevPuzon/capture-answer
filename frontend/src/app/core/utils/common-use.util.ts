@@ -12,7 +12,6 @@ import { UserAccount } from "src/app/models/user-account.model";
 import { SettingsModel } from "src/app/models/settings.model";
 import { LStorage } from "./lstorage.util";
 
-declare var navigator:any;
 @Injectable({
   providedIn: 'root'
 })

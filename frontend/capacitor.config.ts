@@ -11,11 +11,15 @@ const config: CapacitorConfig = {
   plugins: {
     Camera: {
       synced: true
-    }
+    },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
+    },
   },
   ios: {
    // contentInset: "always"
-  }
+  },
+
 };
 
 export default config;

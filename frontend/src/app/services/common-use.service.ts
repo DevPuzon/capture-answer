@@ -64,7 +64,7 @@ export class CommonUseService   {
   claimFreeAiChat(){
     return new Promise<boolean>(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.get(environment.apiBaseURL+'common-use/claim-free-ai-chat/'+deviceUID).subscribe(
+      const req = this.httpClient.post(environment.apiBaseURL+'common-use/claim-free-ai-chat/'+deviceUID,{}).subscribe(
         (res:any) => {
           req.unsubscribe();
           if(res.success){
@@ -72,6 +72,9 @@ export class CommonUseService   {
 
             this.appStates.setRemainingTokens(data.premiumCount);
             this.appStates.setFreeUserChat(data.freeChatCount);
+
+            this.appStates.setAvailableRewardsCount(data.claimRewardsCount);
+
             resolve(data.isCanClaimGift);
           }
         }
@@ -79,18 +82,23 @@ export class CommonUseService   {
     })
   }
 
-  isCanClaimRewards(){
+  checkRewards(){
     return new Promise<boolean>(async (resolve,reject)=>{
       const deviceUID = await CommonUseUtil.getDeviceUID();
-      const req = this.httpClient.get(environment.apiBaseURL+'common-use/claim-free-ai-chat/'+deviceUID).subscribe(
+      const req = this.httpClient.post(environment.apiBaseURL+'common-use/check-rewards/'+deviceUID,{}).subscribe(
         (res:any) => {
           req.unsubscribe();
           if(res.success){
             const data = res.data;
-            resolve(data.isCanClaim);
+
+            this.appStates.setAvailableRewardsCount(data.claimRewardsCount);
+            resolve(data);
           }
         },
-        ()=>{
+        (ex)=>{
+          const error = ex.error;
+          console.log("checkRewards ex",error);
+          this.appStates.setAvailableRewardsCount(error.claimRewardsCount);
           resolve(false)
         }
       );
