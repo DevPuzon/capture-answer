@@ -2,17 +2,18 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfig } from './core/app-config';
-import { ChatAiModule } from './chat-ai/chat-ai.module';
+import { ChatAiModule } from './components/chat-ai/chat-ai.module';
 import { CommonUseModule } from './common-use/common-use.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SharedProvider } from './shared/shared.modules';
-import { AdminModule } from './admin/admin.module';
+import { AdminModule } from './components/admin/admin.module';
+import { ProductModule } from './components/product/product.module';
 
 @Module({
   imports: [ 
     ChatAiModule, 
     CommonUseModule, 
-    AdminModule
+    AdminModule, ProductModule
   ],
   controllers: [AppController],
   providers: [AppService,...SharedProvider ], 

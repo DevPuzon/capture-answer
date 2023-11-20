@@ -1,6 +1,6 @@
 import {  HttpException, HttpStatus, Injectable } from "@nestjs/common";
 // import * as fs from 'fs-extra';
-import { CHAT_PREMIUM_COST, CHAT_VISION_PREMIUM_COST, TABLE_CHAT_AI, TABLE_CLAIM_REWARDS, TABLE_SUBSCRIBERS } from 'src/core/global-constant';
+import { CHAT_PREMIUM_COST, CHAT_VISION_PREMIUM_COST, TABLE_API_REQUEST_VALIDATOR, TABLE_CHAT_AI, TABLE_CLAIM_REWARDS, TABLE_SUBSCRIBERS } from 'src/core/global-constant';
 import { AccountSubscribe } from "src/intefaces/account-subscribe";
 import * as admin from 'firebase-admin';
 import { ClaimRewards } from "src/intefaces/claim-rewards";
@@ -12,59 +12,74 @@ export class CommonUseUtil{
         return new Promise(async (resolve)=>{ 
             const db = admin.firestore();
             
-            const querySnapshot = await db.collection(TABLE_SUBSCRIBERS).doc(TABLE_SUBSCRIBERS).get(); 
-            const data =querySnapshot.data() || {}; 
-            // const exists = await fs.pathExists(TABLE_SUBSCRIBERS);
-            // let data = {};
-            // if(exists){
-            //     data = await fs.readJson(TABLE_SUBSCRIBERS);
-            // } 
-            // console.log('exists',exists);
-            return resolve(data);
+            const querySnapshot = await db.collection(TABLE_SUBSCRIBERS)
+                                  .get();
+            let list = [];
+            for(const data of querySnapshot.docs){
+                list.push(data.data());
+            } 
+            return resolve(list);
         })
     }
 
     findAccountSubscribeDevice(deviceId:string):Promise<AccountSubscribe>{
-        return new Promise<AccountSubscribe>(async (resolve)=>{
-            let account = (await this.subscriberList())[deviceId]; 
+        return new Promise<AccountSubscribe>(async (resolve)=>{ 
+            const db = admin.firestore();
+
+            let account = (await db.collection(TABLE_SUBSCRIBERS).doc(deviceId).get()).data() as AccountSubscribe;
             return resolve(account);
         })
     }
 
     addAccountSubscribeDeviceId(accountSubscribe:AccountSubscribe):Promise<any>{
-        return new Promise<any>(async (resolve)=>{
-            const premiumList = await this.subscriberList();
-            premiumList[accountSubscribe.deviceId] = accountSubscribe;
-            console.log(premiumList);
-            // await fs.writeJson(TABLE_SUBSCRIBERS, premiumList, { spaces: 2 });
-            await this.insertUpdateSubscriber(premiumList);
-            return resolve(premiumList);
+        return new Promise<any>(async (resolve)=>{ 
+            const db = admin.firestore();
+            await db.collection(TABLE_SUBSCRIBERS)
+            .doc(accountSubscribe.deviceId).set(accountSubscribe);
+
+            return resolve({});
         })
     }
 
-    updateAccountSubscriber(deviceId:string,freeChatCount:number,premiumCount:number){
+    updateAccountSubscriber(deviceId:string,freeChatCount:number = -1 ,premiumCount:number = -1 ){
         return new Promise<any>(async (resolve)=>{
             const account = await this.findAccountSubscribeDevice(deviceId);
             
-            account.freeChatCount = freeChatCount;
-            account.premiumCount = premiumCount;
-            
-            const premiumList = await this.subscriberList();
-            premiumList[deviceId] = account;
+            if(freeChatCount != -1){ 
+                account.freeChatCount = freeChatCount;
+            } 
+            if(premiumCount != -1){ 
+                account.premiumCount = premiumCount;
+            }
+             
+            const db = admin.firestore();
+            await db.collection(TABLE_SUBSCRIBERS)
+            .doc(account.deviceId).set(account);
 
-            // await fs.writeJson(TABLE_SUBSCRIBERS, premiumList, { spaces: 2 });
-            await this.insertUpdateSubscriber(premiumList);
-            return resolve(premiumList);
+
+            return resolve({});
         })
-    } 
+    }
+
+    addPremiumCountToAccount(deviceId:string,premiumCount:number){
+        return new Promise<any>(async (resolve,reject)=>{ 
+            let account = await this.findAccountSubscribeDevice(deviceId);
+            if(!account){
+                throw new HttpException({success:false,message:"Device Id doesn't exist"}, HttpStatus.FORBIDDEN);
+            }
+            account.premiumCount = account.premiumCount + premiumCount;
+            await this.updateAccountSubscriber(deviceId,-1,account.premiumCount);
+            return resolve({});
+        })
+    }
     
     deleteAccountSubscriber(deviceId){
-        return new Promise<any>(async (resolve)=>{ 
-            const premiumList = await this.subscriberList();
-            delete premiumList[deviceId]; 
-            // await fs.writeJson(TABLE_SUBSCRIBERS, premiumList, { spaces: 2 });
-            await this.insertUpdateSubscriber(premiumList);
-            return resolve(premiumList);
+        return new Promise<any>(async (resolve)=>{  
+            const db = admin.firestore();
+            await db.collection(TABLE_SUBSCRIBERS)
+            .doc(deviceId).delete();
+
+            return resolve({});
         })
     } 
 
@@ -150,6 +165,29 @@ export class CommonUseUtil{
             await db.collection(TABLE_CLAIM_REWARDS).doc(deviceId).set(currentClaimedRewards);
 
             return resolve({...currentClaimedRewards,isCanClaim:true});
+        })
+    }
+
+    isApiRequestIdExist(transactionId:string){
+        return new Promise(async (resolve)=>{
+            const db = admin.firestore();
+            const isExist = (await db.collection(TABLE_API_REQUEST_VALIDATOR).doc(transactionId).get()).exists;
+            return resolve(isExist);
+        })
+    }
+
+    saveApiRequestLogs(transactionId:string,payload:any){ 
+        return new Promise(async (resolve)=>{
+            const db = admin.firestore();
+            await db.collection(TABLE_API_REQUEST_VALIDATOR)
+            .doc(transactionId).set(
+                {
+                    payload:payload,
+                    timestamp:new Date().getTime()
+                }
+            ); 
+
+            return resolve({});
         })
     }
 }

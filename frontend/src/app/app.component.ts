@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(async () => {
       console.log('platform.ready');
       this.translateService.setDefaultLang('en');
-      this.appPurchaseUtil.initializeV1();
+      this.appPurchaseUtil.initialize();
       // this.nativePermissionUtil.cameraAndroidPermission();
       // this.rateAppService.init();
     });

@@ -17,8 +17,8 @@ export class AdminService {
     
     public updateSubscriber(deviceId:string,freeChatCount:number,premiumCount:number){
         return new Promise<any>(async (resolve)=>{
-            const list = await this.commonUseUtil.updateAccountSubscriber(deviceId,freeChatCount,premiumCount);
-            return resolve(list)
+            await this.commonUseUtil.updateAccountSubscriber(deviceId,freeChatCount,premiumCount);
+            return resolve({deviceId,freeChatCount})
         })
     }
 
@@ -29,8 +29,8 @@ export class AdminService {
                 freeChatCount:freeChatCount,
                 premiumCount:premiumCount
             }
-            const list = await this.commonUseUtil.addAccountSubscribeDeviceId(accountSubscribe);
-            return resolve(list)
+            await this.commonUseUtil.addAccountSubscribeDeviceId(accountSubscribe);
+            return resolve({deviceId,freeChatCount})
         })
     }
     

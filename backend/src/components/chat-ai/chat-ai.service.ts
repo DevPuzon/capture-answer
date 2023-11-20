@@ -13,7 +13,7 @@ import {
 } from 'src/core/global-constant';
 import {
     Chat
-} from 'src/chat-ai/interfaces/chat.model';
+} from 'src/components/chat-ai/interfaces/chat.model';
 import * as admin from 'firebase-admin';
 import {
     CommonUseUtil

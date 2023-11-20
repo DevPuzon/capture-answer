@@ -11,6 +11,9 @@ import { ToastService } from 'src/app/services/toast.service';
 import { PopupGiftComponent } from '../popup-gift/popup-gift.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AdmobUtil } from 'src/app/core/utils/admob.util';
+import { environment } from 'src/environments/environment';
+import { ProductService } from 'src/app/services/product.service';
+import { PurchaseResponse } from 'src/app/models/purchase-response.model';
 
 
 @Component({
@@ -26,27 +29,28 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       id:"one",
       title:"Discounted",
       description:"20 tokens",
+      tokens:20,
       price:1,
       selected:true
     },
     {
       id:"five",
       title:"Silver",
-      description:"200 tokens",
+      tokens:200,
       price:5,
       selected:false
     },
     {
       id:"ten",
       title:"Gold",
-      description:"450 tokens",
+      tokens:450,
       price:10,
       selected:false
     },
     {
       id:"fifteen",
       title:"Diamond",
-      description:"750 tokens",
+      tokens:750,
       price:15,
       selected:false
     }
@@ -74,6 +78,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
               private loadingController:LoadingController,
               private modaController:ModalController,
               private platform:Platform,
+              private productService :ProductService,
               private appStates:AppStates,
               private dialog: MatDialog,
               private appPurchaseUtil:AppPurchaseUtil,
@@ -82,7 +87,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
               private commonUseUtil:CommonUseUtil) {
 
     platform.ready().then(async () => {
-      //this.appPurchaseUtil.initialize();
+      // this.appPurchaseUtil.initialize();
       //Preload
     });
   }
@@ -122,18 +127,43 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   async onSubscribe(){
-    const subscriptionId = this.commonUseUtil.getSubscriptionId(this.selectedPackage.id);
-    console.log("onSubscribe",subscriptionId);
+
+    const productId = this.commonUseUtil.getSubscriptionId(this.selectedPackage.id);
+    console.log("onSubscribe",productId);
     const load = await this.loadingController.create({message: 'Please wait...' });
     await load.present();
-    const isSuccess = await this.appPurchaseUtil.orderProduct(subscriptionId);
-    console.log('isSuccess',isSuccess,subscriptionId);
-    await load.dismiss();
-    if(isSuccess){
-      await (await this.toastService.presentToast(this.translateService.instant("SUBSCRIBED_OK"), 2500));
-      // this.appStates.setIsShowBanner(true);
-      await this.modaController.dismiss();
+
+    let purchase:PurchaseResponse = {
+      isSuccess:false,
+      payload:null,
+      productId:productId,
+      purchaseId:''
+    };
+    if(!environment.production && !this.commonUseUtil.isNativeAndroid() && !this.commonUseUtil.isNativeIos()){
+      // test browser
+      await this.productService.onPurchase('productId-11','purchaseId-11',23,{payloadTest:'payload'})
+      purchase.isSuccess = true;
+    }else{
+      purchase = await this.appPurchaseUtil.orderProduct(productId);
+      console.log('onSubscribe purchase',purchase);
+
     }
+
+    if(purchase.isSuccess){
+      const platformIdRm = this.commonUseUtil.isNativeAndroid() ? 'android_' : 'ios_';
+      const tokens = this.packages.find((el)=>{return el.id == purchase.productId.replace(platformIdRm,'')})?.tokens as number;
+      console.log('onSubscribe tokens',tokens);
+
+      await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase)
+      await (await this.toastService.presentToast('Purchase successfully', 2500));
+
+      await load.dismiss();
+      await this.modaController.dismiss();
+
+    }else{
+      await load.dismiss();
+    }
+
   }
 
   // onChangeOffer(event:any){

@@ -35,14 +35,16 @@ export const STORAGE_APP_URL_ANDROID = 'market://details?id='+'com.mobirix.mbbi'
 
 export const SUBSCRIPTION_IDS = {
   androidSubscriptionIds: {
-    one: 'capture_answer_android_one',
+    one: 'android_one',
     five: 'android_five',
     ten: 'android_ten',
     fifteen: 'android_fifteen'
   },
   iosSubscriptionIds: {
-    monthly: 'ocr_gold_ios_monthly_subs',
-    yearly: 'ocr_gold_ios_yearly_subs'
+    one: 'ios_one',
+    five: 'ios_five',
+    ten: 'ios_ten',
+    fifteen: 'ios_fifteen'
   }
 };
 
