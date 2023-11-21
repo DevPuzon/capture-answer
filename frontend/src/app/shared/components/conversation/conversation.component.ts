@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { OCR_CHAT_AI_USER_ID } from 'src/app/core/global-variable';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { Chat } from 'src/app/models/chat.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 

@@ -33,6 +33,11 @@
     </div>
   </div>
 
+  <div class="unlock-f--costs">
+    <span><span class="unlock-f--costs-span">Capture and Answer:</span> cost 1 token per request</span>
+    <span><span class="unlock-f--costs-span">AI Chat Lounge:</span> cost 0.1 token per request</span>
+  </div>
+
   <ion-row>
     <ion-col size="6"
     *ngFor="let package of packages; index as i">
@@ -40,7 +45,8 @@
         <div class="unlock-f--package--item-content"
           [ngClass]="{ 'unlock-f--package--item--selected' : package.selected} ">
           <span class="unlock-f--package--txt--plan-">{{ package.title | translate }}</span>
-          <span class="unlock-f--package--txt--price">$ {{ package.price }}</span>
+          <span class="unlock-f--package--txt--price">{{ package.price }}</span>
+          <span class="unlock-f--package--txt--discounted" [ngStyle]="{'opacity': package.saves ? 1 : 0 }">Saves ( {{ package.saves }}% )  </span>
           <span class="unlock-f--package--txt--description"> {{ package.tokens }} tokens</span>
         </div>
       </div>

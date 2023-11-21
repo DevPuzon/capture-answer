@@ -1,0 +1,17 @@
+.app--splash--screen {
+  height: 100vh;
+  width: 100%;
+  z-index: 10000;
+  background: #fff;
+  position: absolute;
+  display: grid;
+  align-content: center;
+  text-align: -webkit-center;
+	.app--content {
+
+		.app--content--logo {
+      height: 90px;
+      width: 90px;
+		}
+	}
+}

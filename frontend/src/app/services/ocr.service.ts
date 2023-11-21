@@ -6,7 +6,7 @@ import { createWorker, Worker } from 'tesseract.js';
 import { AppStates } from '../core/app-states';
 import { OcrScan } from '../models/ocr-scan.model';
 import { CommonUseService } from './common-use.service';
-import { CommonUseUtil } from '../core/utils/common-use.util';
+import { CommonUseUtil } from "../core/utils/common-use.util";
 
 @Injectable({
   providedIn: 'root'

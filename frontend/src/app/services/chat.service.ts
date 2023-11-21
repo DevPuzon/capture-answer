@@ -17,7 +17,7 @@ import {
   environment
 } from 'src/environments/environment';
 import { UserAccount } from '../models/user-account.model';
-import { CommonUseUtil } from '../core/utils/common-use.util';
+import { CommonUseUtil } from "../core/utils/common-use.util";
 import { Observable } from 'rxjs';
 import { AppStates } from '../core/app-states';
 import { ToastService } from './toast.service';

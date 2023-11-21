@@ -2,7 +2,7 @@ import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/commo
 import { ProductService } from './product.service';
 import { ENVIRONMENT } from 'src/environments/environment';
 
-@Controller(ENVIRONMENT + '/product') 
+@Controller('product') 
 export class ProductController {
 
     constructor(private productService: ProductService){}

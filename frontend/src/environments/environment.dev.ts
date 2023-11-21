@@ -9,7 +9,7 @@ export const environment = {
   deviceUID:'deviceIDExample02',
   apiBaseURL:"https://us-central1-ocr-chat-ai.cloudfunctions.net/api/local/",
   admobTest:true,
-  firebaseConfig: 'U2FsdGVkX1+MoDIjpVmRtA/Ta9r3C+yrm6YlP/v2tLcYVaqPDeqvJGDvub6Bm3ezYahkE/TbV+QO6qrUsiwmiICXVozx3jdPNNBNipWMPr7BRm5EKKESwN8hCZxRBjDByeErsI/wS7SP+alOC2jZRIDN/iu4K4WrumdFL4b1J7XHCSUQ/JL3yGIPZpE1xc7JFuj8TtnXFiirOIUqujiZBC3u8hGSVxaKIGq39a99rPhqFNxV4p0FGWOieFVaPyQY/+i36voDW5xGfjncF1u8/ga+g4UA4FgNkKkFz/bt/2Hil9m66aixhb9gk9SqtxQfcwBxl8qL1bj1gk5I1rC6VQ=='
+  firebaseConfig: 'U2FsdGVkX19ycoJULfTwv3ByuUT3bwuKpZXSc3C+EEpcoHeS6dwfGH1t/JfY9ZePT0y/hZyy88f3qejTZVB15goZ7rpUFF8vGqCTFdPTTyoQDZxK+RAqSaY6HYZx6WhAIj22feTTUej3JIK3dWFSpqV9o7BhOk1cmujwdlYsXdEO8UT74Gp82uGMLMSdANqqMlD+zhxPuwioQHoZQJwSno1Qp1Qf71z5z3zKSznM861BpTzQimxWmvrW7pVKCkp4uj+nrnoTR6oe2JVYmV6BcyGDw2IdqnRFt3vUUR4uSOblV4pkOxi348sNuPPpwr+yFPSD00+B438sTaZNdVaMu8XOrw+fn3Uy4DHTR5IJzCJPLSzy5G8Wu6myQF9tEs7k0zNoCeMd2gpkd3dU22t8qw=='
 };
 
 /*

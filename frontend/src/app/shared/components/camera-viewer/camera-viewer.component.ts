@@ -1,61 +1,98 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { MatDialog } from '@angular/material/dialog';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
-import { Camera, CameraDirection, CameraResultType, CameraSource } from '@capacitor/camera';
-import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
-import { CameraPreviewFlashMode } from '@capacitor-community/camera-preview';
-import { TEST_IMAGE } from 'src/app/core/global-variable';
-import { AppStates } from 'src/app/core/app-states';
-import { Subject, takeUntil } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
-import { NativePermissionsUtil } from 'src/app/core/utils/native-permissions.util';
-import { AdmobUtil } from 'src/app/core/utils/admob.util';
-import { ToastService } from 'src/app/services/toast.service';
-import { error } from 'console';
-import { CaptureChatComponent } from '../capture-chat/capture-chat.component';
-import { CaptureResultComponent } from '../capture-result/capture-result.component';
-import { CropImageComponent } from '../crop-image/crop-image.component';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import {
+  ModalController
+} from '@ionic/angular';
+import {
+  MatDialog
+} from '@angular/material/dialog';
+import {
+  CommonUseUtil
+} from 'src/app/core/utils/common-use.util';
+import {
+  Camera,
+  CameraDirection,
+  CameraResultType,
+  CameraSource
+} from '@capacitor/camera';
+import {
+  CameraPreview,
+  CameraPreviewOptions,
+  CameraPreviewPictureOptions
+} from '@capacitor-community/camera-preview';
+import {
+  CameraPreviewFlashMode
+} from '@capacitor-community/camera-preview';
+import {
+  AppStates
+} from 'src/app/core/app-states';
+import {
+  Subject,
+  takeUntil
+} from 'rxjs';
+import {
+  NavigationEnd,
+  Router
+} from '@angular/router';
+import {
+  NativePermissionsUtil
+} from 'src/app/core/utils/native-permissions.util';
+import {
+  AdmobUtil
+} from 'src/app/core/utils/admob.util';
+import {
+  ToastService
+} from 'src/app/services/toast.service';
+import {
+  CaptureResultComponent
+} from '../capture-result/capture-result.component';
+import {
+  CropImageComponent
+} from '../crop-image/crop-image.component';
 
 @Component({
   selector: 'ocr-camera-viewer',
   templateUrl: './camera-viewer.component.html',
   styleUrls: ['./camera-viewer.component.scss'],
 })
-export class CameraViewerComponent  implements OnInit,OnDestroy {
-  private destroy$ = new Subject<void>();
+export class CameraViewerComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject < void > ();
   isPremium = false;
   isCameraStarted = false;
   isCameraStop = false;
-  constructor(private modalController:ModalController,
-              private appStates:AppStates,
-              private router:Router,
-              private admobUtil:AdmobUtil,
-              // private cameraPreview: CameraPreview,
-              private toastService: ToastService,
-              private nativePermissionUtil:NativePermissionsUtil,
-              private commonUseUtil:CommonUseUtil,
-              private dialog: MatDialog) {
-  router.events
-  .pipe(takeUntil(this.destroy$))
-  .subscribe((event) => {
-    if (event instanceof NavigationEnd) {
-      console.log('URL changed to:', event.url);
-      if(event.url.includes('main-camera-dashboard') || event.url.split('/')[2]){
-        commonUseUtil.setIsStartCamera(true);
-      }
-      else{
-        commonUseUtil.setIsStartCamera(false);
-      }
-    }
-  });
+  constructor(private modalController: ModalController,
+    private appStates: AppStates,
+    private router: Router,
+    private admobUtil: AdmobUtil,
+    // private cameraPreview: CameraPreview,
+    private toastService: ToastService,
+    private nativePermissionUtil: NativePermissionsUtil,
+    private commonUseUtil: CommonUseUtil,
+    private dialog: MatDialog) {
+    router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          console.log('URL changed to:', event.url);
+          if (event.url.includes('main-camera-dashboard')) {
+            commonUseUtil.setIsStartCamera(true);
+          } else {
+            commonUseUtil.setIsStartCamera(false);
+          }
+        }
+      });
   }
 
   ngOnInit() {
     this.initialCalls();
   }
 
-  initialCalls(){
+  initialCalls() {
     // #change
     this.nativePermissionUtil.cameraAndroidPermission();
     this.commonUseUtil.setIsStartCamera(true);
@@ -65,50 +102,38 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
   init() {
     console.log('cameraviewer init');
     this.appStates.listenIsUserPremium().pipe(takeUntil(this.destroy$))
-    .subscribe((isPremium:boolean)=>{
-      this.isPremium = isPremium;
-      if(isPremium){
-        this.admobUtil.hideBanner();
-      }
-    });
+      .subscribe((isPremium: boolean) => {
+        this.isPremium = isPremium;
+      });
 
-    this.appStates.listenCanShowAds().pipe(takeUntil(this.destroy$))
-    .subscribe((canShowAd:boolean)=>{
-      if(!canShowAd){
-        this.admobUtil.hideBanner();
-      }else if (canShowAd && !this.isPremium){
-        this.admobUtil.showBanner();
-      }
-    })
+    // this.appStates.listenCanShowAds().pipe(takeUntil(this.destroy$))
+    //   .subscribe((canShowAd: boolean) => {
+    //     if (!canShowAd) {
+    //       this.admobUtil.hideBanner();
+    //     } else if (canShowAd && !this.isPremium) {
+    //       this.admobUtil.showBanner();
+    //     }
+    //   })
 
     this.appStates.listenIsStartCamera().pipe(takeUntil(this.destroy$))
-    .subscribe((isStart:boolean)=>{
-      console.log('listenIsStartCamera',isStart);
-      if(isStart == this.isCameraStarted){
-        return;
-      }
-      if(isStart){
-        this.startCamera();
-      }else{
-        this.onCameraStop();
-      }
-      this.isCameraStarted = isStart;
-    })
+      .subscribe((isStart: boolean) => {
+        console.log('listenIsStartCamera', isStart,this.isCameraStarted);
+        if (isStart == this.isCameraStarted) {
+          return;
+        }
+        if (isStart) {
+          this.startCamera();
+        } else {
+          this.onCameraStop();
+        }
+        this.isCameraStarted = isStart;
+      })
 
-    // this.appStates.listenPermissionStatus().pipe(takeUntil(this.destroy$))
-    // .subscribe((permissions:any)=>{
-    //   console.log('listenPermissionStatus',permissions);
-    //   for(let permission of Object.keys(permissions)){
-    //     if(permission == 'camera'){
-    //       this.commonUseUtil.setIsStartCamera(true);
-    //     }
-    //   }
-    // })
   }
 
-  async onShot(){
-    const options : CameraPreviewPictureOptions = {
-      quality:100
+  async onShot() {
+    const options: CameraPreviewPictureOptions = {
+      quality: 90
     }
     try {
       let baseSixtyFourImage = (await CameraPreview.capture(options)).value;
@@ -116,25 +141,30 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
       this.onNextComponent(capturePreview);
     } catch (error: any) {
       let msg = JSON.stringify(error);
-      if(error && error.errorMessage) msg = error.errorMessage;
-      this.toastService.presentToast("Camera not found: "+msg);
+      if (error && error.errorMessage) msg = error.errorMessage;
+      console.log("Camera not found: " + msg);
+      // this.toastService.presentToast("Camera not found: " + msg);
     }
   }
 
   async onNextComponent(capturePreview: string) {
     const captureId = this.commonUseUtil.getUID();
     const isCrop = this.appStates.getSettings().isCrop;
-    let component:any = {};
+    let component: any = {};
 
-    if(isCrop){
+    if (!this.isPremium) {
+      this.admobUtil.showInterstitial();
+    }
+
+    if (isCrop) {
       component = {
-        id:"crop-modal",
-        component:CropImageComponent,
+        id: "crop-modal",
+        component: CropImageComponent,
       }
-    }else{
+    } else {
       component = {
-        id:"capture-result",
-        component:CaptureResultComponent,
+        id: "capture-result",
+        component: CaptureResultComponent,
       }
     }
     const modal = await this.modalController.create({
@@ -146,9 +176,9 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
 
       ...component,
 
-      componentProps:{
-        captureId:captureId,
-        capturedImage:capturePreview
+      componentProps: {
+        captureId: captureId,
+        capturedImage: capturePreview
       }
     })
 
@@ -158,65 +188,64 @@ export class CameraViewerComponent  implements OnInit,OnDestroy {
 
   async startCamera() {
     console.log('on startCamera');
-    // this.isCameraStop = false;
-    // const cameraPreviewOptions: CameraPreviewOptions = {
-    //   parent:'cameraContainer',
-    //   className:'camera-viewer--camera--container--video',
-    //   position: 'rear',
-    //   enableZoom:true,
-    //   toBack:true,
-    //   disableAudio: true
-    // };
+    this.isCameraStop = false;
+    const cameraPreviewOptions: CameraPreviewOptions = {
+      parent: 'cameraContainer',
+      className: 'camera-viewer--camera--container--video',
+      position: 'rear',
+      enableZoom: true,
+      toBack: true,
+      disableAudio: true
+    };
 
-    // CameraPreview.start(cameraPreviewOptions);
-
-
-
-
-    // if(!this.isPremium){
-    //   this.admobUtil.initialAdmob();
-    // }
+    CameraPreview.start(cameraPreviewOptions);
   }
 
   isFlash = false;
-  async onFlash(){
-      if(!this.isFlash){
-        const cameraPreviewFlashMode: CameraPreviewFlashMode = 'torch';
-        CameraPreview.setFlashMode({flashMode:cameraPreviewFlashMode}).catch((error)=>{
-          let msg = JSON.stringify(error);
-          if(error && error.errorMessage) msg = error.errorMessage;
-          this.toastService.presentToast("Error: "+msg);
-        });
-      }else{
-        const cameraPreviewFlashMode: CameraPreviewFlashMode = 'off';
-        CameraPreview.setFlashMode({flashMode:cameraPreviewFlashMode}).catch((error)=>{
-          let msg = JSON.stringify(error);
-          if(error && error.errorMessage) msg = error.errorMessage;
-          this.toastService.presentToast("Error: "+msg);
-        });
-      }
-      this.isFlash = !this.isFlash;
+  async onFlash() {
+    if (!this.isFlash) {
+      const cameraPreviewFlashMode: CameraPreviewFlashMode = 'torch';
+      CameraPreview.setFlashMode({
+        flashMode: cameraPreviewFlashMode
+      }).catch((error) => {
+        let msg = JSON.stringify(error);
+        if (error && error.errorMessage) msg = error.errorMessage;
+        this.toastService.presentToast("Error: " + msg);
+      });
+    } else {
+      const cameraPreviewFlashMode: CameraPreviewFlashMode = 'off';
+      CameraPreview.setFlashMode({
+        flashMode: cameraPreviewFlashMode
+      }).catch((error) => {
+        let msg = JSON.stringify(error);
+        if (error && error.errorMessage) msg = error.errorMessage;
+        this.toastService.presentToast("Error: " + msg);
+      });
+    }
+    this.isFlash = !this.isFlash;
   }
 
-  async onGallery(){
+  async onGallery() {
     try {
       const image = await Camera.getPhoto({
         quality: 100,
-        source:CameraSource.Photos,
+        source: CameraSource.Photos,
         resultType: CameraResultType.Uri
       });
       var imageUrl = await this.commonUseUtil.readFileAsBase64(image.path!) as string;
       this.onNextComponent(imageUrl);
     } catch (error: any) {
       let msg = JSON.stringify(error);
-      if(error && error.errorMessage) msg = error.errorMessage;
+      if (error && error.errorMessage) msg = error.errorMessage;
       // this.toastService.presentToast("Error: "+msg);
     }
   }
 
-  onCameraStop(){
+  onCameraStop() {
     console.log('on CameraStop');
-    if(this.isCameraStop){return;}
+    if (this.isCameraStop) {
+      return;
+    }
     this.isCameraStop = true;
     CameraPreview.stop();
   }

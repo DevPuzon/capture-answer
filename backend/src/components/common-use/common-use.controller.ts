@@ -3,7 +3,7 @@ import { CommonUseService } from './common-use.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ENVIRONMENT } from 'src/environments/environment';
 
-@Controller(ENVIRONMENT+'/common-use')
+@Controller('common-use')
 export class CommonUseController {
     
     constructor(private commonUseService:CommonUseService){}

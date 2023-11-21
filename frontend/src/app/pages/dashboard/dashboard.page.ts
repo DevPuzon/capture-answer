@@ -9,7 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
 import { APPLICATION_ID, APP_NAME, SHARE_APP_MESSAGE, } from 'src/app/core/global-variable';
 import { AdmobUtil } from 'src/app/core/utils/admob.util';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { CommonUseService } from 'src/app/services/common-use.service';
 import { RateAppService } from 'src/app/services/rate-app.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -66,7 +66,7 @@ export class DashboardPage implements OnInit,OnDestroy {
     this.appStates.listenIsUserPremium()
     .pipe(takeUntil(this.destroy$))
     .subscribe((value)=>{
-      this.isPremium = this.appStates.getIsUserPremium();
+      this.isPremium = value;
     });
 
     this.appStates.listenFreeUserChat()
@@ -132,7 +132,7 @@ export class DashboardPage implements OnInit,OnDestroy {
       case'HISTORY':
         this.onHistory();
       break;
-      case'SEND_US_A_FEEDBACK':
+      case'SEND_US_A_MESSAGE':
         this.onFeedback();
       break;
       case'OPEN_SOURCE_LIBRARIES':
@@ -162,9 +162,16 @@ export class DashboardPage implements OnInit,OnDestroy {
     }
   }
 
-  onOpenPrivacyPolicy() {
-    Browser.open({
+  async onOpenPrivacyPolicy() {
+    this.commonUseUtil.setIsStartCamera(false);
+    await Browser.open({
       url:'https://medium.com/@wondertechphclub/privacy-policy-cf05313237ec'
+    })
+    if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
+      this.commonUseUtil.setIsStartCamera(false);
+    }
+    await Browser.addListener('browserFinished', ()=>{
+      this.commonUseUtil.setIsStartCamera(true);
     })
   }
 

@@ -70,8 +70,13 @@
       .unlock-f--package--txt--price{
         font-size: 32px;
         font-weight: bold;
+        margin-top: 10px;
       }
-
+      .unlock-f--package--txt--discounted{
+        font-size: 12px;
+        color: #0D81DF;
+        margin-bottom: 10px;
+      }
       .unlock-f--package--usd--num--txt {
           font-size: 60px;
           font-weight: 700;
@@ -134,4 +139,14 @@ ion-item{
   margin: 20px 10px;
   font-size: 12px;
   text-align: center;
+}
+
+
+.unlock-f--costs {
+  margin: 14px 10px;
+  display: grid;
+  font-size: 15px;
+	.unlock-f--costs-span {
+    font-weight: 500;
+	}
 }

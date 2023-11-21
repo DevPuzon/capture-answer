@@ -77,10 +77,10 @@ export class AdmobUtil {
   //   })
   // }
 
-  hideBanner(){
-    console.log(this.TAG,'hideBanner');
-    // AdMob.hideBanner();
-  }
+  // hideBanner(){
+  //   console.log(this.TAG,'hideBanner');
+  //   // AdMob.hideBanner();
+  // }
 
 
 

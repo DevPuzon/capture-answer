@@ -14,7 +14,7 @@ import {
     AdminService
 } from './admin.service';
 
-@Controller(ENVIRONMENT + '/admin')
+@Controller('admin')
 export class AdminController {
 
     constructor(private adminService: AdminService) {}

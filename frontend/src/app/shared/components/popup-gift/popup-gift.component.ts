@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FREE_SCANS } from 'src/app/core/global-variable';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { CommonUseService } from 'src/app/services/common-use.service';
 import { ToastService } from 'src/app/services/toast.service';
 

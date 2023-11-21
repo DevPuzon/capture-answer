@@ -28,30 +28,32 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     {
       id:"one_consumable",
       title:"Discounted",
-      description:"20 tokens",
       tokens:20,
-      price:1,
+      price:'$1',
       selected:true
     },
     {
       id:"five_consumable",
       title:"Silver",
       tokens:200,
-      price:5,
+      price:'$5',
+      saves:100,
       selected:false
     },
     {
       id:"ten_consumable",
       title:"Gold",
       tokens:450,
-      price:10,
+      price:'$10',
+      saves:125,
       selected:false
     },
     {
       id:"fifteen_consumable",
       title:"Diamond",
       tokens:750,
-      price:15,
+      price:'$15',
+      saves:150,
       selected:false
     }
   ];
@@ -89,15 +91,22 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     platform.ready().then(async () => {
       // this.appPurchaseUtil.initialize();
       //Preload
+      if(commonUseUtil.isNativeAndroid() || commonUseUtil.isNativeIos()){
+        for(let [i,item] of this.packages.entries()){
+          const platform = commonUseUtil.isNativeAndroid() ? 'android' : 'ios';
+          item.price = appPurchaseUtil.getPricing(platform+"_"+item.id) as string;
+        }
+      }
     });
   }
 
   ngOnInit() {
-    this.appStates.setCanShowAds(false);
-    this.admobUtils.hideBanner();
-    setTimeout(() => {
-      this.admobUtils.hideBanner(); //HACk
-    }, 100);
+    this.commonUseUtil.setIsStartCamera(false);
+
+    // this.admobUtils.hideBanner();
+    // setTimeout(() => {
+    //   this.admobUtils.hideBanner(); //HACk
+    // }, 100);
     const language = this.commonUseUtil.getLocalLanguage();
     console.log('langauge',language);
 
@@ -109,11 +118,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngAfterViewInit() {
-    this.admobUtils.hideBanner();
-  }
-
-  ngOnDestroy(){
-    this.appStates.setCanShowAds(true);
+    // this.admobUtils.hideBanner();
   }
 
   onChangePackage(selectedPlanIndex:number,selectedPlan:string){
@@ -137,7 +142,8 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       isSuccess:false,
       payload:null,
       productId:productId,
-      purchaseId:''
+      purchaseId:'',
+      isTestPurchase:true
     };
     if(!environment.production && !this.commonUseUtil.isNativeAndroid() && !this.commonUseUtil.isNativeIos()){
       // test browser
@@ -154,10 +160,21 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       const tokens = this.packages.find((el)=>{return el.id == purchase.productId.replace(platformIdRm,'')})?.tokens as number;
       console.log('onSubscribe tokens',tokens);
 
-      await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase)
+      if(!environment.production){
+        console.log("onSubscribe purchase local")
+        await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase);
+      }
+
+      if(environment.production && !purchase.isTestPurchase){
+        console.log("onSubscribe purchase prod")
+        await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase);
+      }
+
+
       await (await this.toastService.presentToast('Purchase successfully', 2500));
 
       await load.dismiss();
+      this.commonUseUtil.setIsStartCamera(true);
       await this.modaController.dismiss();
 
     }else{
@@ -166,27 +183,12 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
 
   }
 
-  // onChangeOffer(event:any){
-  //   this.scans = event.index == 0 ? GOLD_SCANS : PLATINUM_SCANS;
-  // }
-
   async onClose(){
-    // this.appStates.setIsShowBanner(true);
+    this.commonUseUtil.setIsStartCamera(true);
     await this.modaController.dismiss();
-    // this.checkShowGiftModal();
   }
 
-  // async checkShowGiftModal() {
-  //   //const isNewUser = this.commonUseUtil.isNewUser();
-  //   const isCanGetGift = await this.commonUseService.isCanGetGift();
-  //   console.log("checkShowGiftModal",isCanGetGift);
-  //   if(isCanGetGift){
-  //     this.dialog.open(PopupGiftComponent, {
-  //       width: '360px',
-  //       height:'480px',
-  //       disableClose:true
-  //     });
-  //   }
-  // }
-
+  ngOnDestroy(){
+    this.commonUseUtil.setIsStartCamera(true);
+  }
 }

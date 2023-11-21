@@ -5,7 +5,7 @@ import { AppStates } from 'src/app/core/app-states';
 import { UnlockFeaturesComponent } from '../unlock-features/unlock-features.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'src/app/services/toast.service';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 
 @Component({
   selector: 'ocr-profile-header',
@@ -39,6 +39,7 @@ export class ProfileHeaderComponent  implements OnInit,OnDestroy {
 
   async onUnlockFeatures() {
     // this.router.navigate(['unlock-features']);
+
     const modal = await this.modalController.create(
       {
         component:UnlockFeaturesComponent,

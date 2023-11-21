@@ -5,7 +5,6 @@ import {
   Plugins
 } from '@capacitor/core';
 import {
-  LAST_PURCHASED_PRODUCT_ID,
    SUBSCRIPTION_IDS
 } from '../global-variable';
 import {
@@ -27,7 +26,7 @@ import { PurchaseResponse } from 'src/app/models/purchase-response.model';
   providedIn: 'root'
 })
 export class AppPurchaseUtil {
-  private listenBuyProduct = new BehaviorSubject<PurchaseResponse>({productId:'',purchaseId:'',isSuccess:false,payload:null});
+  private listenBuyProduct = new BehaviorSubject<PurchaseResponse>({productId:'',purchaseId:'',isSuccess:false,payload:null,isTestPurchase:true});
   private buying = false;
   private productId = '';
 
@@ -73,7 +72,7 @@ export class AppPurchaseUtil {
 
     CdvPurchase.store.error(error => {
       console.log('[Store] ERROR',error);
-      this.listenBuyProduct.next({productId:'',purchaseId:'',isSuccess:false,payload:null});
+      this.listenBuyProduct.next({productId:'',purchaseId:'',isSuccess:false,payload:null,isTestPurchase:true});
       this.buying = false;
       if (error.code === CdvPurchase.ErrorCode.PAYMENT_CANCELLED) {
         console.log('[Store] The user cancelled the purchase flow.');
@@ -135,6 +134,8 @@ export class AppPurchaseUtil {
             type: CdvPurchase.ProductType.CONSUMABLE,
             platform: CdvPurchase.Platform.GOOGLE_PLAY
           }
+
+          // CdvPurchase.store.get('product_alias').price;
         }
 
         if (this.commonUseUtil.isNativeIos() && productId.includes('ios')) {
@@ -157,31 +158,41 @@ export class AppPurchaseUtil {
 
   doneProductPuchase(productId:string,receipt:any){
     return new Promise(async (resolve)=>{
-      console.log("doneProductPuchase",productId,JSON.stringify(receipt),!this.buying);
+      console.log("[store] doneProductPuchase 1",productId,JSON.stringify(receipt),!this.buying);
       if(!this.buying){return;} // to avoid the multiple call of the subscription service
 
       this.buying = false;
       // await this.commonUseService.onSubscription(true,productId);
-      localStorage.setItem(LAST_PURCHASED_PRODUCT_ID,productId);
+      // localStorage.setItem(LAST_PURCHASED_PRODUCT_ID,productId);
 
       let payload:any = null;
       let purchaseId = '';
+      let isTestPurchase = true;
+
       if(this.commonUseUtil.isNativeAndroid()){
         payload = JSON.parse(receipt.sourceReceipt.transactions[0].nativePurchase.receipt);
         purchaseId = payload.orderId;
+        console.log("[store] doneProductPuchase 2",receipt,payload.nativeTransactions);
+        isTestPurchase = receipt.nativeTransactions[0].type == 'test';
       }
 
       if(this.commonUseUtil.isNativeIos()){
         // IOS PAYLOAD #change
       }
 
-      this.listenBuyProduct.next({productId:productId,purchaseId:purchaseId,isSuccess:true,payload:payload});
+      this.listenBuyProduct.next({productId:productId,purchaseId:purchaseId,isSuccess:true,payload:payload,isTestPurchase:isTestPurchase});
 
       resolve({});
     })
   }
 
   unsubsribe(){
+  }
+
+  getPricing(productId:string){
+    console.log("[Store] getPricing",CdvPurchase.store.get(productId));
+    const price = CdvPurchase.store.get(productId)?.pricing?.price;
+    return price;
   }
 }
 

@@ -19,7 +19,7 @@ export class AppStates {
 
   private showGiftPopModal = new BehaviorSubject < boolean > (false);
   private settings = new BehaviorSubject < SettingsModel > ({isCrop:true});
-  private canShowAds = new BehaviorSubject < boolean > (false);
+  // private canShowAds = new BehaviorSubject < boolean > (false);
   private remainingTokens = new BehaviorSubject < number > (0);
   private loading = new BehaviorSubject < boolean > (false  );
   private userPremium = new BehaviorSubject < boolean > (false);
@@ -35,13 +35,13 @@ export class AppStates {
 
   constructor() {}
 
-  setCanShowAds(value: boolean) {
-    this.canShowAds.next(value);
-  }
+  // setCanShowAds(value: boolean) {
+  //   this.canShowAds.next(value);
+  // }
 
-  listenCanShowAds() {
-    return this.canShowAds.asObservable();
-  }
+  // listenCanShowAds() {
+  //   return this.canShowAds.asObservable();
+  // }
 
   showGiftPopModalListen() {
     return this.showGiftPopModal.asObservable();

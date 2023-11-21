@@ -3,7 +3,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { ChatAbstract } from 'src/app/core/abstract/chat.abstract';
 import { AppStates } from 'src/app/core/app-states';
 import { TABLE_CHAT_VISON_AI } from 'src/app/core/global-variable';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { UserAccount } from 'src/app/models/user-account.model';
 import { ChatService } from 'src/app/services/chat.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -16,10 +16,12 @@ import { ToastService } from 'src/app/services/toast.service';
 export class CaptureChatComponent extends ChatAbstract implements OnInit {
   @Input('captureId') captureId : string = '';
   @Input('capturedImage') capturedImage : string = '';
+  @Input('fromMainDashboard') fromMainDashboard : boolean = false;
 
   private user : UserAccount = {} as UserAccount;
 
   constructor(chatService : ChatService,
+              private commonUseUtil : CommonUseUtil,
               private toastService:ToastService,
               private modalController:ModalController,
               private loading : LoadingController,
@@ -67,10 +69,14 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
     this.checkChat();
   }
 
-  ngOnDestroy(): void {
+  onStartCamera() {
+    if(this.fromMainDashboard){
+      this.commonUseUtil.setIsStartCamera(true);
+    }
   }
 
   onBack(){
+    this.onStartCamera();
     this.modalController.dismiss();
   }
 
@@ -87,4 +93,9 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
 
     (await load).dismiss();
   }
+
+  ngOnDestroy(): void {
+    this.onStartCamera();
+  }
+
 }

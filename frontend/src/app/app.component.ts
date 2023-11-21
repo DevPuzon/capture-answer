@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, Platform } from '@ionic/angular';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { NativePermissionsUtil } from './core/utils/native-permissions.util';
 import { CommonUseUtil } from './core/utils/common-use.util';
 import { CommonUseService } from './services/common-use.service';
@@ -11,6 +11,9 @@ import { RateAppService } from './services/rate-app.service';
 import { CryptUtil } from './core/utils/crypt.util';
 import { environment } from 'src/environments/environment';
 import { PushNotificationUtil } from './core/utils/push-notification.util';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { Router } from '@angular/router';
+import { UnlockFeaturesComponent } from './shared/components/unlock-features/unlock-features.component';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +21,11 @@ import { PushNotificationUtil } from './core/utils/push-notification.util';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  isShowSplash = false;
   constructor(private platform : Platform,
               private commonUseUtil : CommonUseUtil,
-              private admobUtil : AdmobUtil,
+              private router:Router,
+              private modalController : ModalController,
               private commonUseService:CommonUseService,
               private loadingController:LoadingController,
               private appStates : AppStates,
@@ -32,15 +37,15 @@ export class AppComponent implements OnInit {
     this.initPlatformDependents();
   }
 
-  private initPlatformDependents(){
-
+  private async initPlatformDependents(){
+    // await SplashScreen.hide();
     //On Ready
     this.platform.ready().then(async () => {
       console.log('platform.ready');
       this.translateService.setDefaultLang('en');
       this.appPurchaseUtil.initialize();
 
-      this.pushNotificationUtil.registerNotifications();
+      // this.pushNotificationUtil.registerNotifications();
       // this.nativePermissionUtil.cameraAndroidPermission();
       // this.rateAppService.init();
     });
@@ -60,11 +65,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var a = CryptUtil.encryptData(environment.firebaseConfig);
-    var b = CryptUtil.decryptData(a);
-    console.log("a",a);
-    console.log("b",b);
-    // this.initPrepareAdmob();
   }
 
   // async initPrepareAdmob() {
@@ -82,14 +82,37 @@ export class AppComponent implements OnInit {
   async initApp() {
     const isNewUser = this.commonUseUtil.isNewUser();
     if(!isNewUser){
-      const load = await this.loadingController.create({message: 'Please wait...' })
-      await load.present();
+      // const load = await this.loadingController.create({message: 'Please wait...' })
+      // await load.present();
+      this.isShowSplash = true;
       this.appStates.setLoading(true);
       this.appStates.setHistories(await this.commonUseService.getHistoryList());
       this.commonUseUtil.checkSettings();
       await this.commonUseService.checkFreePremium();
-      await load.dismiss();
+      this.isShowSplash = false;
+      // await load.dismiss();
+
+      this.showUnlockFeature();
       this.appStates.setLoading(false);
+    }
+  }
+
+  showUnlockFeature() {
+    const isNewUser = this.commonUseUtil.isNewUser();
+    const isPremium = this.appStates.getIsUserPremium();
+    const isShowOfferPlan = this.commonUseUtil.isShowOfferPlan();
+
+    if (!isNewUser && isShowOfferPlan && !isPremium) {
+      this.router.navigate(['dashboard', 'main-camera-dashboard']);
+      this.commonUseUtil.setCountShowOffer(true);
+      this.modalController.create({
+        component: UnlockFeaturesComponent,
+        backdropDismiss: false
+      }).then(
+        (modal) => {
+          modal.present();
+          modal.onDidDismiss().then((dataReturned) => {});
+        })
     }
   }
 }

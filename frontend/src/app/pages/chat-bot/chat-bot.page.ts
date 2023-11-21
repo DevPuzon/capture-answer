@@ -3,7 +3,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { ChatAbstract } from 'src/app/core/abstract/chat.abstract';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { OCR_CHAT_AI_USER_ID, TABLE_CHAT_AI } from 'src/app/core/global-variable';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { AppStates } from 'src/app/core/app-states';
 import { LoadingController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';

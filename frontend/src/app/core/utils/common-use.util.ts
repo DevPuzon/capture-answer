@@ -73,6 +73,11 @@ export class CommonUseUtil {
       return true;
     }
     const count = parseInt(countStr ? countStr : "0");
+    // if(count >= 5){
+    //   return true
+    // }
+    // return false;
+
     if(count >= 5){
       return true
     }
@@ -177,6 +182,7 @@ export class CommonUseUtil {
   }
 
   getSubscriptionId(selectedTimeOffer:string){
+    selectedTimeOffer = selectedTimeOffer.replace("_consumable",'');
     let nativeStr = 'android';
     if(this.isNativeAndroid()){
       nativeStr = 'android';
@@ -233,7 +239,9 @@ export class CommonUseUtil {
       return (num / 1e3).toFixed(1) + 'k';
     }
 
-    return num.toFixed(1).toString();
+    // return num.toFixed(1).toString();
+    const decimalPart = num % 1 === 0 ? 0 : num % 1;
+    return (decimalPart === 0 ? num.toFixed(0) : num.toFixed(1)).toString();
   }
 
   convertBlobToBase64(blob: Blob) {

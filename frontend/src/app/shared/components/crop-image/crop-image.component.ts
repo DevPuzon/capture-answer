@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { AppStates } from 'src/app/core/app-states';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { CaptureResultComponent } from '../capture-result/capture-result.component';
 
 @Component({
@@ -11,7 +11,7 @@ import { CaptureResultComponent } from '../capture-result/capture-result.compone
   templateUrl: './crop-image.component.html',
   styleUrls: ['./crop-image.component.scss']
 })
-export class CropImageComponent  implements OnInit {
+export class CropImageComponent  implements OnInit,OnDestroy {
   @Input('captureId') captureId : string = '';
   @Input('capturedImage') capturedImage : string = '';
   croppedImage:any = '';
@@ -20,6 +20,7 @@ export class CropImageComponent  implements OnInit {
               private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    this.commonUseUtil.setIsStartCamera(false);
     if(!this.captureId){
       throw new Error("captureId required");
     }
@@ -40,12 +41,16 @@ export class CropImageComponent  implements OnInit {
   }
 
   onBack(){
-    this.modalController.dismiss();
     this.commonUseUtil.setIsStartCamera(true);
+    this.modalController.dismiss();
   }
 
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
     // console.log(this.croppedImage,event);
+  }
+
+  ngOnDestroy(): void {
+    this.commonUseUtil.setIsStartCamera(true);
   }
 }

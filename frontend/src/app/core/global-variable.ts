@@ -9,7 +9,7 @@ export const GOLD_SCANS = 500;
 export const HISTORY_LOCAL = "HISTORY_LOCAL";
 export const APPLICATION_ID = config.appId;
 export const APPLICATION_IOS_ID = '0000000';
-export const LAST_PURCHASED_PRODUCT_ID = 'LAST_PURCHASED_PRODUCT_ID';
+// export const LAST_PURCHASED_PRODUCT_ID = 'LAST_PURCHASED_PRODUCT_ID';
 export const APP_NAME = config.appName;
 
 export const TABLE_CHAT_AI = 'ocr-chat-ai-'+environment.environment;
@@ -41,10 +41,10 @@ export const SUBSCRIPTION_IDS = {
     fifteen: 'android_fifteen_consumable'
   },
   iosSubscriptionIds: {
-    one: 'ios_one',
-    five: 'ios_five',
-    ten: 'ios_ten',
-    fifteen: 'ios_fifteen'
+    one: 'ios_one_consumable',
+    five: 'ios_five_consumable',
+    ten: 'ios_ten_consumable',
+    fifteen: 'ios_fifteen_consumable'
   }
 };
 

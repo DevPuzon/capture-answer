@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ALREADY_CLAIMED_GIFT, APP_NAME, HISTORY_LOCAL } from '../core/global-variable';
 import { AppStates } from '../core/app-states';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -11,10 +11,13 @@ import { TranslateData } from '../models/translate.model';
 import { SubscriptionResponse } from '../models/subscription.model';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { LStorage } from '../core/utils/lstorage.util';
+import { Storage, ref, uploadBytesResumable } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root'
 })
 export class CommonUseService   {
+  private readonly storage: Storage = inject(Storage);
+
   constructor(
               private appStates:AppStates,
               private commonUseUtil:CommonUseUtil,
@@ -243,19 +246,33 @@ export class CommonUseService   {
   //   })
   // }
 
+  // onUploadImage(file:File){
+  //   return new Promise<string>((resolve)=>{
+
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+
+  //     const req = this.httpClient.post(environment.apiBaseURL+"common-use/upload",
+  //       formData
+  //     ).subscribe((data:any) => {
+  //       req.unsubscribe();
+  //       return resolve(data.data.imageUrl);
+  //     })
+
+  //   })
+  // }
+
   onUploadImage(file:File){
-    return new Promise<string>((resolve)=>{
+    return new Promise<string>(async (resolve)=>{
 
-      const formData = new FormData();
-      formData.append('image', file);
 
-      const req = this.httpClient.post(environment.apiBaseURL+"common-use/upload",
-        formData
-      ).subscribe((data:any) => {
-        req.unsubscribe();
-        return resolve(data.data.imageUrl);
-      })
+      const fileName = `${Date.now()}_${file.name}`;
+      const storageRef = ref(this.storage, fileName);
+      const upload = await uploadBytesResumable(storageRef, file);
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/ocr-chat-ai.appspot.com/o/${fileName}?alt=media`;
 
+      console.log("onUploadImage upload",upload);
+      return resolve(imageUrl);
     })
   }
 

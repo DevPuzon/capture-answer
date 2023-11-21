@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { SwiperOptions } from 'swiper/types';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { UnlockFeaturesComponent } from 'src/app/shared/components/unlock-features/unlock-features.component';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { CommonUseService } from 'src/app/services/common-use.service';
 import { AppStates } from 'src/app/core/app-states';
 

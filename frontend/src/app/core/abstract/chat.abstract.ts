@@ -4,10 +4,6 @@ import { CollectionReference, DocumentData, Query, } from '@angular/fire/firesto
 import { Observable } from 'rxjs/internal/Observable';
 import { Chat } from 'src/app/models/chat.model';
 import { Injectable, OnInit } from '@angular/core';
-import { CommonUseUtil } from '../utils/common-use.util';
-import { UserAccount } from 'src/app/models/user-account.model';
-import { OCR_CHAT_AI_USER_ID } from '../global-variable';
-
 @Injectable()
 export abstract class ChatAbstract{
   convoRef : CollectionReference<DocumentData> = {} as  CollectionReference<DocumentData>;

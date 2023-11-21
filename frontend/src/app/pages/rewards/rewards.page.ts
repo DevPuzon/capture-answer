@@ -3,7 +3,7 @@ import { LoadingController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
 import { AdmobUtil } from 'src/app/core/utils/admob.util';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { CommonUseService } from 'src/app/services/common-use.service';
 import { ToastService } from 'src/app/services/toast.service';
 

@@ -11,6 +11,9 @@ import { ProductModule } from './components/product/product.module';
 
 @Module({
   imports: [ 
+    MulterModule.register({
+      dest: './uploads',
+    }),
     ChatAiModule, 
     CommonUseModule, 
     AdminModule, ProductModule

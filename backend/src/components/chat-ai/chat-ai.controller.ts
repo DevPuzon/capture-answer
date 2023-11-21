@@ -2,7 +2,7 @@ import { Body, Controller, HttpException, HttpStatus, Param, Post, Req } from '@
 import { ChatAiService } from './chat-ai.service';
 import { ENVIRONMENT } from 'src/environments/environment';
 
-@Controller(ENVIRONMENT+'/chat-ai')
+@Controller('chat-ai')
 export class ChatAiController {
 
     constructor(private chatAiService:ChatAiService){}

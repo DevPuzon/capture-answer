@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
+import { CommonUseUtil } from "src/app/core/utils/common-use.util";
 import { HistoryData } from 'src/app/models/history.model';
 import { CommonUseService } from 'src/app/services/common-use.service';
 import { CaptureChatComponent } from '../capture-chat/capture-chat.component';
@@ -11,20 +11,23 @@ import { ChatService } from 'src/app/services/chat.service';
   templateUrl: './capture-result.component.html',
   styleUrls: ['./capture-result.component.scss'],
 })
-export class CaptureResultComponent  implements OnInit {
+export class CaptureResultComponent  implements OnInit,OnDestroy {
   @Input('capturedImage') capturedImage : string = '';
   @Input('captureId') captureId : string = '';
 
   constructor(
-    private commoUseUtl:CommonUseUtil,
+    private commonUseUtil:CommonUseUtil,
     private chatService:ChatService,
     private loadingController:LoadingController,
     private commonUseService : CommonUseService,
     private modalController:ModalController) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.commonUseUtil.setIsStartCamera(false);
+  }
 
   async onBack(){
+    this.commonUseUtil.setIsStartCamera(true);
     await this.modalController.dismiss();
   }
 
@@ -34,7 +37,7 @@ export class CaptureResultComponent  implements OnInit {
     await load.present();
     try{
       console.log("onSendMessage",event,message);
-      const file = this.commoUseUtl.base64toFile(this.capturedImage,this.captureId.toString());
+      const file = this.commonUseUtil.base64toFile(this.capturedImage,this.captureId.toString());
       const item:HistoryData = {
         captureId: this.captureId,
         text:message,
@@ -45,7 +48,7 @@ export class CaptureResultComponent  implements OnInit {
       const { image } = await this.commonUseService.getHistoryItem(this.captureId);
       this.capturedImage = image;
       await this.chatService.sendMessageVision(this.captureId,message,image);
-      await this.onBack();
+      await this.modalController.dismiss();
       await this.onOpenCaptureChat();
     }catch(ex){
       console.error(ex);
@@ -59,9 +62,14 @@ export class CaptureResultComponent  implements OnInit {
       component:CaptureChatComponent,
       componentProps:{
         capturedImage:this.capturedImage,
-        captureId:this.captureId
+        captureId:this.captureId,
+        fromMainDashboard:true
       }
     })
     await modal.present();
+  }
+
+  ngOnDestroy(): void {
+    this.commonUseUtil.setIsStartCamera(true);
   }
 }

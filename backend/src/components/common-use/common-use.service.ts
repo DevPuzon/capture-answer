@@ -1,4 +1,6 @@
 import {
+    HttpException,
+    HttpStatus,
     Injectable
 } from '@nestjs/common';
 import {
@@ -85,6 +87,7 @@ export class CommonUseService {
             });
 
             stream.on('error', (error) => { 
+                throw new HttpException({...error,code:1000}, HttpStatus.FORBIDDEN);
             }); 
             stream.on('finish', () => { 
             }); 
