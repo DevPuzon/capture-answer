@@ -138,6 +138,7 @@ export class CommonUseService {
 
 
 
+
     
 
     private claimRewards(deviceId:string){

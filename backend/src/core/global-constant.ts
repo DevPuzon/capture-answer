@@ -13,6 +13,7 @@ export const TABLE_CLAIM_REWARDS = ENVIRONMENT+'-claim-rewards';
 export const TABLE_API_REQUEST_VALIDATOR = ENVIRONMENT+'-api-validator';
 export const TABLE_PRODUCT = ENVIRONMENT+'-product';
 export const TABLE_OPEN_AI_LOGS = ENVIRONMENT+'-open-ai-logs';
+export const TABLE_HISTORY = ENVIRONMENT+'-history';
 
 // export const LOCAL_SUBSCRIBE = 'LOCAL_SUBSCRIBE.json';
 export const FREE_CHAT_COUNT = 10;

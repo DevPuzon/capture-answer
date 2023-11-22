@@ -65,14 +65,14 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   packages = [{
       id: "one_consumable",
       title: "Discounted",
-      tokens: 20,
+      tokens: 60,
       price: '$1',
       selected: true
     },
     {
       id: "five_consumable",
       title: "Silver",
-      tokens: 200,
+      tokens: 600,
       price: '$5',
       saves: 100,
       selected: false
@@ -80,7 +80,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     {
       id: "ten_consumable",
       title: "Gold",
-      tokens: 450,
+      tokens: 1350,
       price: '$10',
       saves: 125,
       selected: false
@@ -88,7 +88,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     {
       id: "fifteen_consumable",
       title: "Diamond",
-      tokens: 750,
+      tokens: 2250,
       price: '$15',
       saves: 150,
       selected: false
@@ -181,7 +181,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
 
     let purchase: PurchaseResponse = {
       isSuccess: false,
-      payload: null,
+      receipt: null,
       productId: productId,
       purchaseId: '',
       isTestPurchase: true
@@ -191,7 +191,12 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       console.log("onSubscribe purchase web local");
       const productId = this.commonUseUtil.getUID();
       const purchaseId = this.commonUseUtil.getUID();
-      await this.productService.onPurchase(productId,purchaseId, 23, {
+
+      const tokens = this.packages.find((el) => {
+        return el.id == purchase.productId.replace('android_', '')
+      })?.tokens as number;
+
+      await this.productService.onPurchase(productId, purchaseId, tokens, {
         payloadTest: 'payload'
       })
       purchase.isSuccess = true;
@@ -209,16 +214,18 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
 
       console.log('onSubscribe tokens', tokens);
 
-      if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
-        if (!environment.production) {
-          console.log("onSubscribe purchase native local");
-          await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
-        }
+      if (this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()) {
+        // if (!environment.production) {
+        //   console.log("onSubscribe purchase native local");
+        //   await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
+        // }
 
-        if (environment.production && !purchase.isTestPurchase) {
-          console.log("onSubscribe purchase prod");
-          await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
-        }
+        // if (environment.production && !purchase.isTestPurchase) {
+        //   console.log("onSubscribe purchase prod");
+        //   await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
+        // }
+
+        await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
       }
 
 

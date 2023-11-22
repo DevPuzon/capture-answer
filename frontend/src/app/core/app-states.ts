@@ -86,11 +86,15 @@ export class AppStates {
     return this.userPremium.asObservable();
   }
 
+  getHistories() {
+    return this.histories.getValue();
+  }
+
   setHistories(histories: HistoryData[]) {
     this.histories.next(histories);
   }
 
-  historiesListen() {
+  listenHistories() {
     return this.histories.asObservable();
   }
 

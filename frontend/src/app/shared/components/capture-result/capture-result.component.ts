@@ -44,7 +44,7 @@ export class CaptureResultComponent  implements OnInit,OnDestroy {
         image:'',
         date:new Date().getTime()
       }
-      await this.commonUseService.saveHistory(item,file);
+      await this.commonUseService.setHistory(item,file);
       const { image } = await this.commonUseService.getHistoryItem(this.captureId);
       this.capturedImage = image;
       await this.chatService.sendMessageVision(this.captureId,message,image);

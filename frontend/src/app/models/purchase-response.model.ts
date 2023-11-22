@@ -3,7 +3,7 @@ export interface PurchaseResponse{
   productId:string;
   purchaseId:string;
   isTestPurchase:boolean;
-  payload:any;
+  receipt:any;
 }
 
 

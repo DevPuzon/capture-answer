@@ -8,15 +8,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { SharedProvider } from './shared/shared.modules';
 import { AdminModule } from './components/admin/admin.module';
 import { ProductModule } from './components/product/product.module';
+import { HistoryModule } from './components/history/history.module';
 
 @Module({
-  imports: [ 
-    MulterModule.register({
-      dest: './uploads',
-    }),
+  imports: [  
     ChatAiModule, 
     CommonUseModule, 
-    AdminModule, ProductModule
+    AdminModule, ProductModule, HistoryModule
   ],
   controllers: [AppController],
   providers: [AppService,...SharedProvider ], 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 import { AppStates } from 'src/app/core/app-states';
 import { HistoryData } from 'src/app/models/history.model';
@@ -19,6 +19,7 @@ export class HistoryPage implements OnInit,OnDestroy {
   constructor(private commonUseService: CommonUseService,
               private alertController:AlertController,
               private appStates : AppStates,
+              private loadingController:LoadingController,
               private modalController : ModalController) { }
 
   ngOnInit() {
@@ -27,11 +28,19 @@ export class HistoryPage implements OnInit,OnDestroy {
   }
 
   async init() {
-    this.appStates.historiesListen().pipe(takeUntil(this.destroy$))
+    this.appStates.listenHistories().pipe(takeUntil(this.destroy$))
     .subscribe((histories:HistoryData[])=>{
       this.histories = histories.sort((a, b) => b.date - a.date);
       this.checkData();
     })
+
+    const histories = this.appStates.getHistories();
+    if(histories.length <= 0){
+      const load = await this.loadingController.create({message:"Please wait..."});
+      await load.present();
+      await this.commonUseService.getHistories();
+      await load.dismiss();
+    }
   }
 
   checkData(){
@@ -69,7 +78,10 @@ export class HistoryPage implements OnInit,OnDestroy {
             text:"Delete",
             role:"destructive",
             handler:async ()=>{
+              const load = await this.loadingController.create({message:"Please wait..."});
+              await load.present();
               await this.commonUseService.deleteHistoryItem(captureId);
+              await load.dismiss();
             }
           }
         ]

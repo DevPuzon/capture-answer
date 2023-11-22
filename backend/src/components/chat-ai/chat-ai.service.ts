@@ -27,6 +27,7 @@ import {
 import {
     ChatCompletion
 } from 'openai/resources';
+import { AccountSubscribe } from 'src/intefaces/account-subscribe';
 
 @Injectable()
 export class ChatAiService {
@@ -35,56 +36,51 @@ export class ChatAiService {
 
     public chatAi(deviceId: string, message: string) {
         return new Promise(async (resolve, reject) => {
-            let accountSubscribeDevice;
+            let account = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
             try {
-                accountSubscribeDevice = await this.chatValidation(deviceId, false);
+                account = await this.chatValidation(account, false);
             } catch (ex) {
                 return reject(ex);
             }
 
             const roomId = deviceId;
             await this.saveMessage(TABLE_CHAT_AI, roomId, deviceId, message);
-            const convoData = await this.getConvoHistory(roomId);
+            // const convoData = await this.getConvoHistory(roomId);
+            const convoData = null;
             const botResponse = await this.requestChatGPT(message, OCR_CHAT_PROMPT, convoData);
             const botMessage = botResponse.message;
             await this.saveMessage(TABLE_CHAT_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
-            this.saveOpenAiLogs(deviceId, botMessage, botResponse.logs, null);
+            this.saveOpenAiLogs(deviceId, botMessage, botResponse.logs, null); 
 
-            accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
             resolve({
                 message: botMessage,
-                accountSubscribeDevice: accountSubscribeDevice
-            });
-
-            // resolve({});
+                accountSubscribeDevice: account
+            }); 
         })
     }
 
     public chatVisionAi(deviceId: string, roomId: string, message: string, imageUrl: string) {
         return new Promise(async (resolve, reject) => {
             console.log('chatVisionAi', deviceId, roomId, message, imageUrl);
-            let accountSubscribeDevice;
+            let account = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
             try {
-                accountSubscribeDevice = await this.chatValidation(deviceId, true);
+                account = await this.chatValidation(account, true);
             } catch (ex) {
                 return resolve(ex);
             }
-            console.log('chatVisionAi accountSubscribeDevice', accountSubscribeDevice);
+            console.log('chatVisionAi account', account);
 
-            await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, deviceId, message);
-            // const convoData = await this.getConvoHistory(roomId);
+            await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, deviceId, message); 
             const botResponse = await this.requestChatVisionGPT(message, imageUrl);
             const botMessage = botResponse.message;
             console.log('chatVisionAi botMessage', botMessage);
             await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
             this.saveOpenAiLogs(deviceId, botMessage, botResponse.logs, null);
-
-            accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
-
-            console.log('chatVisionAi accountSubscribeDevice', accountSubscribeDevice);
+ 
+            console.log('chatVisionAi accountSubscribeDevice', account);
             resolve({
                 message: botMessage,
-                accountSubscribeDevice: accountSubscribeDevice
+                accountSubscribeDevice: account
             });
 
             // resolve({});
@@ -128,7 +124,7 @@ export class ChatAiService {
                 });
                 let messages: any = [{
                     "role": "system",
-                    "content": message
+                    "content": 'You are a helpful assistant.'
                 }];
                 if (convoData) {
                     messages = messages.concat(convoData);
@@ -216,7 +212,9 @@ export class ChatAiService {
             const db = admin.firestore();
             const collectionRef = db.collection(TABLE_CHAT_AI).doc(roomId)
                 .collection(TABLE_CHAT_AI);
-            const querySnapshot = await collectionRef.orderBy('created_at', 'desc').limit(READ_HISTORY_COUNT).get();
+
+            const querySnapshot = await collectionRef.orderBy('created_at', 'desc')
+            .limit(READ_HISTORY_COUNT).get();
 
             const convoHistory: any[] = [];
             querySnapshot.forEach((doc) => {
@@ -255,24 +253,24 @@ export class ChatAiService {
         })
     }
 
-    private chatValidation(deviceId: string, isUseChatVision: boolean) {
-        return new Promise(async (resolve, reject) => {
-            console.log("chatValidation", deviceId);
-            const isPremiumUser = await this.commonUseUtil.isPremiumUser(deviceId);
-            let accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
+    private chatValidation(account:AccountSubscribe,isUseChatVision: boolean):Promise<AccountSubscribe> {
+        return new Promise<AccountSubscribe>(async (resolve, reject) => {
+            console.log("chatValidation", account);
+            const isPremiumUser = await this.commonUseUtil.isPremiumUser(account);
+            // let accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
 
-            console.log("chatValidation accountSubscribeDevice", accountSubscribeDevice);
+            console.log("chatValidation account", account);
             if (isPremiumUser) {
                 // Has premium count above 0
                 if (isUseChatVision) {
-                    await this.commonUseUtil.minusChatWithVisonAccountSubscribe(deviceId);
+                    account = await this.commonUseUtil.minusChatWithVisonAccountSubscribe(account);
                 } else {
-                    const freeAiChat = accountSubscribeDevice.freeChatCount;
+                    const freeAiChat = account.freeChatCount;
                     if (freeAiChat > 0) {
                         // if has free ai Chat
-                        await this.commonUseUtil.minusFreeChatAccountSubscribe(deviceId);
+                        account = await this.commonUseUtil.minusFreeChatAccountSubscribe(account);
                     } else {
-                        await this.commonUseUtil.minusChatAccountSubscribe(deviceId);
+                        account = await this.commonUseUtil.minusChatAccountSubscribe(account);
                     }
                 }
             } else {
@@ -283,17 +281,17 @@ export class ChatAiService {
                     });
                 }
 
-                console.log("accountSubscribeDevice", accountSubscribeDevice);
-                if (!accountSubscribeDevice || accountSubscribeDevice.freeChatCount <= 0) {
+                console.log("accountSubscribeDevice", account);
+                if (!account || account.freeChatCount <= 0) {
                     return reject({
                         message: "No more token"
                     });
                 } else {
-                    await this.commonUseUtil.minusFreeChatAccountSubscribe(deviceId);
+                    account = await this.commonUseUtil.minusFreeChatAccountSubscribe(account);
                 }
             }
 
-            resolve(accountSubscribeDevice);
+            resolve(account);
         })
     }
 }

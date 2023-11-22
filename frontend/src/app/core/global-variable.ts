@@ -6,7 +6,6 @@ export const COUNT_SHOW_OFFER = "COUNT_SHOW_OFFER";
 export const FREE_SCANS = 5;
 export const PLATINUM_SCANS = 1500;
 export const GOLD_SCANS = 500;
-export const HISTORY_LOCAL = "HISTORY_LOCAL";
 export const APPLICATION_ID = config.appId;
 export const APPLICATION_IOS_ID = '0000000';
 // export const LAST_PURCHASED_PRODUCT_ID = 'LAST_PURCHASED_PRODUCT_ID';

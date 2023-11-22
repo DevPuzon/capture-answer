@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { ALREADY_CLAIMED_GIFT, APP_NAME, HISTORY_LOCAL } from '../core/global-variable';
+import { ALREADY_CLAIMED_GIFT } from '../core/global-variable';
 import { AppStates } from '../core/app-states';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -108,6 +108,114 @@ export class CommonUseService   {
     })
   }
 
+  getHistories(){
+    return new Promise<HistoryData[]>(async (resolve,reject)=>{
+
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+
+      const body ={
+        deviceId:deviceUID,
+        history:history
+      }
+
+      const req = this.httpClient.post(environment.apiBaseURL+'history/histories-per-account',
+      body).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            this.appStates.setHistories(res.data);
+
+            return resolve(res.data);
+          }
+        }
+      );
+
+    })
+  }
+
+  setHistory(history:HistoryData,file:File){
+    return new Promise<HistoryData[]>(async (resolve,reject)=>{
+
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+
+      if(file){
+        history.image = await this.onUploadImage(file);
+      }else{
+        throw new Error("Required file");
+      }
+
+
+      const body ={
+        deviceId:deviceUID,
+        history:history
+      }
+
+      const req = this.httpClient.post(environment.apiBaseURL+'history/save-history',
+      body).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            const histories = this.appStates.getHistories();
+            histories.push(history);
+
+            this.appStates.setHistories(histories);
+
+            return resolve(res.data);
+          }
+        }
+      );
+
+    })
+  }
+
+  deleteHistoryItem(captureId:string){
+    return new Promise(async(resolve)=>{
+
+      // let histories = this.appStates.getHistories();
+      // console.log("deleteHistoryItem histories 1",histories);
+      // const fIndex = histories.findIndex((el)=>{return el.captureId == captureId});
+      // console.log("deleteHistoryItem fIndex 1",fIndex);
+      // histories.splice(fIndex, 1);
+      // console.log("deleteHistoryItem histories 2",histories);
+      // return;
+
+      const deviceUID = await CommonUseUtil.getDeviceUID();
+      const body ={
+        deviceId:deviceUID,
+        captureId:captureId
+      }
+
+      const req = this.httpClient.post(environment.apiBaseURL+'history/delete-history',
+      body).subscribe(
+        (res:any) => {
+          req.unsubscribe();
+          if(res.success){
+            let histories = this.appStates.getHistories();
+            const fIndex = histories.findIndex((el)=>{return el.captureId == captureId});
+            histories.splice(fIndex, 1);
+
+            this.appStates.setHistories(histories);
+
+            return resolve(res.data);
+          }
+        }
+      );
+
+    })
+  }
+
+
+  getHistoryItem(captureId:string){
+    return new Promise<HistoryData>(async (resolve)=>{
+
+      const histories = this.appStates.getHistories();
+      const item:any = histories.find((el)=>{return captureId == el.captureId; });
+
+      return resolve(item);
+    })
+  }
+
+
   isCanGetGift(){
     return new Promise<boolean>(async (resolve,reject)=>{
 
@@ -120,66 +228,6 @@ export class CommonUseService   {
 
       const isCanClaimGift = await this.checkFreePremium();
       resolve(isCanClaimGift);
-    })
-  }
-
-  saveHistory(item:HistoryData,file?:File){
-    return new Promise<HistoryData[]>(async (resolve,reject)=>{
-      const histories = await this.getHistoryList();
-      const historyFindIndex = this.historyFindIndex(item.captureId,histories);
-
-      if(historyFindIndex != -1){
-        // new item
-        histories[historyFindIndex] = item;
-      }else{
-        // already exist item
-        if(file){
-          item.image = await this.onUploadImage(file);
-        }else{
-          throw new Error("Requred file");
-        }
-
-        histories.push(item);
-      }
-
-      // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
-      LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
-      await this.getHistoryList();
-      resolve(histories);
-    })
-  }
-
-  deleteHistoryItem(captureId:string){
-    return new Promise(async(resolve)=>{
-      const histories = await this.getHistoryList();
-      const historyFindIndex = this.historyFindIndex(captureId,histories);
-      histories.splice(historyFindIndex,1);
-      // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
-      LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
-      await this.getHistoryList();
-      resolve(histories);
-    })
-  }
-
-  private historyFindIndex(captureId:string, histories:HistoryData[]){
-    return histories.findIndex((el)=>{return el.captureId == captureId});
-  }
-
-  getHistoryItem(captureId:string){
-    return new Promise<HistoryData>(async (resolve)=>{
-      const histories = await this.getHistoryList();
-      const item:any = histories.find((el)=>{return captureId == el.captureId; });
-      return resolve(item);
-    })
-  }
-
-  getHistoryList(){
-    return new Promise<HistoryData[]>(async (resolve,reject)=>{
-      // let histories:any[]|HistoryData[] = JSON.parse(localStorage.getItem(HISTORY_LOCAL) || '[]');
-      let histories:any[]|HistoryData[] = JSON.parse(LStorage.get(HISTORY_LOCAL) || '[]');
-      console.log(histories);
-      this.appStates.setHistories(histories);
-      resolve(histories);
     })
   }
 
@@ -262,6 +310,59 @@ export class CommonUseService   {
   //   })
   // }
 
+
+
+  // setHistory(item:HistoryData,file?:File){
+  //   return new Promise<HistoryData[]>(async (resolve,reject)=>{
+  //     const histories = await this.getHistoryList();
+  //     const historyFindIndex = this.historyFindIndex(item.captureId,histories);
+
+  //     if(historyFindIndex != -1){
+  //       // new item
+  //       histories[historyFindIndex] = item;
+  //     }else{
+  //       // already exist item
+  //       if(file){
+  //         item.image = await this.onUploadImage(file);
+  //       }else{
+  //         throw new Error("Requred file");
+  //       }
+
+  //       histories.push(item);
+  //     }
+
+  //     // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+  //     LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
+  //     await this.getHistoryList();
+  //     resolve(histories);
+  //   })
+  // }
+
+  // deleteHistoryItem(captureId:string){
+  //   return new Promise(async(resolve)=>{
+  //     const histories = await this.getHistoryList();
+  //     const historyFindIndex = this.historyFindIndex(captureId,histories);
+  //     histories.splice(historyFindIndex,1);
+  //     // localStorage.setItem(HISTORY_LOCAL,JSON.stringify(histories));
+  //     LStorage.set(HISTORY_LOCAL,JSON.stringify(histories));
+  //     await this.getHistoryList();
+  //     resolve(histories);
+  //   })
+  // }
+
+  // private historyFindIndex(captureId:string, histories:HistoryData[]){
+  //   return histories.findIndex((el)=>{return el.captureId == captureId});
+  // }
+
+  // getHistoryItem(captureId:string){
+  //   return new Promise<HistoryData>(async (resolve)=>{
+  //     const histories = await this.getHistoryList();
+  //     const item:any = histories.find((el)=>{return captureId == el.captureId; });
+  //     return resolve(item);
+  //   })
+  // }
+
+
   onUploadImage(file:File){
     return new Promise<string>(async (resolve)=>{
 
@@ -286,4 +387,7 @@ export class CommonUseService   {
 
     })
   }
+
+
+
 }

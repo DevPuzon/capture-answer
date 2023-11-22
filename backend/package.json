@@ -29,8 +29,7 @@
     "fb:logs": "firebase functions:log",
 
     "build:deploy:prod":"node script-build/build.js --prod && npm run build && firebase deploy --only functions",
-    "build:deploy:dev":"node script-build/build.js --dev && npm run build && firebase deploy --only functions",
-
+ 
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

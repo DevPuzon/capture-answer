@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
       // await load.present();
       this.isShowSplash = true;
       this.appStates.setLoading(true);
-      this.appStates.setHistories(await this.commonUseService.getHistoryList());
+      // this.appStates.setHistories(await this.commonUseService.getHistoryList());
       this.commonUseUtil.checkSettings();
       await this.commonUseService.checkFreePremium();
       this.isShowSplash = false;

@@ -46,13 +46,13 @@ export class CommonUseUtil {
         })
     }
 
-    addAccountSubscribeDeviceId(accountSubscribe: AccountSubscribe): Promise < any > {
-        return new Promise < any > (async (resolve) => {
+    addAccountSubscribeDeviceId(accountSubscribe: AccountSubscribe): Promise < AccountSubscribe > {
+        return new Promise < AccountSubscribe > (async (resolve) => {
             const db = admin.firestore();
             await db.collection(TABLE_SUBSCRIBERS)
                 .doc(accountSubscribe.deviceId).set(accountSubscribe);
 
-            return resolve({});
+            return resolve(accountSubscribe);
         })
     }
 
@@ -108,46 +108,41 @@ export class CommonUseUtil {
             return resolve(save);
         })
     }
-
-    isPremiumUser(deviceId: string): Promise < boolean > {
-        return new Promise < boolean > (async (resolve) => {
-            const account = await this.findAccountSubscribeDevice(deviceId);
+ 
+    isPremiumUser(account:AccountSubscribe): Promise < boolean > {
+        return new Promise < boolean > (async (resolve) => { 
             if (!account) {
                 return resolve(false);
-            }
-
+            } 
             resolve(account.premiumCount > 0);
         });
     }
 
-    minusFreeChatAccountSubscribe(deviceId: string) {
-        return new Promise(async (resolve) => {
-            let account = await this.findAccountSubscribeDevice(deviceId);
+    minusFreeChatAccountSubscribe(account:AccountSubscribe):Promise<AccountSubscribe> {
+        return new Promise<AccountSubscribe>(async (resolve) => { 
             account.freeChatCount--;
             account.freeChatCount = CommonUseUtil.formatNumber(account.freeChatCount);
-            await this.addAccountSubscribeDeviceId(account);
-            resolve({});
+            account = await this.addAccountSubscribeDeviceId(account);
+            resolve(account);
         })
     }
 
-    minusChatAccountSubscribe(deviceId: string) {
-        return new Promise(async (resolve) => {
-            let account = await this.findAccountSubscribeDevice(deviceId);
+    minusChatAccountSubscribe(account:AccountSubscribe):Promise<AccountSubscribe> {
+        return new Promise<AccountSubscribe>(async (resolve) => { 
             account.premiumCount = account.premiumCount - CHAT_PREMIUM_COST;
 
             account.premiumCount = CommonUseUtil.formatNumber(account.premiumCount);
             console.log("minusChatAccountSubscribe", account);
-            await this.addAccountSubscribeDeviceId(account);
-            resolve({});
+            account = await this.addAccountSubscribeDeviceId(account);
+            resolve(account);
         })
     }
 
-    minusChatWithVisonAccountSubscribe(deviceId: string) {
-        return new Promise(async (resolve) => {
-            let accountSubscribeDevice = await this.findAccountSubscribeDevice(deviceId);
-            accountSubscribeDevice.premiumCount = accountSubscribeDevice.premiumCount - CHAT_VISION_PREMIUM_COST;
-            await this.addAccountSubscribeDeviceId(accountSubscribeDevice);
-            resolve({});
+    minusChatWithVisonAccountSubscribe(account:AccountSubscribe):Promise<AccountSubscribe> {
+        return new Promise<AccountSubscribe>(async (resolve) => { 
+            account.premiumCount = account.premiumCount - CHAT_VISION_PREMIUM_COST;
+            account = await this.addAccountSubscribeDeviceId(account);
+            resolve(account);
         })
     }
 
