@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">capture &amp; answer - AI</string>
-    <string name="title_activity_main">capture &amp; answer - AI</string>
+    <string name="app_name">capture &amp; answer - AI Buddy</string>
+    <string name="title_activity_main">capture &amp; answer - AI Buddy</string>
     <string name="package_name">com.capture.answer.ai</string>
     <string name="custom_url_scheme">com.capture.answer.ai</string>
   <string name="admob_app_id">ca-app-pub-2424323323577681~9404682921</string>

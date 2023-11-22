@@ -66,7 +66,7 @@ export class ChatAiService {
             try {
                 account = await this.chatValidation(account, true);
             } catch (ex) {
-                return resolve(ex);
+                return reject(ex);
             }
             console.log('chatVisionAi account', account);
 
@@ -259,7 +259,7 @@ export class ChatAiService {
             const isPremiumUser = await this.commonUseUtil.isPremiumUser(account);
             // let accountSubscribeDevice = await this.commonUseUtil.findAccountSubscribeDevice(deviceId);
 
-            console.log("chatValidation account", account);
+            console.log("chatValidation account", account,isPremiumUser);
             if (isPremiumUser) {
                 // Has premium count above 0
                 if (isUseChatVision) {
