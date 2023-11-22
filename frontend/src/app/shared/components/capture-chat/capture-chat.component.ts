@@ -31,6 +31,12 @@ export class CaptureChatComponent extends ChatAbstract implements OnInit {
   }
 
   async ngOnInit() {
+    setTimeout(() => {
+      if(this.fromMainDashboard){
+        this.commonUseUtil.setIsStartCamera(false);
+      }
+    }, 2000);
+
     if(!this.captureId){throw new Error("capturedImage is required");return;}
 
     this.user = await CommonUseUtil.getUser();

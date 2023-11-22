@@ -272,7 +272,7 @@ export class CommonUseUtil {
     let ret = false;
     // let countShowInter = parseInt(localStorage.getItem("isShowInterstitial") || '0');
     let countShowInter = parseInt(LStorage.get("isShowInterstitial") || '0');
-    if(countShowInter >= 3){
+    if(countShowInter >= 10){
       ret = true;
       countShowInter = 0;
     }

@@ -61,6 +61,7 @@ export class SliderPage implements OnInit {
     console.log("init load");
     this.appStates.setLoading(true);
     // this.appStates.setHistories(await this.commonUseService.getHistoryList());
+    this.commonUseService.getHistories();
     await this.commonUseService.checkFreePremium();
     await load.dismiss();
     this.appStates.setLoading(false);

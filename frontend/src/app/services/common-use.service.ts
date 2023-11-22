@@ -135,6 +135,10 @@ export class CommonUseService   {
 
   setHistory(history:HistoryData,file:File){
     return new Promise<HistoryData[]>(async (resolve,reject)=>{
+      const histories = this.appStates.getHistories();
+      if(histories.length <= 0){
+        await this.getHistories();
+      }
 
       const deviceUID = await CommonUseUtil.getDeviceUID();
 

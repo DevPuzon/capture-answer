@@ -126,6 +126,9 @@ export class AdmobUtil {
     if(this.commonUseUtil.isNativeIos()){
       adId = '';
     }
+
+    console.log("showBanner adId",adId);
+
     const options: BannerAdOptions = {
       adId: adId,
       adSize: BannerAdSize.BANNER,
@@ -153,6 +156,8 @@ export class AdmobUtil {
     if(this.commonUseUtil.isNativeIos()){
       adId = '';
     }
+
+    console.log("showInterstitial adId",adId);
     const options: AdOptions = {
       adId: adId,
       isTesting: environment.admobTest
@@ -182,6 +187,7 @@ export class AdmobUtil {
         if(this.commonUseUtil.isNativeIos()){
           adId = '';
         }
+        console.log("showRewardVideo adId",adId);
         const options: RewardAdOptions = {
           adId: adId,
           isTesting: environment.admobTest

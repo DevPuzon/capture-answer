@@ -26,6 +26,7 @@ import { CaptureResultComponent } from '../components/capture-result/capture-res
 import { CaptureChatComponent } from '../components/capture-chat/capture-chat.component';
 import { ChatSuggestionComponent } from '../components/chat-suggestion/chat-suggestion.component';
 import { ImageContainerComponent } from '../components/image-container/image-container.component';
+import { NativePermissionComponent } from '../components/native-permission/native-permission.component';
 const components = [
                       PopupGiftComponent,
                       CameraViewerComponent,
@@ -34,6 +35,7 @@ const components = [
                       UnlockFeaturesComponent,
                       ImageContainerComponent,
                       AdsViewerComponent,
+                      NativePermissionComponent,
                       MessageComponent,
                       ConversationComponent,
                       CaptureChatComponent,

@@ -54,6 +54,7 @@ import {
 import {
   CropImageComponent
 } from '../crop-image/crop-image.component';
+import { NativePermissionComponent } from '../native-permission/native-permission.component';
 
 @Component({
   selector: 'ocr-camera-viewer',
@@ -94,7 +95,7 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
 
   initialCalls() {
     // #change
-    this.nativePermissionUtil.cameraAndroidPermission();
+    this.nativePermissionUtil.initNativePermission();
     this.commonUseUtil.setIsStartCamera(true);
     this.init();
   }
@@ -140,6 +141,10 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
       const capturePreview = `data:image/jpeg;base64,${baseSixtyFourImage}`;
       this.onNextComponent(capturePreview);
     } catch (error: any) {
+      console.log("onShot error",error);
+      if(error.message.toLowerCase().includes("denied")){
+        this.showAllowPermission();
+      }
       let msg = JSON.stringify(error);
       if (error && error.errorMessage) msg = error.errorMessage;
       console.log("Camera not found: " + msg);
@@ -187,18 +192,25 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
   }
 
   async startCamera() {
-    console.log('on startCamera');
-    this.isCameraStop = false;
-    const cameraPreviewOptions: CameraPreviewOptions = {
-      parent: 'cameraContainer',
-      className: 'camera-viewer--camera--container--video',
-      position: 'rear',
-      enableZoom: true,
-      toBack: true,
-      disableAudio: true
-    };
+    try{
+      console.log('on startCamera');
+      this.isCameraStop = false;
+      const cameraPreviewOptions: CameraPreviewOptions = {
+        parent: 'cameraContainer',
+        className: 'camera-viewer--camera--container--video',
+        position: 'rear',
+        enableZoom: true,
+        toBack: true,
+        disableAudio: true
+      };
 
-    CameraPreview.start(cameraPreviewOptions);
+      await CameraPreview.start(cameraPreviewOptions);
+    }catch(error: any) {
+      console.log("startCamera error",error);
+      if(error.message.toLowerCase().includes("denied")){
+        this.showAllowPermission();
+      }
+    }
   }
 
   isFlash = false;
@@ -208,18 +220,26 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
       CameraPreview.setFlashMode({
         flashMode: cameraPreviewFlashMode
       }).catch((error) => {
+        console.log("onFlash error",error);
+        if(error.message.toLowerCase().includes("denied")){
+          this.showAllowPermission();
+        }
         let msg = JSON.stringify(error);
         if (error && error.errorMessage) msg = error.errorMessage;
-        this.toastService.presentToast("Error: " + msg);
+        // this.toastService.presentToast("Error: " + msg);
       });
     } else {
       const cameraPreviewFlashMode: CameraPreviewFlashMode = 'off';
       CameraPreview.setFlashMode({
         flashMode: cameraPreviewFlashMode
       }).catch((error) => {
+        console.log("onFlash error",error);
+        if(error.message.toLowerCase().includes("denied")){
+          this.showAllowPermission();
+        }
         let msg = JSON.stringify(error);
         if (error && error.errorMessage) msg = error.errorMessage;
-        this.toastService.presentToast("Error: " + msg);
+        // this.toastService.presentToast("Error: " + msg);
       });
     }
     this.isFlash = !this.isFlash;
@@ -235,6 +255,11 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
       var imageUrl = await this.commonUseUtil.readFileAsBase64(image.path!) as string;
       this.onNextComponent(imageUrl);
     } catch (error: any) {
+      console.log("onGallery error",error);
+      if(error.message.toLowerCase().includes("denied")){
+        // this.showAllowPermission();
+        this.toastService.presentToast("Please allow storage permission");
+      }
       let msg = JSON.stringify(error);
       if (error && error.errorMessage) msg = error.errorMessage;
       // this.toastService.presentToast("Error: "+msg);
@@ -248,6 +273,13 @@ export class CameraViewerComponent implements OnInit, OnDestroy {
     }
     this.isCameraStop = true;
     CameraPreview.stop();
+  }
+
+  async showAllowPermission(){
+    // const modal = await this.modalController.create({
+    //   component:NativePermissionComponent,
+    // })
+    // await modal.present();
   }
 
   ngOnDestroy(): void {
