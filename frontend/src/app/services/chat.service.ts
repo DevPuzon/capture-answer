@@ -51,7 +51,11 @@ export class ChatService {
         resolve({});
       },
       (error: HttpErrorResponse) => {
-        this.toastService.presentToast(error.error.message);
+        if(error.error){
+          this.toastService.presentToast(error.error.message);
+        }else{
+          this.toastService.presentToast('Something went wrong');
+        }
         reject(error);
       })
     })
@@ -79,7 +83,11 @@ export class ChatService {
         resolve({});
       },
       (error: HttpErrorResponse) => {
-        this.toastService.presentToast(error.error.message);
+        if(error.error){
+          this.toastService.presentToast(error.error.message);
+        }else{
+          this.toastService.presentToast('Something went wrong');
+        }
         reject(error);
       })
     })

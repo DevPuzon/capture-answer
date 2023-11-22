@@ -45,9 +45,9 @@ export class ChatAiService {
 
             const roomId = deviceId;
             await this.saveMessage(TABLE_CHAT_AI, roomId, deviceId, message);
-            const convoData = await this.getConvoHistory(roomId);
+            const convoData = await this.getConvoHistory(TABLE_CHAT_AI,roomId);
             // const convoData = null;
-            const botResponse = await this.requestChatGPT(message, OCR_CHAT_PROMPT, convoData);
+            const botResponse = await this.requestChatGPT(convoData);
             const botMessage = botResponse.message;
             await this.saveMessage(TABLE_CHAT_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
             this.saveOpenAiLogs(deviceId, botMessage, botResponse.logs, null); 
@@ -71,7 +71,8 @@ export class ChatAiService {
             console.log('chatVisionAi account', account);
 
             await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, deviceId, message); 
-            const botResponse = await this.requestChatVisionGPT(message, imageUrl);
+            const convoData = await this.getConvoHistory(TABLE_CHAT_VISON_AI,roomId);
+            const botResponse = await this.requestChatVisionGPT(imageUrl,convoData);
             const botMessage = botResponse.message;
             console.log('chatVisionAi botMessage', botMessage);
             await this.saveMessage(TABLE_CHAT_VISON_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
@@ -109,7 +110,7 @@ export class ChatAiService {
         });
     }
 
-    private requestChatGPT(message: string, prompt: string, convoData ? : any): Promise < {
+    private requestChatGPT(convoData : any): Promise < {
         message: string,
         logs: any
     } > {
@@ -119,21 +120,21 @@ export class ChatAiService {
         } > (async (resolve) => {
             console.log("requestChatGPT starting");
             if (IS_PROD) {
-                message += prompt;
+                // message += prompt;
                 const openai = new OpenAI({
                     apiKey: OPEN_AI_KEY,
                 });
-                let messages: any = [{
-                    "role": "system",
-                    // "content": 'You are a helpful assistant.'
-                    "content": message
-                }];
-                if (convoData) {
-                    messages = messages.concat(convoData);
-                }
+                // let messages: any = [{
+                //     "role": "system",
+                //     // "content": 'You are a helpful assistant.'
+                //     "content": message
+                // }];
+                // if (convoData) {
+                //     messages = messages.concat(convoData);
+                // }
                 const request: any = {
                     model: "gpt-3.5-turbo",
-                    messages: messages,
+                    messages: convoData,
                     temperature: 1,
                     max_tokens: 256,
                     top_p: 1,
@@ -163,7 +164,7 @@ export class ChatAiService {
         })
     }
 
-    private requestChatVisionGPT(message: string, imageUrl: string): Promise < {
+    private requestChatVisionGPT(imageUrl: string,convoData : any[]): Promise < {
         message: string,
         logs: any
     } > {
@@ -176,23 +177,24 @@ export class ChatAiService {
                 const openai = new OpenAI({
                     apiKey: OPEN_AI_KEY,
                 });
+                
+                let messages = [{
+                    role: "user",
+                    content: [ 
+                        {
+                            type: "image_url",
+                            image_url: {
+                                "url": imageUrl,
+                                "detail": "low"
+                            },
+                        },
+                    ],
+                }];
+                messages = [...convoData,...messages];
+
                 const request: any = {
                     model: "gpt-4-vision-preview",
-                    messages: [{
-                        role: "user",
-                        content: [{
-                                type: "text",
-                                text: message
-                            },
-                            {
-                                type: "image_url",
-                                image_url: {
-                                    "url": imageUrl,
-                                    "detail": "low"
-                                },
-                            },
-                        ],
-                    }], 
+                    messages: messages, 
                     max_tokens: 300
                 };
                 const response = await openai.chat.completions.create(request);
@@ -218,12 +220,12 @@ export class ChatAiService {
         })
     }
 
-    private getConvoHistory(roomId: string) {
-        return new Promise(async (resolve) => {
+    private getConvoHistory(tableName:string,roomId: string):Promise<any[]> {
+        return new Promise<any[]>(async (resolve) => {
 
             const db = admin.firestore();
-            const collectionRef = db.collection(TABLE_CHAT_AI).doc(roomId)
-                .collection(TABLE_CHAT_AI);
+            const collectionRef = db.collection(tableName).doc(roomId)
+                .collection(tableName);
 
             const querySnapshot = await collectionRef.orderBy('created_at', 'desc')
             .limit(READ_HISTORY_COUNT).get();
@@ -231,10 +233,18 @@ export class ChatAiService {
             const convoHistory: any[] = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data() as Chat;
-                convoHistory.push({
-                    role: OCR_CHAT_AI_USER_ID != data.user_id ? "user" : "assistant",
-                    content: data.message
-                });
+                if(OCR_CHAT_AI_USER_ID != data.user_id){
+                    convoHistory.unshift({
+                        role: OCR_CHAT_AI_USER_ID != data.user_id ? "user" : "assistant",
+                        content: data.message
+                    });
+                }
+                // else{
+                //     convoHistory.unshift({
+                //         role: 'assistant',
+                //         content: ''
+                //     });
+                // }
             });
             console.log(convoHistory);
 

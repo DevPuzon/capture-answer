@@ -57,6 +57,9 @@ export class CommonUseService   {
 
             this.appStates.setRemainingTokens(data.premiumCount);
             this.appStates.setFreeUserChat(data.freeChatCount);
+            if(!data.isCanClaimGift){
+              LStorage.set(ALREADY_CLAIMED_GIFT,"1");
+            }
             resolve(data.isCanClaimGift);
           }
         }

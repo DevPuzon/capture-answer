@@ -30,8 +30,24 @@ export class ConversationComponent  implements OnInit {
   }
 
   onScroll() {
+    console.log('onScroll');
     const doc = this.scrollContainer.nativeElement;
-    if((doc.scrollHeight-doc.offsetHeight) - (doc.scrollTop * -1) <= 0){
+    console.log('onScroll',doc,this.scrollContainer);
+    console.log('doc.scrollHeight',doc.scrollHeight);
+    console.log('doc.offsetHeight',doc.offsetHeight);
+    console.log('doc.scrollTop',doc.scrollTop);
+
+    let scrollHeight = doc.scrollHeight;
+    let offsetHeight = doc.offsetHeight;
+    let scrollTop = doc.scrollTop;
+    let checker = 10;
+
+    console.log(scrollHeight-offsetHeight)
+    console.log(scrollTop * -1)
+    console.log(parseInt(((scrollHeight-offsetHeight) - (scrollTop * -1)).toString()));
+    console.log(parseInt(((scrollHeight-offsetHeight) - (scrollTop * -1)).toString()) <= checker);
+
+    if(parseInt(((scrollHeight-offsetHeight) - (scrollTop * -1)).toString()) <= checker){
       console.log('Scroll is at the top');
       this.loadMore.emit(true);
     }

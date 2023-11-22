@@ -165,7 +165,7 @@ export class DashboardPage implements OnInit,OnDestroy {
   async onOpenPrivacyPolicy() {
     this.commonUseUtil.setIsStartCamera(false);
     await Browser.open({
-      url:'https://medium.com/@wondertechphclub/privacy-policy-cf05313237ec'
+      url:'https://sites.google.com/view/wondertechph/home'
     })
     if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
       this.commonUseUtil.setIsStartCamera(false);

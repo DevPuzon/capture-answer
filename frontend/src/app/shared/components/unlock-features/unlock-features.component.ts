@@ -69,6 +69,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       price: '$1',
       selected: true
     },
+    // 40% $5 (consume $2 - profit $3)
     {
       id: "five_consumable",
       title: "Silver",
@@ -77,6 +78,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       saves: 100,
       selected: false
     },
+    // 45% $10 (consume $4.5 - profit $5.5)
     {
       id: "ten_consumable",
       title: "Gold",
@@ -85,6 +87,7 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       saves: 125,
       selected: false
     },
+    // 50% $15 (consume $7.5 - profit $7.5)
     {
       id: "fifteen_consumable",
       title: "Diamond",
