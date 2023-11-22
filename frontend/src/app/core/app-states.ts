@@ -31,6 +31,7 @@ export class AppStates {
   private isShowBanner = new BehaviorSubject < boolean > (false);
   private isAlreadyAdmobInit = new BehaviorSubject < boolean > (false);
   private availableRewardsCount = new BehaviorSubject < number > (0);
+  private showSplash = new BehaviorSubject < boolean > (false);
 
 
   constructor() {}
@@ -168,6 +169,19 @@ export class AppStates {
   listenLoading(){
     return this.loading.asObservable();
   }
+
+  setShowSplash(showSplash:boolean){
+    this.showSplash.next(showSplash);
+  }
+
+  getShowSplash(){
+    return this.showSplash.getValue();
+  }
+
+  listenShowSplash(){
+    return this.showSplash.asObservable();
+  }
+
 
   setSettings(settings:SettingsModel){
     this.settings.next(settings);

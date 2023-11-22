@@ -47,7 +47,7 @@
           <span class="unlock-f--package--txt--plan-">{{ package.title | translate }}</span>
           <span class="unlock-f--package--txt--price">{{ package.price }}</span>
           <span class="unlock-f--package--txt--discounted" [ngStyle]="{'opacity': package.saves ? 1 : 0 }">Saves ( {{ package.saves }}% )  </span>
-          <span class="unlock-f--package--txt--description"> {{ package.tokens }} tokens</span>
+          <span class="unlock-f--package--txt--description"> {{  package.tokens | number:'1.0-0' }} tokens</span>
         </div>
       </div>
     </ion-col>

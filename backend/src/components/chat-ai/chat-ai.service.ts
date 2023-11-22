@@ -45,8 +45,8 @@ export class ChatAiService {
 
             const roomId = deviceId;
             await this.saveMessage(TABLE_CHAT_AI, roomId, deviceId, message);
-            // const convoData = await this.getConvoHistory(roomId);
-            const convoData = null;
+            const convoData = await this.getConvoHistory(roomId);
+            // const convoData = null;
             const botResponse = await this.requestChatGPT(message, OCR_CHAT_PROMPT, convoData);
             const botMessage = botResponse.message;
             await this.saveMessage(TABLE_CHAT_AI, roomId, OCR_CHAT_AI_USER_ID, botMessage);
@@ -117,6 +117,7 @@ export class ChatAiService {
             message: string,
             logs: any
         } > (async (resolve) => {
+            console.log("requestChatGPT starting");
             if (IS_PROD) {
                 message += prompt;
                 const openai = new OpenAI({
@@ -124,7 +125,8 @@ export class ChatAiService {
                 });
                 let messages: any = [{
                     "role": "system",
-                    "content": 'You are a helpful assistant.'
+                    // "content": 'You are a helpful assistant.'
+                    "content": message
                 }];
                 if (convoData) {
                     messages = messages.concat(convoData);
@@ -139,16 +141,20 @@ export class ChatAiService {
                     presence_penalty: 0,
                 }
                 const response: ChatCompletion = await openai.chat.completions.create(request);
-                console.log(response);
-
+                console.log('requestChatGPT',response);
+                let responseMsg = response.choices[0].message.content;
+                responseMsg = responseMsg.replaceAll('\n','<br>');
+                console.log('requestChatGPT responseMsg',responseMsg); 
+                console.log("requestChatGPT done");
                 resolve({
-                    message: response.choices[0].message.content,
+                    message: responseMsg,
                     logs: {
                         request: request,
                         response: response
                     }
                 });
             } else {
+                console.log("requestChatGPT done");
                 resolve({
                     message: 'test chat ai',
                     logs: null as ChatCompletion
@@ -165,6 +171,7 @@ export class ChatAiService {
             message: string,
             logs: any
         } > (async (resolve) => {
+            console.log("requestChatVisionGPT starting");
             if (IS_PROD) {
                 const openai = new OpenAI({
                     apiKey: OPEN_AI_KEY,
@@ -189,15 +196,20 @@ export class ChatAiService {
                     max_tokens: 300
                 };
                 const response = await openai.chat.completions.create(request);
-                console.log(response);
+                console.log('requestChatVisionGPT',response);
+                let responseMsg = response.choices[0].message.content;
+                responseMsg = responseMsg.replaceAll('\n','<br>');
+                console.log('requestChatVisionGPT responseMsg',responseMsg);
+                console.log("requestChatVisionGPT done");
                 resolve({
-                    message: response.choices[0].message.content,
+                    message: responseMsg,
                     logs: {
                         request: request,
                         response: response
                     }
                 });
             } else {
+                console.log("requestChatVisionGPT done");
                 resolve({
                     message: 'test from- ai requestChatVisionGPT',
                     logs: null as ChatCompletion

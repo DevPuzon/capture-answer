@@ -35,6 +35,9 @@ export class AppComponent implements OnInit {
               private nativePermissionUtil:NativePermissionsUtil,
               private translateService: TranslateService) {
     this.initPlatformDependents();
+    appStates.listenShowSplash().subscribe((show)=>{
+      this.isShowSplash = show;
+    })
   }
 
   private async initPlatformDependents(){
