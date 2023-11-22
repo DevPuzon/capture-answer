@@ -1,19 +1,57 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { AppStates } from 'src/app/core/app-states';
-import { GOLD_SCANS, PLATINUM_SCANS } from 'src/app/core/global-variable';
-import { AppPurchaseUtil } from 'src/app/core/utils/app-purchase.utils';
-import { CommonUseUtil } from 'src/app/core/utils/common-use.util';
-import { CommonUseService } from 'src/app/services/common-use.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { PopupGiftComponent } from '../popup-gift/popup-gift.component';
-import { MatDialog } from '@angular/material/dialog';
-import { AdmobUtil } from 'src/app/core/utils/admob.util';
-import { environment } from 'src/environments/environment';
-import { ProductService } from 'src/app/services/product.service';
-import { PurchaseResponse } from 'src/app/models/purchase-response.model';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import {
+  Router
+} from '@angular/router';
+import {
+  LoadingController,
+  ModalController,
+  Platform
+} from '@ionic/angular';
+import {
+  TranslateService
+} from '@ngx-translate/core';
+import {
+  AppStates
+} from 'src/app/core/app-states';
+import {
+  GOLD_SCANS,
+  PLATINUM_SCANS
+} from 'src/app/core/global-variable';
+import {
+  AppPurchaseUtil
+} from 'src/app/core/utils/app-purchase.utils';
+import {
+  CommonUseUtil
+} from 'src/app/core/utils/common-use.util';
+import {
+  CommonUseService
+} from 'src/app/services/common-use.service';
+import {
+  ToastService
+} from 'src/app/services/toast.service';
+import {
+  PopupGiftComponent
+} from '../popup-gift/popup-gift.component';
+import {
+  MatDialog
+} from '@angular/material/dialog';
+import {
+  AdmobUtil
+} from 'src/app/core/utils/admob.util';
+import {
+  environment
+} from 'src/environments/environment';
+import {
+  ProductService
+} from 'src/app/services/product.service';
+import {
+  PurchaseResponse
+} from 'src/app/models/purchase-response.model';
 
 
 @Component({
@@ -24,37 +62,36 @@ import { PurchaseResponse } from 'src/app/models/purchase-response.model';
 export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   textPaymentTerm = '';
-  packages = [
-    {
-      id:"one_consumable",
-      title:"Discounted",
-      tokens:20,
-      price:'$1',
-      selected:true
+  packages = [{
+      id: "one_consumable",
+      title: "Discounted",
+      tokens: 20,
+      price: '$1',
+      selected: true
     },
     {
-      id:"five_consumable",
-      title:"Silver",
-      tokens:200,
-      price:'$5',
-      saves:100,
-      selected:false
+      id: "five_consumable",
+      title: "Silver",
+      tokens: 200,
+      price: '$5',
+      saves: 100,
+      selected: false
     },
     {
-      id:"ten_consumable",
-      title:"Gold",
-      tokens:450,
-      price:'$10',
-      saves:125,
-      selected:false
+      id: "ten_consumable",
+      title: "Gold",
+      tokens: 450,
+      price: '$10',
+      saves: 125,
+      selected: false
     },
     {
-      id:"fifteen_consumable",
-      title:"Diamond",
-      tokens:750,
-      price:'$15',
-      saves:150,
-      selected:false
+      id: "fifteen_consumable",
+      title: "Diamond",
+      tokens: 750,
+      price: '$15',
+      saves: 150,
+      selected: false
     }
   ];
   selectedPackage = this.packages[0];
@@ -74,27 +111,27 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
   // scans = GOLD_SCANS;
 
 
-  constructor(private router:Router,
-              private toastService:ToastService,
-              private commonUseService:CommonUseService,
-              private loadingController:LoadingController,
-              private modaController:ModalController,
-              private platform:Platform,
-              private productService :ProductService,
-              private appStates:AppStates,
-              private dialog: MatDialog,
-              private appPurchaseUtil:AppPurchaseUtil,
-              private translateService: TranslateService,
-              private admobUtils: AdmobUtil,
-              private commonUseUtil:CommonUseUtil) {
+  constructor(private router: Router,
+    private toastService: ToastService,
+    private commonUseService: CommonUseService,
+    private loadingController: LoadingController,
+    private modaController: ModalController,
+    private platform: Platform,
+    private productService: ProductService,
+    private appStates: AppStates,
+    private dialog: MatDialog,
+    private appPurchaseUtil: AppPurchaseUtil,
+    private translateService: TranslateService,
+    private admobUtils: AdmobUtil,
+    private commonUseUtil: CommonUseUtil) {
 
     platform.ready().then(async () => {
       // this.appPurchaseUtil.initialize();
       //Preload
-      if(commonUseUtil.isNativeAndroid() || commonUseUtil.isNativeIos()){
-        for(let [i,item] of this.packages.entries()){
+      if (commonUseUtil.isNativeAndroid() || commonUseUtil.isNativeIos()) {
+        for (let [i, item] of this.packages.entries()) {
           const platform = commonUseUtil.isNativeAndroid() ? 'android' : 'ios';
-          item.price = appPurchaseUtil.getPricing(platform+"_"+item.id) as string;
+          item.price = appPurchaseUtil.getPricing(platform + "_" + item.id) as string;
         }
       }
     });
@@ -108,11 +145,11 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     //   this.admobUtils.hideBanner(); //HACk
     // }, 100);
     const language = this.commonUseUtil.getLocalLanguage();
-    console.log('langauge',language);
+    console.log('langauge', language);
 
-    if(this.commonUseUtil.isNativeIos()){
+    if (this.commonUseUtil.isNativeIos()) {
       this.textPaymentTerm = 'You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Apple Store.';
-    }else{
+    } else {
       this.textPaymentTerm = 'You have the freedom to cancel your subscription at any time by accessing the Payment & Subscriptions section within the Google Play Store.';
     }
   }
@@ -121,53 +158,67 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
     // this.admobUtils.hideBanner();
   }
 
-  onChangePackage(selectedPlanIndex:number,selectedPlan:string){
-    for(let [i,val] of this.packages.entries()){val.selected=false;}
-    for(let [i,val] of this.packages.entries()){
-      if(i == selectedPlanIndex){
+  onChangePackage(selectedPlanIndex: number, selectedPlan: string) {
+    for (let [i, val] of this.packages.entries()) {
+      val.selected = false;
+    }
+    for (let [i, val] of this.packages.entries()) {
+      if (i == selectedPlanIndex) {
         val.selected = true;
         this.selectedPackage = val;
       }
     }
   }
 
-  async onSubscribe(){
+  async onSubscribe() {
 
     const productId = this.commonUseUtil.getSubscriptionId(this.selectedPackage.id);
-    console.log("onSubscribe",productId);
-    const load = await this.loadingController.create({message: 'Please wait...' });
+    console.log("onSubscribe", productId);
+    const load = await this.loadingController.create({
+      message: 'Please wait...'
+    });
     await load.present();
 
-    let purchase:PurchaseResponse = {
-      isSuccess:false,
-      payload:null,
-      productId:productId,
-      purchaseId:'',
-      isTestPurchase:true
+    let purchase: PurchaseResponse = {
+      isSuccess: false,
+      payload: null,
+      productId: productId,
+      purchaseId: '',
+      isTestPurchase: true
     };
-    if(!environment.production && !this.commonUseUtil.isNativeAndroid() && !this.commonUseUtil.isNativeIos()){
+    if (!environment.production && !this.commonUseUtil.isNativeAndroid() && !this.commonUseUtil.isNativeIos()) {
       // test browser
-      await this.productService.onPurchase('productId-11','purchaseId-11',23,{payloadTest:'payload'})
+      console.log("onSubscribe purchase web local");
+      const productId = this.commonUseUtil.getUID();
+      const purchaseId = this.commonUseUtil.getUID();
+      await this.productService.onPurchase(productId,purchaseId, 23, {
+        payloadTest: 'payload'
+      })
       purchase.isSuccess = true;
-    }else{
+    } else {
       purchase = await this.appPurchaseUtil.orderProduct(productId);
-      console.log('onSubscribe purchase',purchase);
+      console.log('onSubscribe purchase', purchase);
 
     }
 
-    if(purchase.isSuccess){
+    if (purchase.isSuccess) {
       const platformIdRm = this.commonUseUtil.isNativeAndroid() ? 'android_' : 'ios_';
-      const tokens = this.packages.find((el)=>{return el.id == purchase.productId.replace(platformIdRm,'')})?.tokens as number;
-      console.log('onSubscribe tokens',tokens);
+      const tokens = this.packages.find((el) => {
+        return el.id == purchase.productId.replace(platformIdRm, '')
+      })?.tokens as number;
 
-      if(!environment.production){
-        console.log("onSubscribe purchase local")
-        await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase);
-      }
+      console.log('onSubscribe tokens', tokens);
 
-      if(environment.production && !purchase.isTestPurchase){
-        console.log("onSubscribe purchase prod")
-        await this.productService.onPurchase(purchase.productId,purchase.purchaseId,tokens,purchase);
+      if(this.commonUseUtil.isNativeAndroid() || this.commonUseUtil.isNativeIos()){
+        if (!environment.production) {
+          console.log("onSubscribe purchase native local");
+          await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
+        }
+
+        if (environment.production && !purchase.isTestPurchase) {
+          console.log("onSubscribe purchase prod");
+          await this.productService.onPurchase(purchase.productId, purchase.purchaseId, tokens, purchase);
+        }
       }
 
 
@@ -177,18 +228,18 @@ export class UnlockFeaturesComponent implements OnInit, AfterViewInit, OnDestroy
       this.commonUseUtil.setIsStartCamera(true);
       await this.modaController.dismiss();
 
-    }else{
+    } else {
       await load.dismiss();
     }
 
   }
 
-  async onClose(){
+  async onClose() {
     this.commonUseUtil.setIsStartCamera(true);
     await this.modaController.dismiss();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.commonUseUtil.setIsStartCamera(true);
   }
 }

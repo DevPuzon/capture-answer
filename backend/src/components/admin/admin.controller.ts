@@ -6,10 +6,7 @@ import {
     Post,
     Req,
     Body
-} from '@nestjs/common';
-import {
-    ENVIRONMENT
-} from 'src/environments/environment';
+} from '@nestjs/common'; 
 import {
     AdminService
 } from './admin.service';
